@@ -9,7 +9,7 @@ TAD servidor:
         observadores, generadores, verMapa, verCasas, verComercios, verPopularidad y verTurno
 
     usa:
-        SimCity, Mapa, Nombre, Pos, Construccion, Nivel, Nat, bool, dicc(α, β), secu(α)
+        SimCity, Mapa, Nombre, Pos, Construccion, Nivel, Nat, bool, dicc(α, β), conj(α)
 
     igualdad:
         (∀ s1, s2: server)(s1 =obs s2 ⟺ (
@@ -18,7 +18,7 @@ TAD servidor:
 
     observadores:
         partidas: server ➝ dicc(Nombre, SimCity)
-        congeladas: server ➝ secu(Nombre)
+        congeladas: server ➝ conj(Nombre)
 
     generadores:
         nuevoServer: ➝ server
@@ -77,10 +77,10 @@ TAD servidor:
         partidas(avanzarTurnoPartida(s, p, cs)) ≡ definir(p, avanzarTurno(obtener(p, partidas(s)), cs), partidas(s))
         partidas(unirPartidas(s, p1, p2)) ≡ definir(p1, unir(obtener(p1, partidas(s)), obtener(p2, partidas(s))), partidas(s))
 
-        congeladas(nuevaPartida) ≡ <>
+        congeladas(nuevaPartida) ≡ ∅
         congeladas(nuevaPartida(s, p, m)) ≡ congeladas(s)
         congeladas(avanzarTurnoPartida(s, p, cs)) ≡ congeladas(s)
-        congeladas(unirPartidas(s, p1, p2)) ≡ p2 • congeladas(s)  
+        congeladas(unirPartidas(s, p1, p2)) ≡ Ag(p2, congeladas(s))  
 
         verMapa(s, p) ≡ mapa(obtener(p, partidas(s)))
         verCasas(s, p) ≡ casas(obtener(p, partidas(s)))
