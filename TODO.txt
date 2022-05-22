@@ -73,7 +73,3 @@ natan   implementacion SimCity
 
 
     
-
-natan = 1 + 1 + 1 + 1 + 10 = 14
-manu = 2 + 3 + 2 + 2 = 9
-fede = 0.5 + 7 + 2 + 2 = 11.5
