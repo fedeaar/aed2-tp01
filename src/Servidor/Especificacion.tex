@@ -90,8 +90,7 @@
         \paratodo{server}{s}, 
         \paratodo{Nombre}{p,\ p1,\ p2}, 
         \paratodo{Mapa}{m}, 
-        \paratodo{conj(Pos)}{cs}, 
-        \paratodo{dicc(Pos, Nivel)}{a,\ b}
+        \paratodo{conj(Pos)}{cs}
     ]
     \tadAlinearAxiomas
     {congeladas(avanzarTurnoPartida(s,\ p,\ cs))}
@@ -204,20 +203,20 @@
     {dicc($\alpha$, $\beta$)}
     {}
 \tadAxioma
-    {$\bullet\ \cup\ \bullet$}
+    {$a\ \ \cup\ \ b$}
     {$ \_definir(a,\ b,\ claves(b))$}
 \vspace{4mm}
 \tadOperacion
-    {\_definir}
-    {dicc($\alpha$, $\beta$), dicc($\alpha$, $\beta$)\ b, conj($\alpha$)\ cs}
-    {dicc($\alpha$, $\beta$)}
+    {\_union}
+    {dicc($\alpha$,\ $\beta$),\ dicc($\alpha$,\ $\beta$)\ b,\ conj($\alpha$)\ cs}
+    {dicc($\alpha$,\ $\beta$)}
     {$cs\ \subseteq\ claves(b)$}
 \tadAxioma
-    {\_definir(a,\ b,\ cs)}
+    {\_union(a,\ b,\ cs)}
     {$ 
     \LIF\ vacio?(cs)\ \LTHEN\ $\\$ 
     $\tab$ a $\\$
     \LELSE $\\$ 
-    $\tab$ \_definir(definir(dameUno(cs), obtener(dameUno(cs), b)), b, sinUno(cs)) $\\$ 
+    $\tab$ \_union(definir(dameUno(cs),\ obtener(dameUno(cs),\ b)),\ b,\ sinUno(cs)) $\\$ 
     \LFI
     $}
