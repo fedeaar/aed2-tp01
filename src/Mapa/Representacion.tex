@@ -1,0 +1,26 @@
+\begin{Representacion}
+  
+    \Titulo{Representación de mapa}
+  
+    Un mapa contiene rios infinitos horizontales y verticales. Los rios se
+    representan como conjuntos lineales de naturales que indican la posición en
+    los ejes de los ríos.
+  
+    \begin{Estructura}{mapa}[estr]
+      \begin{Tupla}[estr]
+        \tupItem{horizontales}{conj(Nat)}%
+        \tupItem{verticales}{conj(Nat)}%
+      \end{Tupla}
+  
+    \end{Estructura}
+    
+      \Rep[estr]{true}
+  
+      ~ 
+  
+    \AbsFc[estr]{mapa}[m]{
+        horizontales(m) = $estr$.horizontales $\land$ 
+        verticales(m) = $estr$.verticales
+    }
+  
+  \end{Representacion}
