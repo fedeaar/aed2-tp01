@@ -156,29 +156,11 @@
 \tadAxioma
     {unionValida(s,\ p1,\ p2)}     
     {$
-        def?(p,\ partidas(s))\ \land\ $\\$
-        p\ \notin\ congeladas(s)\ \land\ $\\$ 
-        \neg vacia?(claves(cs))\ $\yluego\ \\$
-        (\forall pos:\ Pos)(pos\ \in\ claves(cs)\ $\impluego$ $\\$
-            $\tab$ \neg sobreRio(pos,\ mapa(sim))\ \land\ $\\$
-            $\tab$ \neg def?(pos,\ casas(sim))\ \land\ $\\$
-            $\tab$ \neg def?(pos,\ comercios(sim)) $\\$
-        )
-    $}
-\tab donde $sim \equiv obtener(p,\ partidas(s))$  
-\\
-\tadOperacion
-    {avanzarTurnoValido}
-    {server\ s, Nombre\ p, dicc(Pos, Construccion)\ cs}
-    {boolean}
-    {}
-\tadAxioma
-    {avanzarTurnoValido(s,\ p,\ cs)}
-    {$
         def?(p1,\ partidas(s))\ \land\ 
         def?(p2,\ partidas(s))\ \land\ $\\$
-        p1\ \notin\ congeladas(s)\ \land\ 
-        p2\ \notin\ congeladas(s)\ $\yluego$\ $\\$
+        p1\ \notin\ congeladas(s)\ %\land\ 
+        %p2\ \notin\ congeladas(s)\ 
+        $\yluego$\% $\\$
         (\forall\ pos:\ Pos)(pos \in claves(constr1)\ $\impluego\ \\$   
             $\tab$ \neg sobreRio(pos,\ sim2)\ \land\  $\\$
             $\tab$ ((\nexists\ otra:\ Pos)(otra\ \in\ constr1\ $\yluego\ \\$ 
@@ -192,11 +174,34 @@
             $\tab$)\ $\impluego$\ \neg def?(pos,\ constr1))\ $\\$
         )               
         $}
+    
 \tab donde $sim1\ \equiv\ obtener(p1,\ partidas(s))$, \\
 \tab\tab\tab \: $sim2\ \equiv\ obtener(p2,\ partidas(s))$, \\
 \tab\tab\tab \: $constr1\ \equiv\ casas(sim1)\ \cup\ comercios(sim1)$, \\
 \tab\tab\tab \: $constr2\ \equiv\ casas(sim2)\ \cup\ comercios(sim2)$
 \\
+
+\tadOperacion
+    {avanzarTurnoValido}
+    {server\ s, Nombre\ p, dicc(Pos, Construccion)\ cs}
+    {boolean}
+    {}
+\tadAxioma
+    {avanzarTurnoValido(s,\ p,\ cs)}
+    {$
+        def?(p,\ partidas(s))\ \land\ $\\$
+        p\ \notin\ congeladas(s)\ \land\ $\\$ 
+        \neg vacia?(claves(cs))\ $\yluego\ \\$
+        (\forall pos:\ Pos)(pos\ \in\ claves(cs)\ $\impluego$ $\\$
+            $\tab$ obtener(pos,\ cs)\ \in\ \{"casa",\ "comercio"\}\ \land\ $\\$
+            $\tab$ \neg sobreRio(pos,\ mapa(sim))\ \land\ $\\$
+            $\tab$ \neg def?(pos,\ casas(sim))\ \land\ $\\$
+            $\tab$ \neg def?(pos,\ comercios(sim)) $\\$
+        )
+    $}
+\tab donde $sim \equiv obtener(p,\ partidas(s))$  
+\\
+
 \tadOperacion
     {$\bullet\ \cup\ \bullet$}
     {dicc($\alpha$, $\beta$), dicc($\alpha$, $\beta$)}
