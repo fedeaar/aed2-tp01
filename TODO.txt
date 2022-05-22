@@ -1,0 +1,79 @@
+natan       pasar a latex       tad Mapa
+natan/manu  corregir/simplif    tad SimCity
+fede        corregir            tad Servidor
+
+ok  representacion Mapa
+    ok abstraccion
+    ok invariante
+    ok representacion
+
+fede    representacion SimCity
+    abstraccion     
+    invariante      
+    ok  estr
+    simCity src estr donde:
+        estr = Tupla<
+            Turno: nat, 
+            Popu: nat,
+            Mapa: conjLineal(puntero(mapa)), 
+            ListaCons: Lista(puntero(cons))
+        >
+        cons = Lista(tupla<
+            pos: tupla<x: nat, y: nat>, 
+            tipo: string,
+            turnoAgregada: nat
+        >)
+
+manu    representacion Servidor
+    abstraccion     
+    invariante      
+    servidor src estr donde:
+        estr = diccTrie(nombre, tupla<modificable: bool, puntero(SimCity)>)
+
+natan   pasar a latex   interfaz Mapa
+fede    interfaz SimCity    
+manu   interfaz Servidor   
+
+natan   pasar a latex   implementacion Mapa
+    horizontales
+    verticales
+    esRio
+    + auxiliares
+
+implementacion Servidor 
+manu    partidas        
+        congeladas      
+        nuevoServer     
+        nuevaPartida    
+        unirPartidas    
+        avanzarTurnoPartida 
+fede    agregarCasa 
+        agregarComercio 
+        verMapa 
+        verCasas 
+        verComercios 
+        verPopularidad 
+        verTurno 
+
+    + auxiliares ?
+
+natan   implementacion SimCity
+    Mapa            
+    casas           
+    comercios       
+    popularidad     
+    iniciar         
+    avanzarTurno    
+    unir            
+    turnos          
+
+    + auxiliares ?
+
+- debatir si agregar a servidor el agregarCasa, agregarComercio
+
+
+    
+
+natan = 1 + 1 + 1 + 1 + 10 = 14
+manu = 2 + 3 + 2 + 2 = 9
+fede = 0.5 + 7 + 2 + 2 = 11.5
