@@ -1,0 +1,27 @@
+\begin{tad}{\tadNombre{Mapa}}
+    \tadIgualdadObservacional{m}{m'}{Mapa}{
+        horizontales($m$) $\igobs$ horizontales($m'$) $\yluego$ \\
+        verticales($m$) $\igobs$ verticales($m'$) 
+    }
+    
+    \tadGeneros{Mapa}
+    \tadExporta{{\completar}}
+    \tadUsa{{\completar}}
+    
+    \tadAlinearFunciones{horizontales}{Mapa}
+    
+    \tadObservadores
+    \tadOperacion{horizontales}{Mapa}{conj(Nat)}{}
+    \tadOperacion{verticales}{Mapa}{conj(Nat)}{}
+    
+    \tadAlinearFunciones{crear}{conj(Nat),conj(Nat)}{Mapa}{}
+    
+    \tadGeneradores
+    \tadOperacion{crear}{conj(Nat),conj(Nat)}{Mapa}{}
+    
+    \tadAxiomas[\paratodo{conj(Nat)}{hs,vs}]
+    \tadAlinearAxiomas{horizontales(crear(hs, vs))}
+    
+    \tadAxioma{horizontales(crear(hs, vs))}{hs}
+    \tadAxioma{verticales(crear(hs, vs))}{vs}
+\end{tad}

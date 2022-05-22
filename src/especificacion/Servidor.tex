@@ -1,0 +1,223 @@
+\begin{tad}{\tadNombre{Servidor}}
+    \tadGeneros{server}
+    \tadExporta{observadores,\ generadores,\ verMapa,\ verCasas,\ verComercios,\ verPopularidad y verTurno}
+    \tadUsa{SimCity,\ Mapa,\ Nombre,\ Pos,\ Construccion,\ Nivel,\ Nat,\ bool,\ dicc$(\alpha,\ \beta)$,\ conj$(\alpha)$}
+    
+    \tadIgualdadObservacional{s}{s'}{server}{
+        partidas($s$) $\igobs$ partidas($s'$) $\land$ \\
+        congeladas($s$) $\igobs$ congeladas($s'$) 
+    }
+\vspace{3mm}
+    \tadObservadores
+        \tadAlinearFunciones
+            {congeladas}
+            {server}
+        \tadOperacion
+            {partidas}
+            {server}
+            {dicc(Nombre,\ SimCity)}
+            {}
+        \tadOperacion
+            {congeladas}
+            {server}
+            {conj(Nombre)}
+            {}
+            
+\vspace{3mm}
+    \tadGeneradores
+    \tadAlinearFunciones
+    {unirPartidas}
+    {server\ s, Nombre\ p1, Nombre\ p2}
+        \tadOperacion
+            {nuevoServer}
+            {}
+            {server}
+            {}
+        \tadOperacion
+            {nuevaPartida}
+            {server\ s, Nombre\ p, Mapa}
+            {server}
+            {$\neg def?(p,\ partidas(s))$}
+        \tadOperacion
+            {unirPartidas}
+            {server\ s, Nombre\ p1, Nombre\ p2}
+            {server}
+            {*$unionValida(s,\ p1,\ p2,\ cs)$}
+
+    \tadAlinearFunciones
+    {avanzarTurnoPartida}
+    {server\ s, Nombre\ p, dicc(Pos, Construccion)\ cs}
+        \tadOperacion
+            {avanzarTurnoPartida}
+            {server\ s, Nombre\ p, dicc(Pos, Construccion)\ cs}
+            {server}
+            {*$avanzarTurnoValido(s,\ p,\ cs)$} 
+       
+%\vspace{3mm}
+    \tadOtrasOperaciones
+    \tadAlinearFunciones
+    {verPopularidad}
+    {server\ s, Nombre\ p}
+        \tadOperacion
+            {verMapa}
+            {server\ s, Nombre\ p}
+            {Mapa}
+            {$def?(p,\ partidas(s))$}
+        \tadOperacion
+            {verCasas}
+            {server\ s, Nombre\ p}
+            {dicc(Pos, Nivel)}
+            {$def?(p,\ partidas(s))$}        
+        \tadOperacion
+            {verComercios}
+            {server\ s, Nombre\ p}
+            {dicc(Pos, Nivel)}
+            {$def?(p,\ partidas(s))$}
+        \tadOperacion
+            {verPopularidad}
+            {server\ s, Nombre\ p}
+            {Nat}
+            {$def?(p,\ partidas(s))$}
+        \tadOperacion
+            {verTurno}
+            {server\ s, Nombre\ p}
+            {Nat}
+            {$def?(p,\ partidas(s))$}
+
+\vspace{3mm}
+    \tadAxiomas
+    [
+        \paratodo{server}{s}, 
+        \paratodo{Nombre}{p,\ p1,\ p2}, 
+        \paratodo{Mapa}{m}, 
+        \paratodo{conj(Pos)}{cs}, 
+        \paratodo{dicc(Pos, Nivel)}{a,\ b}
+    ]
+    \tadAlinearAxiomas
+    {congeladas(avanzarTurnoPartida(s,\ p,\ cs))}
+        \tadAxioma
+            {partidas(nuevoServer)}
+            {$vacio$}
+        \tadAxioma
+            {partidas(nuevaPartida(s,\ p,\ m))}
+            {$definir(p,\ iniciar(m),\ partidas(s))$}
+        \tadAxioma
+            {partidas(unirPartidas(s,\ p1,\ p2))}
+            {$definir(p1,\ $\\$ 
+            $\tab$ unir(obtener(p1,\ partidas(s)),\ obtener(p2,\ partidas(s))),\ $\\$ 
+            $\tab$ partidas(s))$}
+        \tadAxioma
+            {partidas(avanzarTurnoPartida(s,\ p,\ cs))}
+            {$definir(p,\ $\\$
+            $\tab$ avanzarTurno(obtener(p,\ partidas(s)),\ cs),\ $\\$
+            $\tab$ partidas(s))$}
+
+        \tadAxioma
+            {congeladas(nuevaPartida)}
+            {$\emptyset$}         
+        \tadAxioma    
+            {congeladas(nuevaPartida(s,\ p,\ m))}
+            {$congeladas(s)$}
+        \tadAxioma
+            {congeladas(avanzarTurnoPartida(s,\ p,\ cs))}
+            {$ congeladas(s)$}
+        \tadAxioma
+            {congeladas(unirPartidas(s,\ p1,\ p2))}
+            {$ Ag(p2,\ congeladas(s))  $}
+        
+        \ \ \ // $oo$
+        \tadAxioma
+            {verMapa(s,\ p)}
+            {$ mapa(obtener(p,\ partidas(s)))$}
+        \tadAxioma
+            {verCasas(s,\ p)}
+            {$casas(obtener(p,\ partidas(s)))$}
+        \tadAxioma
+            {verComercios(s,\ p)}
+            {$comercios(obtener(p,\ partidas(s)))$}
+        \tadAxioma
+            {verPopularidad(s,\ p)}
+            {$popularidad(obtener(p,\ partidas(s)))$}
+        \tadAxioma
+            {verTurno(s,\ p)}
+            {$turnos(obtener(p,\ partidas(s)))$}
+        
+\end{tad}
+
+
+\pagebreak
+
+
+*donde: $\\$
+\tadOperacion
+    {unionValida}
+    {server\ s, Nombre\ p1, Nombre\ p2}
+    {boolean}
+    {}
+\tadAxioma
+    {unionValida(s,\ p1,\ p2)}     
+    {$
+        def?(p,\ partidas(s))\ \land\ $\\$
+        p\ \notin\ congeladas(s)\ \land\ $\\$ 
+        \neg vacia?(claves(cs))\ $\yluego\ \\$
+        (\forall pos:\ Pos)(pos\ \in\ claves(cs)\ $\impluego$ $\\$
+            $\tab$ \neg sobreRio(pos,\ mapa(sim))\ \land\ $\\$
+            $\tab$ \neg def?(pos,\ casas(sim))\ \land\ $\\$
+            $\tab$ \neg def?(pos,\ comercios(sim)) $\\$
+        )
+    $}
+\tab donde $sim \equiv obtener(p,\ partidas(s))$  
+\\
+\tadOperacion
+    {avanzarTurnoValido}
+    {server\ s, Nombre\ p, dicc(Pos, Construccion)\ cs}
+    {boolean}
+    {}
+\tadAxioma
+    {avanzarTurnoValido(s,\ p,\ cs)}
+    {$
+        def?(p1,\ partidas(s))\ \land\ 
+        def?(p2,\ partidas(s))\ \land\ $\\$
+        p1\ \notin\ congeladas(s)\ \land\ 
+        p2\ \notin\ congeladas(s)\ $\yluego$\ $\\$
+        (\forall\ pos:\ Pos)(pos \in claves(constr1)\ $\impluego\ \\$   
+            $\tab$ \neg sobreRio(pos,\ sim2)\ \land\  $\\$
+            $\tab$ ((\nexists\ otra:\ Pos)(otra\ \in\ constr1\ $\yluego\ \\$ 
+            $\tab\tab$ obtener(pos,\ constr1).nivel\ <\ obtener(otra,\ constr1).nivel $\\$
+            $\tab$)\ $\impluego$\ \neg def?(pos,\ constr2))\ $\\$
+        )\ \land\ $\\$
+        (\forall\ pos:\ Pos)(pos\ \in\ claves(constr2)\ $\impluego\ \\$   
+            $\tab$ \neg sobreRio(pos,\ sim1)\ \land\  $\\$
+            $\tab$((\nexists otra:\ Pos)(otra\ \in\ constr2\ $\yluego$\ $\\$ 
+            $\tab\tab$ obtener(pos,\ constr2).nivel\ <\  obtener(otra,\ constr2).nivel $\\$
+            $\tab$)\ $\impluego$\ \neg def?(pos,\ constr1))\ $\\$
+        )               
+        $}
+\tab donde $sim1\ \equiv\ obtener(p1,\ partidas(s))$, \\
+\tab\tab\tab \: $sim2\ \equiv\ obtener(p2,\ partidas(s))$, \\
+\tab\tab\tab \: $constr1\ \equiv\ casas(sim1)\ \cup\ comercios(sim1)$, \\
+\tab\tab\tab \: $constr2\ \equiv\ casas(sim2)\ \cup\ comercios(sim2)$
+\\
+\tadOperacion
+    {$\bullet\ \cup\ \bullet$}
+    {dicc($\alpha$, $\beta$), dicc($\alpha$, $\beta$)}
+    {dicc($\alpha$, $\beta$)}
+    {}
+\tadAxioma
+    {$\bullet\ \cup\ \bullet$}
+    {$ \_definir(a,\ b,\ claves(b))$}
+\vspace{4mm}
+\tadOperacion
+    {\_definir}
+    {dicc($\alpha$, $\beta$), dicc($\alpha$, $\beta$)\ b, conj($\alpha$)\ cs}
+    {dicc($\alpha$, $\beta$)}
+    {$cs\ \subseteq\ claves(b)$}
+\tadAxioma
+    {\_definir(a,\ b,\ cs)}
+    {$ 
+    \LIF\ vacio?(cs)\ \LTHEN\ $\\$ 
+    $\tab$ a $\\$
+    \LELSE $\\$ 
+    $\tab$ \_definir(definir(dameUno(cs), obtener(dameUno(cs), b)), b, sinUno(cs)) $\\$ 
+    \LFI
+    $}

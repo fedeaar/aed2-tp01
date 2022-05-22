@@ -1,0 +1,62 @@
+\documentclass[]{aed2-tp}
+
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{aed2-tad,aed2-itef,aed2-symb,aed2-diseno}
+\usepackage{algorithmicx, algpseudocode, algorithm}
+\usepackage{xcolor}
+\usepackage{multicol}
+\usepackage{caratula} % Version modificada para usar las macros de algo1 de ~> https://github.com/bcardiff/dc-tex
+%\usepackage{minted}
+
+\renewcommand{\labelenumii}{\theenumii}
+\renewcommand{\theenumii}{\theenumi.\arabic{enumii}.}
+
+\colorlet{darkblue}{blue!60!black}
+\newcommand{\rtn}[1]{\texttt{\textbf{\textcolor{darkred}{#1}}}}
+\newcommand{\var}[1]{\texttt{\textbf{\textcolor{darkgreen}{#1}}}}
+\newcommand{\cpp}[1]{\texttt{\textbf{\textcolor{darkblue}{#1}}}}
+\newcommand{\completar}{{\color{orange}completar}}
+\newcommand{\ccompletar}[1]{{\color{orange}completar: #1}}
+
+\newcommand{\Operacion}[1]{\texttt{\textcolor{darkblue}{#1}}}
+
+\newcommand{\TPitem}[1]{\texttt{\textcolor{darkgreen}{#1}}\xspace}
+\newcommand{\TPMapa}{\TPitem{Mapa}}
+\newcommand{\TPSimCity}{\TPitem{SimCity}}
+
+\newcommand{\complejidad}[1]{\textcolor{red}{\ensuremath{#1}}}
+\newcommand{\bigo}[1]{O(#1)}
+\newcommand{\pre}[1]{{\bf Pre} $\equiv$ \{#1\}}
+\newcommand{\post}[1]{{\bf Post} $\equiv$ \{#1\}}
+
+\begin{document}
+
+% caratula
+\titulo{TP de Especificaci\'on y Dise\~no}
+\subtitulo{Modelado de SimCity}
+\fecha{1 de Junio de 2022}
+\materia{Algoritmos y Estructuras de Datos II}
+\grupo{Grupo 01 - hasTADlaVista, turno ma\~nana}
+\newcommand{\senial}{\textit{se\~nal}}
+
+\integrante{Lakowsky, Manuel}{511/21}{mlakowsky@gmail.com}
+\integrante{Vekselman, Nat\'an}{338/21}{COMPLETAR@gmail.com}
+\integrante{Arienti, Federico}{316/21}{fa.arienti@gmail.com}
+
+\maketitle
+
+\newpage
+
+% especificacion
+\section{Especificación}
+\input{src/especificacion/main.tex}
+
+\newpage
+% diseño
+\section{Módulos de referencia}
+\input{src/modulos/main.tex}
+
+\end{document}
+
