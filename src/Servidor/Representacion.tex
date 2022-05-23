@@ -1,0 +1,36 @@
+\begin{Representacion}
+  
+    \Titulo{Representación de servidor}
+  
+    Un servidor almacena y actualiza los diferentes SimCity. Se representa como un 
+    diccionario implementado en un trie, donde las claves son los nombres de las partidas
+    y los significados un puntero al SimCity y su estado (si es modificable o no).
+  
+    \begin{Estructura}{servidor}[estr]
+        \tab donde estr es diccTrie(nombre, tupla<modificable: bool, sim: puntero(SimCity)>) \\
+        \tab donde nombre es string
+    \end{Estructura}
+    
+      \Rep[estr]{ \\
+            ($\forall\ partida_{1}, partida_{2}$: string) \\
+            (def?($partida_{1}, e$) $\wedge$ def?($partida_{2}, e$) $\wedge\ partida_{1} \neq partida_{2}$ \impluego \\
+                \tab obtener($partida_{1}, e$).sim $\neq$ obtener($partida_{2}, e$).sim \\
+            )\ $\wedge$ \\
+            ($\forall\ partida$: string)(def?($partida, e$) \impluego\ obtener($partida, e$) $\neq$ NULL)
+      }
+    
+    \AbsFc[estr]{servidor}[e]{
+        s: servidor | \\
+            \tab ($\forall\ nombre$: Nombre)\\
+                \tab\tab ($nombre$ $\in$ congelados($s$) $\Leftrightarrow$ \\
+                \tab\tab (def?($nombre$, partidas($e$)) \yluego\ obtener($nombre, e$).modificable $\igobs$ \false)) \\
+            \tab $\wedge$ \\
+            \tab ($\forall\ nombre$: Nombre)\\
+                \tab\tab (def?($nombre$, partidas($s$)) $\Leftrightarrow$ def?($nombre$, $e$)) \\
+            \tab \yluego \\
+            \tab ($\forall\ nombre$: Nombre)\\
+                \tab\tab (def?($nombre$, partidas($s$)) \impluego \\ 
+                \tab\tab  obtener($nombre$, partidas($s$)) $\igobs$ obtener($nombre, e$).sim) \\
+    }
+  
+  \end{Representacion}
