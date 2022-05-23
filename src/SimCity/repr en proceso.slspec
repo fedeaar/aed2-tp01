@@ -1,0 +1,290 @@
+// a
+representacion SimCity
+
+    simCity src estr donde:
+        estr ≡ Tupla<
+            turno: nat, 
+            popularidad: nat,
+            mapa: conjLineal(puntero(mapa)), 
+            listaConjCons: lista(puntero(conjCons)) // nos interesa el orden
+        >
+        conjCons ≡ conjLineal(cons)
+        cons ≡ tupla<
+            pos: Pos, 
+            tipo: string,
+            turnoAgregada: nat
+        >
+        Pos ≡ tupla<x: nat, y: nat>
+
+    invariante:
+        rep: ^estr ➝ boolean
+        (∀e: ^estr)
+        rep(e) ≡ 
+            (∀p: puntero(^conjCons))(esta?(p, e.listaConjCons) ⟹L
+                // no hay punteros repetidos
+                (∄ p2: puntero(^conjCons))(esta?(p2, e.listaConjCons) ∧L 
+                    pos(p) ≠ pos(p2) ∧ p =obs p2
+                ) ∧
+                (∀ c: ^cons)(c ∈ *p ⟹L
+                    // el turno es mas grande que el turno en que se agrego
+                    e.turno > c.turnoAgregada ∧
+                    // el tipo es una casa o un comercio
+                    c.tipo ∈ {"casa", "comercio"} ∧
+                    // la posicion no esta sobre un rio 
+                    (∀ pm: puntero(mapa))(pm ∈ e.mapa ⟹L
+                        ¬esRio(c.pos, *pm)
+                    ) ∧
+                    // la pos no está solapada dentro de este mismo conjunto
+                    (∄ c2: ^cons)(c ≠ c2 ∧ c2 ∈ *p ∧L
+                        c.pos =obs c2.pos    
+                    )
+                ) ∧
+            ) ∧L
+            // se agrego al menos una cons cada turno hasta el anterior
+            (∀ n: Nat)(0 ≤ n < e.turno ⟹L
+                (∃ p: puntero(^conjCons))(esta?(p, e.listaConjCons) ∧L
+                    (∃ c: ^cons)(c ∈ *p ∧L
+                        c.turnoAgregada =obs n
+                    )
+                )
+            ) ∧
+            // no hay posiciones máximas tapadas entre cada conjCons y todos los siguientes
+            // es decir: la union a través de la que se llegó a ésta estructura, y todas las anteriores implicitas, es válida
+            maxLibres(e.listaConjCons, e.turnoActual) ∧
+            // popularidad = long(cons) = long(mapa)
+            e.popularidad =obs #(e.mapa) =obs long(e.listaConjCons)
+            
+        donde:
+
+        pos: α a × secu(α) s ➝ nat     {esta?(a, s)}
+        pos(a, s) ≡ if a = prim(s) then 0 else 1 + pos(a, fin(s)) fi
+
+        maxLibres: secu(puntero(conjCons)) × nat ➝ bool 
+        maxLibres(scc, t) ≡ long(scc) ≤ 1 ∨ (maximas(*prim(scc), t) ⋂ maximas(unir(fin(scc)), t) = ∅ ∧ maxLibres(sinUno(scc)), t)
+        
+
+        maximas: conjCons × nat ➝ conjCons
+        maximas(cc, t) ≡ _maximas(cc, ∅, ∅, t)
+
+        _maximas: conjCons × conjCons × conjCons × nat ➝ conjCons
+        _maximas(cc, q, r, t) ≡ 
+            if vacio?(cc) then
+                q
+            else if _manhattan(dameUno(cc), cc ⋃ q ⋃ r, t) > _manhattan(dameUno(q), cc ⋃ q ⋃ r, t) then   
+                _maximas(sinUno(cc), Ag(dameUno(cc), ∅), r ⋃ q)
+            else if _manhattan(dameUno(cc), cc ⋃ q ⋃ r, t) = _manhattan(dameUno(q), cc ⋃ q ⋃ r, t) then
+                _maximas(sinUno(cc), Ag(dameUno(cc), q), r)
+            else
+                _maximas(sinUno(cc), q, Ag(dameUno(cc), r)) fi
+
+        _manhattan: cons × conjCons × nat ➝ nat
+        _manhattan(c, cc, t) ≡ 
+            if c.tipo = "casa" then
+                t - c.turnoAgregada
+            else
+                _max_manhattan(c, cc, 1, t) fi
+                
+        _max_manhattan: cons × conjCons × nat × nat ➝ nat 
+        _max_manhattan(c, cc, n, t) ≡ 
+            if vacio?(cc) then 
+                n
+            else if dameUno(cc).tipo = casa ∧ _dist_manhattan(dameUno(cc).pos, c.pos) ≤ 3 then 
+                _max_manhattan(c, sinUno(cc), max(n, t - dameUno(cc).turnoAgregada), t)
+            else
+                _max_manhattan(c, sinUno(cc), n, t) fi 
+
+        _dist_manhattan: Pos × Pos ➝ nat 
+        _dist_manhattan(p1, p2) ≡ |p1.x - p2.x| + |p1.y - p2.y|
+
+
+        unir: secu(puntero(conjCons)) ➝ conjCons
+        unir(scc) ≡ _unir(scc, ∅)
+
+        _unir: secu(puntero(conjCons)) × conjCons ➝ conjCons
+        _unir(scc, cc) ≡ 
+            if vacia?(s) then 
+                cc
+            else if vacio?(*prim(scc)) ∨L dameUno(*prim(scc)).pos ∈ posiciones(cc) then 
+                unir(sinUno(scc), cc)
+            else
+                unir(&sinUno(*prim(scc)) • fin(scc), Ag(*prim(scc), cc)) fi
+
+        posiciones: conjCons ➝ conj(Pos)
+        posiciones(cc) ≡ if vacio?(cc) then ∅ else Ag(dameUno(cc).pos, sinUno(cc))
+
+    abstraccion:
+    abs: ^estr ➝ SimCity
+    (∀ e: ^estr)
+    abs(e) ≡ sc: SimCity |
+        mapa(s) =obs unirMapas(e.mapa) ∧
+        casas(s) =obs agarrarCasasYAbs(e.listaConjCons)
+        comercios(s) =obs agarrarComerciosYAbs(e.listaConjCons)
+        popularidad(s) =obs e.popularidad
+
+    unirMapas: conjLineal(puntero(Mapa)) ➝ Mapa
+    unirMapas(pm) ≡ if vacia?(pm) then crear(∅, ∅) else *dameUno(pm) + unirMapas(sinUno(pm)) fi
+
+fin representacion
+
+
+// b
+representacion simCity:
+
+    simCity src estr donde:
+        estr ≡ Tupla<
+            turno: nat, 
+            diferenciaUnion: nat 
+            popularidad: nat,       
+            mapa: mapa,
+            casas: diccLineal(pos, turnoAgregada),
+            comercios: diccLineal(pos, turnoAgregada),
+            uniones: lista(puntero(hijo))
+        >
+        Pos ≡ tupla<x: nat, y: nat>  
+        hijo ≡ tupla<
+            simCity: puntero(estr)
+            diferenciaUnion: nat,  
+            proximo: puntero(hijo)
+        >           
+
+    invariante:
+        rep: ^estr ➝ boolean
+        (∀e: ^estr)
+
+        rep(e) ≡
+            // el turno actual es mayor o igual al máximo de cada union en el simCity
+            (∀ p: puntero(^estr))(p ∈ uniones ⟹L
+                e.turno ≥ (*p).turno
+            ) ∧
+            // diferenciaPorUnion es el resultado de calcular la diferencia entre el turno
+            // actual y las uniones para el primer elem de e.uniones, 
+            // que representa la diff para la estructura actual
+            long(e.uniones) ≥ 1 ∧L e.diferenciaUnion = sumarDiferencias(prim(e.uniones)) ∧L
+            // la popularidad es igual a la cantidad de uniones en el simCity
+            // ya que uniones no agrega los punteros nulos (i.e. auto-referenciales)
+            e.popularidad = #(uniones) ∧L
+            (∀p: pos)(pos ∈ claves(e.casas) ⟹L
+            // el turno absoluto es mas grande que el turno en que se agregó una casa
+                obtener(pos, e.casas) ≤ e.turno - e.diferenciaUnion  ∧
+            // ninguna casa esta sobre un río 
+                ¬esRio(pos, mapa)
+            ) ∧
+            (∀p: pos)(pos ∈ claves(e.comercios) ⟹L
+            // el turno absoluto es mas grande que el turno en que se agregó un comercio
+                obtener(pos, e.comercios) ≤ e.turno - e.diferenciaUnion  ∧
+                // ningun comercio está sobre un río 
+                ¬esRio(pos, mapa)
+            ) ∧
+            // se agrego al menos una consrucción cada turno hasta el actual
+            // en cualquier nivel 
+            (∀ n: Nat)(0 ≤ n < e.turno ⟹L
+                (∃p: pos)(def?(p, casas) ∧L
+                    obtener(pos, casas) = n 
+                ) ∨ 
+                (∃p: pos)(def?(p, comercios) ∧L
+                    obtener(pos, comercios) = n 
+                )
+            ) ∧
+            (∀p: puntero(^hijo))(esta?(p, e.uniones) ⟹L
+                // no reaparece en ningun otro nodo del mismo nivel, recursivamente
+                p ∉ unirPunteros(removerPrimeraAparicion(p, e.uniones)) ∧L
+                // el primero es null pero no el resto
+                (pos(p) = 0 ⟹L p.simCity = null) ∧
+                (pos(p) ≠ 0 ⟹L p.simCity ≠ null) ∧L 
+                // rep recursivamente
+                rep(*(p.simCity)) ∧L
+                // el turno es mayor a todas las diferencias
+                e.turno ≥ p.diferenciaUnion ∧
+                // el turno absoluto para este hijo es mayor o igual a su turno
+                e.turno - p.diferenciaUnion ≥ (*(p.simCity)).turno ∧
+                // no hay loops en proximo
+                p ∉ secuPunteros(p.proximo)
+                // si es 0 apunta a otro con 0 o apunta a null
+                p.diferenciaUnion = 0 ⟺ p.proximo = null ∨L *(p.proximo).diferenciaUnion = 0
+            ) ∧
+            // solo un hijo no tiene proximo
+            (∃! p: puntero(^hijo))(esta?(p, e.uniones) ∧L p.proximo = null) ∧
+            // no se solapan posiciones maximas entre la 
+            // estructura menos el ultimo hijo (ultima union), y este
+            // puedo garantizarlo si hubo turnos nuevos? si:
+            //  o se agrego una casa nueva con nivel uno, por lo que no va a reemplazar
+            //  la maxima actual.
+            //  o se agrego un comercio nuevo tal que ahora es maximo pero
+            //  si se agrego, lo hizo en una posicion vacia.
+            // salvo que se agregue y pasen muchos turnos 
+            unionesValidas(e)
+
+        donde:
+            uniones ≡ unirPunteros(e.uniones)
+            casas ≡ unirCasas(ag(&e, uniones)) 
+            comercios ≡ unirComercios(ag(&e, uniones))
+            mapa  ≡ unirMapas(ag(&e, uniones))
+
+
+        unirPunteros: secu(^hijo) × conj(puntero(^estr)) ➝ conj(puntero(^estr))
+        unirPunteros(sh, ps) ≡ 
+            if vacia?(sh) then                 
+                ps
+            if prim(sh).simCity = null ∨L prim(sh).simCity ∈ ps /* loop! */ then 
+                unirPunteros(fin(sh), ps)
+            else 
+                unirPunteros(*(prim(sh).simCity).uniones, Ag(prim(sh), ps)) ⋃ unirPunteros(fin(sh), Ag(prim(sh), ps)) 
+            fi
+
+
+        unirMapas: conj(puntero(^estr)) ➝ Mapa
+        unirMapas(ps) ≡ if vacio?(ps) then crear(∅, ∅) else (*dameUno(ps)).mapa + UnirMapas(sinUno(ps)) fi
+
+        unirCasas: conj(puntero(^estr)) ➝ dicc(Pos, Nat)
+        unirCasas(ps) ≡ if vacio?(ps) then vacio else (*p).casas ⋃ unirCasas(sinUno(ps)) fi
+
+        unirComercios: conj(puntero(^estr)) ➝ dicc(Pos, Nat)
+        unirComercios(ps) ≡ if vacio?(ps) then vacio else (*p).casas ⋃ unirComercios(sinUno(ps)) fi
+
+        removerPrimeraAparicion: secu(α) × α ➝ secu(α)
+        removerPrimeraAparicion(s, a) ≡ if vacia?(s) then <> else if a = prim(s) then fin(s) else prim(s) • removerPrimeraAparicion(fin(s), a) fi
+
+
+    abstraccion:
+        abs: ^estr e ➝ SimCity {rep(e)}
+        (∀ e: ^estr)
+        abs(e) ≡ sc: SimCity |
+            mapa(sc) =ob unirMapas(ag(&e, unirPunteros(e.uniones))) ∧
+            casas(sc) =obs nivelar(claves(unirCasas(ag(&e, unirPunteros(e.uniones)))), e) ∧
+            comercios(sc) =obs nivelar(claves(unirComercios(ag(&e, unirPunteros(e.uniones)))), e) ∧
+            popularidad(sc) =obs e.popularidad
+
+fin representacion
+
+
+nivelar: conj(Pos) × ^estr ➝ dicc(Pos, Nivel)
+nivelar(cp, e) ≡ 
+    if vacio?(cp) then 
+        vacio 
+    else 
+        definir(
+            dameUno(cp), 
+            nivel(dameUno(cp), e), 
+            nivelar(sinUno(cp), e)) 
+    fi 
+
+nivel(pos, sc) ≡ // existe pos en sc
+        if def?(pos, casas(sc)) then
+            (turno - diferenciaPorUnion) - obtener(pos, casas(sc))
+        else if def?(pos, comercios(sc)) then
+            (turno - diferenciaPorUnion) - manhattan(pos, obtener(pos, comercio(sc)))
+        else 
+            sumarDiferencias(llegarAlHijoCorrecto(pos, sc.uniones)) + nivel(llegarAlHijoCorrecto(pos, cs.uniones).simCity)
+        fi     
+
+llegarAlHijoCorrecto(h) ≡
+    if def?(pos, obtener(pos, unirCasas(prim(h).SimCity))) then
+        prim(h)
+    else
+        llegarAlHijoCorrecto(fin(h)) fi 
+        
+sumarDiferencia(h) ≡
+    if h.proximo = null then
+        0
+    else
+        h.diferenciaPorUnion + sumarDiferencia(h.proximo) fi 
