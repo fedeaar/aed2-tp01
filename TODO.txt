@@ -1,5 +1,7 @@
 natan       pasar a latex       tad Mapa
 natan/manu  corregir/simplif    tad SimCity
+    Agarrar el UnirDicc de tad Servidor
+    Agarrar el esRio de tad Mapa (nat subilo plssss :DD)
 fede        corregir            tad Servidor
 
 ok  representacion Mapa
