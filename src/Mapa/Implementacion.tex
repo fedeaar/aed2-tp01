@@ -1,16 +1,48 @@
 \begin{Algoritmos}
 
     \begin{algorithm}[H]{\textbf{crear}(\In{hs}{conj(Nat)}, \In{vs}{conj(Nat)}) $\to$ $res$ : estr}
-    \begin{algorithmic}[1]
-        \State $estr.horizontales \gets hs$
-        \State $estr.verticales \gets vs$
-        \Return estr
-        \medskip
-        \Statex \underline{Complejidad:} $O(copy(hs) + copy(vs))$
-    \end{algorithmic}
+        \begin{algorithmic}[1]
+            \State $estr.horizontales \gets hs$
+            \State $estr.verticales \gets vs$
+            \Return estr
+            \medskip
+            \Statex \underline{Complejidad:} $O(copy(hs) + copy(vs))$
+        \end{algorithmic}
     \end{algorithm}
-    
-    \completar
-      
+
+    \begin{algorithm}[H]{\textbf{esRio}(\In{m1}{Mapa}, \In{p}{Pos}) $\to$ $res$ : Bool}
+        \begin{algorithmic}[1]
+            \State $bool \ res \gets false$
+            \State $for(Nat \ y : estr.horizontales)$
+            \State \indent $if(y \ = _{obs} \ p.y) \ then$
+            \State \indent \indent$res \gets true$
+            \State \indent $else$
+            \State \indent \indent $skip$
+            \State $for(Nat \ x : estr.verticales)$
+            \State \indent $if(x \ = _{obs} \ p.x) \ then$
+            \State \indent \indent $res \gets true$
+            \State \indent $else$
+            \State \indent \indent$skip$
+            \Return res
+            \medskip
+            \Statex \underline{Complejidad:} $O( \# horizontales(m1) + \# verticales(m1))$
+        \end{algorithmic}
+    \end{algorithm}
+
+
+    \begin{algorithm}[H]{\textbf{Suma}(\In{hs}{conj(Nat)}, \In{vs}{conj(Nat)}) $\to$ $res$ : estr}
+        \begin{algorithmic}[1]
+            \State $for(Nat \ n : m1.horizontales)$
+            \State \indent $Ag(n, \ estr.horizontales)$
+            \State $for(Nat \ n : m2.horizontales)$
+            \State \indent $Ag(n, \ estr.horizontales)$
+            \State $for(Nat \ n : m1.verticales)$
+            \State \indent $Ag(n, \ estr.verticales)$
+            \State $for(Nat \ n : m2.verticales)$
+            \State \indent $Ag(n, \ estr.verticales)$
+            \Return estr
+            \medskip
+            \Statex \underline{Complejidad:} $O( \# horizontales(m1) + \# verticales(m1) \# horizontales(m2) + \# verticales(m2))$
+        \end{algorithmic}
+    \end{algorithm}
 \end{Algoritmos}
-    

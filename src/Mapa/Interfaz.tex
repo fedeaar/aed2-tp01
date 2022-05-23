@@ -10,7 +10,15 @@
     {$res \igobs mapa(hs, vs)$}%
       [$O(copy(hs), copy(vs))$]
     [crea un mapa]
-  
-      \completar
-  
+
+    \InterfazFuncion{esRio}{\In{m1}{Mapa},\In{p}{Pos}}{Bool}%
+    {$res \igobs esRio(m1, p)$}%
+      [$O(1)$]
+    [verifica si en determinada pos hay rio] 
+
+    \InterfazFuncion{Suma}{\In{m1}{Mapa},\In{m2}{Mapa}}{Mapa}%
+    {$res \igobs m1 + m2$}%
+      [$O(crear(m1) + crear(m2)$]
+    [une 2 mapas] 
+    \\
   \end{Interfaz}
