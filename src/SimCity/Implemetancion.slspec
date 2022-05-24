@@ -1,0 +1,35 @@
+Algoritmos
+//----------------------------------------
+iniciar(in m: Mapa) ⟶ res : estr
+1:  Ag(Direccion(m), estr.mapa)
+2:  estr.diferenciaUnion ⟵ 0
+3:  estr.popularidad ⟵ 0
+4:  estr.listaConjCons ⟵ <>
+5:  return estr
+Complejidad: O(1)
+//----------------------------------------
+
+//----------------------------------------
+avanzarTurno(inout SimCity s,  in dicc(Pos × Construccion) cs)
+1:  for(Pos p : claves(cs)) {
+2:      if(cs[p] == "casa") {
+3:          s.casas[p] = estr.turno
+4:      } else if(cs[p] == "comercio") {
+5:          s.comercios[p] = estr.turno
+6:      }
+7:  }
+8:  estr.turno ⟵ estr.turno + 1
+//----------------------------------------
+
+//----------------------------------------
+unir(inout SimCity s1,  inout Simcity s2)
+    popularidad ← popularidad + 1
+    turno ← max(s1.turno, s2.turno)
+    
+//----------------------------------------
+Casas(in SimCity s) ➝ res: dicc(Pos, Nivel) 
+    res
+    
+
+
+
