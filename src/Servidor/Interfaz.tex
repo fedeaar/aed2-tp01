@@ -49,7 +49,7 @@
         s \igobs\ s0\ \wedge\ def?(p, partidas(s))\ $\yluego$\ \lnot p\ \in\ congeladas(s)\ \wedge\ $\\$
         $\tab\tab$ \lnot def?(pos, verCasas(s, p))\ \wedge\ \lnot esRio(pos, verMapa(s, p))
     $]
-    {$construccionesSeMantienen(s, s0, pos)\ \wedge\ casaAgregada(s, p, pos)$}
+    {$construccionesSeMantienen(s, s0, p, pos)\ \wedge\ casaAgregada(s, p, pos)$}
     [$O()$]
     [agrega una nueva casa a la partida]
     [No tiene]
@@ -172,8 +172,17 @@
     $def?(pos, verCasas(s, p))\ $\yluego$\ obtener(pos, verCasas(s, p))\ \igobs\ 1$
 }
 
-\tadOperacion{construccionesSeMantienen}{servidor,servidor,pos}{boolean}{}
-\tadAxioma{construccionesSeMantienen($s, s0, pos$)}{}
+\tadOperacion{construccionesSeMantienen}{servidor,servidor,string,Pos}{boolean}{}
+\tadAxioma{construccionesSeMantienen($s, s0, p, pos$)}{$
+    partidas(s)
+    (\forall\ partida: string)(def?(partida, s)\ \Leftrightarrow\ def?(partida, s0)) $\\$
+    $\yluego \\$
+    (\forall\ partida: string)(def?(partida, s0)\ \wedge\ partida\ \neq\ p\ $\impluego \\$ 
+        $\tab$ (\forall\ pos2: Pos)(def?(pos2, verCasas(partida, s0))\ \Leftrightarrow\ def?(pos2, verCasas(partida, s))) $\\$
+        $\tab$ \wedge $\\$
+        $\tab$ (\forall\ pos2: Pos)(def?(pos2, verCasas(partida, s0))\ \Leftrightarrow\ def?(pos2, verCasas(partida, s)))
+    ) 
+$}
     
 \end{Interfaz}
 
