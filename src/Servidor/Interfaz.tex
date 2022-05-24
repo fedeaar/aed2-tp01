@@ -1,0 +1,180 @@
+\begin{Interfaz}
+    \textbf{se explica con}: \tadNombre{Servidor}
+
+    \textbf{géneros}: \TipoVariable{server}
+
+    \Titulo{Operaciones básicas de server}
+
+    \InterfazFuncion{nuevoServer}{}{server}
+    {$res \igobs nuevoServer$}
+    [$O()$]
+    [crea un servidor]
+    [No tiene]
+
+    \InterfazFuncion{partidas}{\In{s}{server}}{dicc(string, SimCity)}
+    {$res \igobs partidas(s)$}
+    [$O()$]
+    [Devuelve un diccionario con todas las partidas del servidor]
+    [Devuelve una referencia no modificable]
+
+    \InterfazFuncion{congeladas}{\In{s}{server}}{conj(string)}
+    {$res \igobs congeladas(s)$}
+    [$O()$]
+    [Devuelve el conjunto con los nombres de las partidas no modificables]
+    [Devuelve una referencia no modificable]
+
+    \InterfazFuncion{nuevaPartida}{\Inout{s}{server}, \In{p}{string}, \In{m}{mapa}}{}
+    [$s \igobs\ s0\ \wedge\ \lnot def?(p, partidas(s))$]
+    {$s \igobs nuevaPartida(s0, p, m)$}
+    [$O()$]
+    [agrega una partida nueva al servidor]
+    [No tiene]
+
+    \InterfazFuncion{unirPartidas}{\Inout{s}{server}, \In{p1}{string}, \In{p2}{string}}{}
+    [$*unionValida(s, p1, p2)$]
+    {$s \igobs nuevaPartida(s0, p, m)$}
+    [$O()$]
+    [une dos partidas de simcity en una, y p2 pasa a ser no modificable]
+    [No tiene]
+
+    \InterfazFuncion{avanzarTurnoPartida}{\Inout{s}{server}, \In{p}{string}, \In{cs}{dicc(Pos, Nat)}}{}
+    [$*avanzarTurnoValido(s, p, cs)$]
+    {$s \igobs avanzarTurnoPartida(s0, p, cs)$}
+    [$O()$]
+    [avanza el turno de una partida y agrega las construcciones definidas en el diccionario de entrada]
+    [No tiene]
+
+    \InterfazFuncion{agregarCasa}{\Inout{s}{server}, \In{p}{string}, \In{pos}{Pos}}{}
+    [$
+        s \igobs\ s0\ \wedge\ def?(p, partidas(s))\ $\yluego$\ \lnot p\ \in\ congeladas(s)\ \wedge\ $\\$
+        $\tab\tab$ \lnot def?(pos, verCasas(s, p))\ \wedge\ \lnot esRio(pos, verMapa(s, p))
+    $]
+    {$construccionesSeMantienen(s, s0, pos)\ \wedge\ casaAgregada(s, p, pos)$}
+    [$O()$]
+    [agrega una nueva casa a la partida]
+    [No tiene]
+
+    \pagebreak
+    
+    \InterfazFuncion{agregarComercio}{\Inout{s}{server}, \In{p1}{string}, \In{p2}{string}}{}
+    [$
+        s \igobs\ s0\ \wedge\ def?(p, partidas(s))\ $\yluego$\ \lnot p\ \in\ congeladas(s)\ \wedge\ $\\$
+        $\tab\tab$ \lnot def?(pos, verComercios(s, p))\ \wedge\ \lnot esRio(pos, verMapa(s, p))
+    $]
+    {$s \igobs nuevaPartida(s0, p, m)$}
+    [$O()$]
+    [agrega un nuevo comercio a la partida]
+    [No tiene]
+    
+    \InterfazFuncion{popularidad}{\In{s}{server}, \In{p}{string}}{Nat}
+    [$def?(p, partidas(s))$]
+    {$res \igobs verPopularidad(s, p)$}
+    [$O()$]
+    [Devuelve la popularidad de la partida]
+    [Devuelve una referencia no modificable]
+
+    \InterfazFuncion{antiguedad}{\In{s}{server}, \In{p}{string}}{Nat}
+    [$def?(p, partidas(s))$]
+    {$res \igobs verTurno(s, p)$}
+    [$O()$]
+    [Devuelve la antiguedad de la partida]
+    [Devuelve una referencia no modificable]
+
+    \InterfazFuncion{mapa}{\In{s}{server}, \In{p}{string}}{mapa}
+    [$def?(p, partidas(s))$]
+    {$res \igobs verMapa(s, p)$}
+    [$O()$]
+    [Devuelve el mapa de la partida]
+    [Devuelve una referencia no modificable]
+
+    \InterfazFuncion{verCasas}{\In{s}{server}, \In{p}{string}}{dicc(Pos, Nat)}
+    [$def?(p, partidas(s))$]
+    {$res \igobs verCasas(s, p)$}
+    [$O()$]
+    [Devuelve un diccionario con las posiciones y niveles de las casas de la partida]
+    [Devuelve una referencia no modificable]
+
+    \InterfazFuncion{verComercios}{\In{s}{server}, \In{p}{string}}{dicc(Pos, Nat)}
+    [$def?(p, partidas(s))$]
+    {$res \igobs verComercios(s, p)$}
+    [$O()$]
+    [Devuelve un diccionario con las posiciones y niveles de los comercios de la partida]
+    [Devuelve una referencia no modificable]
+
+    \pagebreak
+
+    *donde: \\
+\tadOperacion
+    {unionValida}
+    {server\ s, Nombre\ p1, Nombre\ p2}
+    {boolean}
+    {}
+\tadAxioma
+    {unionValida(s,\ p1,\ p2)}     
+    {$
+        def?(p1,\ partidas(s))\ \land\ 
+        def?(p2,\ partidas(s))\ \land\ $\\$
+        p1\ \notin\ congeladas(s)\ $\yluego$\ $\\$
+        (\forall\ pos:\ Pos)(pos \in claves(constr1)\ $\impluego\ \\$   
+            $\tab$ \neg sobreRio(pos,\ sim2)\ \land\  $\\$
+            $\tab$ ((\nexists\ otra:\ Pos)(otra\ \in\ constr1\ $\yluego\ \\$ 
+            $\tab\tab$ obtener(pos,\ constr1).nivel\ <\ obtener(otra,\ constr1).nivel $\\$
+            $\tab$)\ $\impluego$\ \neg def?(pos,\ constr2))\ $\\$
+        )\ \land\ $\\$
+        (\forall\ pos:\ Pos)(pos\ \in\ claves(constr2)\ $\impluego\ \\$   
+            $\tab$ \neg sobreRio(pos,\ sim1)\ \land\  $\\$
+            $\tab$((\nexists otra:\ Pos)(otra\ \in\ constr2\ $\yluego$\ $\\$ 
+            $\tab\tab$ obtener(pos,\ constr2).nivel\ <\  obtener(otra,\ constr2).nivel $\\$
+            $\tab$)\ $\impluego$\ \neg def?(pos,\ constr1))\ $\\$
+        )               
+        $}
+    
+\tab donde $sim1\ \equiv\ obtener(p1,\ partidas(s))$, \\
+\tab\tab\tab \: $sim2\ \equiv\ obtener(p2,\ partidas(s))$, \\
+\tab\tab\tab \: $constr1\ \equiv\ casas(sim1)\ \cup_{dicc}\ comercios(sim1)$, \\
+\tab\tab\tab \: $constr2\ \equiv\ casas(sim2)\ \cup_{dicc}\ comercios(sim2)$
+\\
+
+\tadOperacion
+    {avanzarTurnoValido}
+    {server\ s, Nombre\ p, dicc(Pos, Construccion)\ cs}
+    {boolean}
+    {}
+\tadAxioma
+    {avanzarTurnoValido(s,\ p,\ cs)}
+    {$
+        def?(p,\ partidas(s))\ \land\ $\\$
+        p\ \notin\ congeladas(s)\ \land\ $\\$ 
+        \neg vacia?(claves(cs))\ $\yluego\ \\$
+        (\forall pos:\ Pos)(pos\ \in\ claves(cs)\ $\impluego$ $\\$
+            $\tab$ obtener(pos,\ cs)\ \in\ \{"casa",\ "comercio"\}\ \land\ $\\$
+            $\tab$ \neg sobreRio(pos,\ mapa(sim))\ \land\ $\\$
+            $\tab$ \neg def?(pos,\ casas(sim))\ \land\ $\\$
+            $\tab$ \neg def?(pos,\ comercios(sim)) $\\$
+        )
+    $}
+\tab donde $sim \equiv obtener(p,\ partidas(s))$  
+\\
+
+\tadOperacion{$\bullet\ \cup_{dicc}\ \bullet$}{dicc($\alpha$, $\beta$),dicc($\alpha$, $\beta$)}{dicc($\alpha$, $\beta$)}{}
+\tadAxioma{$d$\ $\cup_{dicc}$ $d'$}{
+    $\LIF$ $vacio?$(claves($d'$)) $\LTHEN$ \\
+        \tab $d$ \\
+    $\LELSE$ \\
+        \tab definir(dameUno(claves($d'$)), \\
+        \tab\tab obtener(dameUno(claves($d'$)), $d'$), \\
+        \tab\tab $d$ $\cup_{dicc}$ borrar(dameUno(claves($d'$)), $d'$)) \\
+    $\LFI$
+}
+
+\tadOperacion{casaAgregada}{servidor,string,pos}{boolean}{}
+\tadAxioma{casaAgregada($s, p, pos$)}{
+    $def?(pos, verCasas(s, p))\ $\yluego$\ obtener(pos, verCasas(s, p))\ \igobs\ 1$
+}
+
+\tadOperacion{construccionesSeMantienen}{servidor,servidor,pos}{boolean}{}
+\tadAxioma{construccionesSeMantienen($s, s0, pos$)}{}
+    
+\end{Interfaz}
+
+\pagebreak
