@@ -1,34 +1,57 @@
 Algoritmos
 //----------------------------------------
 iniciar(in m: Mapa) ⟶ res : estr
-1:  Ag(Direccion(m), estr.mapa)
-2:  estr.diferenciaUnion ⟵ 0
-3:  estr.popularidad ⟵ 0
-4:  estr.listaConjCons ⟵ <>
+1:  estr.turno ← 0
+3:  estr.popularidad ← 0
+1:  estr.mapa ← m
+2:  estr.casas ← vacio()
+2:  estr.comercios ← vacio()
+4:  estr.uniones ← vacia()
 5:  return estr
 Complejidad: O(1)
 //----------------------------------------
 
 //----------------------------------------
-avanzarTurno(inout SimCity s,  in dicc(Pos × Construccion) cs)
-1:  for(Pos p : claves(cs)) {
-2:      if(cs[p] == "casa") {
-3:          s.casas[p] = estr.turno
-4:      } else if(cs[p] == "comercio") {
-5:          s.comercios[p] = estr.turno
-6:      }
-7:  }
-8:  estr.turno ⟵ estr.turno + 1
+avanzarTurno(inout SimCity s,  in dicc(Pos, Construccion) cs)
+    // actualizo turno de las uniones 
+    nat i = 0; 
+    while(i < long(s.uniones)) : 
+        turnoDesdeUnion ← turnoDesdeUnion + 1;
+        i ← i + 1
+
+    // subo 1 al nivel de cada una de las casas del simcity s 
+    itDicc(Pos, Nivel) itCasas = crearIt(s.casas);
+    while(haySiguiente(itCasas)) :
+        siguienteSignificado(itCasas) ← siguienteSignificado(itCasas) + 1
+        avanzar(itCasas)
+
+    // subo 1 al nivel de cada una de los comercios del simcity s 
+    itDicc(Pos, Nivel) itComercios = crearIt(s.comercios);
+    while(haySiguiente(itComercios)) :
+        siguienteSignificado(itComercios) ← siguienteSignificado(itComercios) + 1
+        avanzar(itComercios)
+
+    // agrego con nivel 1 cada una de las casas o comercios agregados en el turno
+    itDicc(Pos, Nivel) itCs = crearIt(cs);
+    while(haySiguiente(itCs)) :
+        if(siguienteSignificado(itCs) =obs "casa") :
+            definirRapido(s.casas, siguienteClave(itCs), 1);
+        else if(siguienteSignificado(itCs) =obs "comercio") :
+            definirRapido(s.comercio, siguienteClave(itCs), 1);
+        avanzar(itCs)
+
+    // actualizo el turno
+    estr.turno ⟵ estr.turno + 1
 //----------------------------------------
 
 //----------------------------------------
 unir(inout SimCity s1,  inout Simcity s2)
-    popularidad ← popularidad + 1
+    s1.popularidad ← s1.popularidad + s2.popularidad
     turno ← max(s1.turno, s2.turno)
+    hijo nuevoHijo ← <direccion(s2), 0>
+    agregarAtras(s1.uniones, nuevoHijo)
     
 //----------------------------------------
-Casas(in SimCity s) ➝ res: dicc(Pos, Nivel) 
-    res
     
 
 
