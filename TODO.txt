@@ -1,4 +1,4 @@
-natan       pasar a latex       tad Mapa
+natan       pasar a latex       tad Mapa ok
 natan/manu  corregir/simplif    tad SimCity
     ok Agarrar el UnirDicc de tad Servidor
     Agarrar el esRio de tad Mapa (nat subilo plssss :DD)
@@ -32,11 +32,11 @@ manu    representacion Servidor
     servidor src estr donde:
         estr = diccTrie(nombre, tupla<modificable: bool, puntero(SimCity)>)
 
-natan   pasar a latex   interfaz Mapa
+natan   pasar a latex   interfaz Mapa ok
 fede    interfaz SimCity    
 manu   interfaz Servidor   
 
-natan   pasar a latex   implementacion Mapa
+natan   pasar a latex   implementacion Mapa ok
     horizontales
     verticales
     esRio
