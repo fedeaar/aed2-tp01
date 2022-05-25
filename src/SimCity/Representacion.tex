@@ -1,0 +1,89 @@
+\begin{Representacion}
+  
+    $SimCity$ se compone por la $ubicacion$ y $nivel$ de una serie de $construcciones$, de tipo $casa$ o $comercio$, sobre un $Mapa$, y de una $popularidad$ respecto a la cantidad de uniones que lo modificaron. \\
+    
+    La ubicación de las casas se representan sobre un diccionario lineal con clave $Pos \equiv tupla<Nat,\ Nat>$ y significado $Nivel \equiv Nat$. La ubicación de los comercios se representan similarmente, pero su significado responde a un $NivelBase \equiv Nat$ a partir del cual se calcula propiamente su $nivel$. El mapa es de tipo $Mapa$ y las uniones se representan a través de una $lista$ que contiene
+    punteros a los $SimCitys$ unidos e información relevante para calcular el nivel de sus construcciones. Ya que, una vez unido a otro, un $SimCity$ debe permanecer sin modificación. 
+  
+
+    \begin{Estructura}{SimCity}[estr]
+        \begin{Tupla}[estr]
+            \tupItem{turno\ }{Nat}%
+            \tupItem{\\popularidad\ }{Nat}%
+            \tupItem{\\mapa\ }{Mapa}%
+            \tupItem{\\casas\ }{diccLineal(pos,\ Nivel)}
+            \tupItem{\\comercios\ }{diccLineal(pos,\ NivelBase)}
+            \tupItem{\\uniones\ }{lista(hijo)}
+        \end{Tupla}
+        
+        \vspace{2mm}
+        \begin{Tupla}[hijo]
+            \tupItem{sc\ }{puntero(estr)}
+            \tupItem{\\ turnosDesdeUnion\ }{Nat}
+        \end{Tupla}
+        
+        \vspace{2mm}
+        \begin{Tupla}[pos]
+            \tupItem{x\ }{Nat}
+            \tupItem{y\ }{Nat}
+        \end{Tupla}
+    \end{Estructura}
+    \vspace{2mm}
+    \Rep[estr]{$( \\
+        %1
+        \tab \&e\ \notin\ conjUnidos\ \yluego\ \\
+        %2
+        \tab e.popularidad\ =\ \#(conjUnidos)\ \land\ \\
+        %3
+        \tab (\forall\ p:\ puntero(\hat{estr}))(p\ \in\ conjUnidos\ \impluego\\
+        \tab \tab e.turno\ \geq (*p).turno \\
+        \tab )\ \land \\       
+        %
+        \tab (\forall\ p:\ \hat{pos})(p\ \in\ claves(conjCasas)\ \impluego \\
+        %4, 5, 6
+        \tab \tab \neg def(p,\ e.comercios)\ \land\ \neg esRio(p,\ conjMapas)\ \land\ obtener(p,\ conjCasas)\ <\ e.turno\ \\
+        \tab )\ \land \\
+        %
+        \tab (\forall\ p:\ \hat{pos})(p\ \in\ claves(conjComercios) \impluego\ \\
+        %7, 8, 9
+        \tab \tab \neg def(p,\ e.casas)\ \land\ \neg esRio(p,\ conjMapas)\ \land\ obtener(p,\ conjComercios)\ <\ e.turno\ \\
+        \tab )\ \land\ \\
+        %10
+        \tab (\forall\  n:\ Nat)(0\ \leq n\ <\ e.turno\ \impluego\ \\
+        \tab \tab (\exists\ p:\ \hat{pos})(def?(p,\ conjCasas)\ \yluego\ obtener(p,\ conjCasas)\ =\ n) \vee\ \\ 
+        \tab \tab (\exists\ p:\ \hat{pos})(def?(p,\ conjComercios)\ \yluego\ obtener(p,\ conjComercios)\ =\ n) \\  
+        \tab )\ \land\ \\ 
+        \tab (\forall\  h:\ \hat{hijo})(esta?(h,\ e.uniones)\ \impluego\ \\
+        %11, 12
+        \tab \tab h.simCity\ \neq\ null\ \yluego\ h.sc\ \notin\ unirPunteros(remover(p,\ e.uniones))\ \land\ \\
+        %13
+        \tab \tab rep(*(h.simCity))\ \yluego\ \\
+        %14
+        \tab \tab e.turno\ \geq\ h.turnosDesdeUnion\ \land\ \\
+        %15
+        \tab \tab (\forall\  h2:\ \hat{hijo})(esta?(h2,\ e.uniones)\ \yluego\ pos(h2,\ e.uniones)\ >\ pos(h,\ e.uniones)\ \impluego\ \\
+        \tab \tab \tab h2.turnosDesdeUnion\ \leq\ h.turnosDesdeUnion\ \\
+        \tab \tab ) \\
+        \tab )\ \land\ \\
+        \tab unionesValidas(e,\ e.uniones) \\
+        )$}
+    \vspace{3mm}
+    \tab donde: $\\$
+    \tab \tab $conjUnidos\ \equiv\ unirPunteros(e.uniones)$ \\
+    \tab \tab $conjCasas\ \equiv\ unirCasas(Ag(\&e,\ conjUnidos))$ \\
+    \tab \tab $conjComercios\ \equiv\ unirComercios(Ag(\&e,\ conjUnidos))$ \\
+    \tab \tab $conjMapas\ \equiv\ unirMapas(Ag(\&e,\ conjUnidos))$ \\
+
+    auxiliares: $\\$
+   
+    \tadOperacion
+    {unirPunteros}{secu(hijo)}{conj(puntero(estr))}{}
+    \tadAxioma
+    {unirPunteros(s)}{ 
+        $_unirPunteros(s,\ \emptyset)$
+    }
+    TODO
+
+  
+  
+  \end{Representacion}
