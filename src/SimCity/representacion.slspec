@@ -82,7 +82,7 @@ representacion SimCity:
         unirCasas(ps) ≡ if vacio?(ps) then vacio else p->casas ⋃ unirCasas(sinUno(ps)) fi
 
         unirComercios: conj(puntero(^estr)) ➝ dicc(Pos, Nat)
-        unirComercios(ps) ≡ if vacio?(ps) then vacio else p->.comercios ⋃ unirComercios(sinUno(ps)) fi
+        unirComercios(ps) ≡ if vacio?(ps) then vacio else p->comercios ⋃ unirComercios(sinUno(ps)) fi
 
         remover: secu(α) × α ➝ secu(α) // remueve la primera aparicion
         remover(s, a) ≡ if vacia?(s) then <> else if a = prim(s) then fin(s) else prim(s) • remover(fin(s), a) fi
@@ -133,11 +133,31 @@ representacion SimCity:
         nivel: ^estr × pos ➝ Nat
         nivel(e, pos) ≡
             if def?(pos, conjCasas) then
-                obtener(pos, conjCasas)
+                obtener(pos, conjCasas) + nivelesPorUnion(e, pos)
             else 
-                max(manhattan(pos, pos, conjCasas), obtener(pos, conjComercios))
+                max(manhattan(pos, pos, conjCasas), obtener(pos, conjComercios) + nivelesPorUnion(e, pos))
             fi
 
+        nivelesPorUnion: ^estr × pos ➝ Nat
+        nivelesPorUnion(e, pos) ≡ 
+            if def?(pos, e.casas) ∨ def?(pos, e.comercios) then
+                0
+            else
+                hijoCorrecto.turnosDesdeUnion + nivelesPorUnion(hijoCorrecto.sc, pos)
+            fi  
+            donde:
+                hijoCorrecto ≡ llegarAlHijoCorrecto(e.uniones, pos)
+
+        llegarAlHijoCorrecto: secu(^hijo) × pos 
+        llegarAlHijoCorrecto(s, p) ≡ // no puede quedar vacia, siempre se llama con un pos existente
+            if def?(pos, unirCasas(h) ∨ def?(pos, unirComercios(h)) then 
+                prim(s) 
+            else 
+                llegarAlHijoCorrecto(fin(s)) 
+            fi 
+            donde:
+                h ≡ Ag(prim(s).sc, ∅)
+        
         manhattan: Pos × Pos × dicc(Pos, Nat) ➝ Nat
         manhattan(h, d, cc) ≡ 
             if |h.x - d.x| + |h.y - d.y| ≤ 3 then
