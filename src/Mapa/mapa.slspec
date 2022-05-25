@@ -1,0 +1,76 @@
+mapa se representa con estr
+donde estr es tupla(horizontales: conj(Nat), verticales: conj(Nat))
+
+TAD Mapa
+    igualdad observacional
+        (∀m, m0: Mapa)(m =obs m0 ⟺ horizontales(m) =obs horizontales(m0) ∧L
+                                    verticales(m) =obs verticales(m0))
+    generos Mapa
+
+    exporta Mapa, observadores, generadores, • + •, •[•] 
+
+    usa Nat, conj(a), Pos(Nat, Nat), Bool
+
+    observadores
+        horizontales : Mapa ⟶ conj(Nat)
+        verticales   : Mapa ⟶ conj(Nat)
+
+    generadores
+        crear : conj(Nat) × conj(Nat) ⟶ Mapa
+
+    otras operaciones
+        • + • : Mapa × Mapa ⟶ Mapa
+        esRio : Mapa × Pos  ⟶ Bool  
+        
+    axiomas ∀hs, vs: conj(Nat), ∀m1, m2: Mapa, ∀p: Pos
+        horizontales(crear(hs, vs)) ≡ hs
+        verticales(crear(hs, vs))   ≡ vs
+        m1 + m2      ≡ crear(horizontales(m1) ⋃ horizontales(m2), verticales(m1) ⋃ verticales(m2))
+        esRio(m1, p) ≡ p.x ∈ verticales(m1) ∨ p.y ∈ horizontales(m1) 
+Fin TAD
+
+Operaciones básicas
+    crear(in hs: conj(Nat), in vs: conj(Nat)) ⟶ res : mapa
+    Pre ≡ {true}
+    Post ≡ {res =obs mapa(hs, vs)}
+    Complejidad: O(copy(hs) + copy(vs))
+    Descripción: crea un mapa
+
+    Suma(in m1: mapa, in m2: mapa) ⟶ res : mapa
+    Pre ≡ {true}
+    Post ≡ {res =obs m1 + m2}
+    Complejidad: O(crear(m1) + crear(m2))
+    Descripción: une 2 mapas
+
+    esRio(in m1: mapa, in p: Pos) ⟶ res : Bool
+    Pre ≡ {true}
+    Post ≡ {res =obs esRio(m1, p)}
+    Complejidad: O(1)
+    Descripción: verifica si en determinada pos hay rio
+
+Algoritmos
+crear(in hs : conj(Nat), in vs : conj(Nat)) ⟶ res : estr
+1: estr.horizontales ← hs
+2: estr.verticales ← vs 
+3: return estr
+Complejidad: O(copy(hs) + copy(vs))
+
+Suma(in m1: mapa, in m2: mapa) ⟶ res : mapa
+    mapa res ← copiar(m1)
+
+    itConj(Nat) itH ← crearIt(horizontales(m2))
+    while(haySiguiente(itH)) :
+        Ag(horizontales(res), siguiente(itH))
+        avanzar(itH)
+
+    itConj(Nat) itV ← crearIt(verticales(m2))
+    while(haySiguiente(itV)) :
+        Ag(verticales(res), siguiente(itV))
+        avanzar(itV)
+
+    return res
+Complejidad: O(copiar(m1) + copiar(m2))
+
+esRio(in m1: mapa, in p: Pos) ⟶ res : Bool
+    return p.x ∈ verticales(m1) ∨ p.y ∈ horizontales(m1)
+Complejidad: O(#horizontales(m1) + #verticales(m1))

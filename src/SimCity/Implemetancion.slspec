@@ -1,23 +1,23 @@
 Algoritmos
+
+============ Generadores ============ 
 //----------------------------------------
 iniciar(in m: Mapa) ⟶ res : estr
-1:  estr.turno ← 0
-2:  estr.popularidad ← 0
-3:  estr.mapa ← m
-4:  estr.casas ← vacio()
-5:  estr.comercios ← vacio()
-6:  estr.uniones ← vacia()
-7:  return estr
+    estr.turno ← 0
+    estr.popularidad ← 0
+    estr.mapa ← m
+    estr.casas ← vacio()
+    estr.comercios ← vacio()
+    estr.uniones ← vacia()
+    return estr
 Complejidad: O(1)
 //----------------------------------------
 
 //----------------------------------------
 avanzarTurno(inout SimCity s,  in dicc(Pos, Construccion) cs)
     // actualizo turno de las uniones 
-    nat i = 0; 
-    while(i < long(s.uniones)) : 
+    for(nat i ← 0; i < long(s.uniones); i ← i + 1) : 
         turnoDesdeUnion ← turnoDesdeUnion + 1;
-        i ← i + 1
 
     // subo 1 al nivel de cada una de las casas del simcity s 
     itDicc(Pos, Nivel) itCasas ← crearIt(s.casas);
@@ -35,13 +35,12 @@ avanzarTurno(inout SimCity s,  in dicc(Pos, Construccion) cs)
     itDicc(Pos, Nivel) itCs ← crearIt(cs);
     while(haySiguiente(itCs)) :
         if(siguienteSignificado(itCs) =obs "casa") :
-            definirRapido(s.casas, siguienteClave(itCs), 1);
+            agCasa(s.casas, siguienteClave(itCs), 1)
         else if(siguienteSignificado(itCs) =obs "comercio") :
-            definirRapido(s.comercio, siguienteClave(itCs), 1);
+            agComercio(s.comercio, siguienteClave(itCs), 1)
         avanzar(itCs)
 
-    // actualizo el turno
-    estr.turno ⟵ estr.turno + 1
+    estr.turno ⟵ estr.turno + 1 // actualizo el turno
 //----------------------------------------
 
 //----------------------------------------
@@ -52,7 +51,103 @@ unir(inout SimCity s1,  inout Simcity s2)
     agregarAtras(s1.uniones, nuevoHijo)
     
 //----------------------------------------
-    
+===================================== 
+
+============ Observadores ============ 
+//----------------------------------------
+mapa(in SimCity s) ➝ res : Mapa 
+    Mapa res ← s.mapa
+    for(nat i ← 0; i < long(s.uniones); i ← i + 1) : 
+        res ← res + s.uniones[i].sc->mapa
+    return res
+//----------------------------------------
+
+//----------------------------------------
+casas(in SimCity s) ➝ res : dicc(Pos, Nivel)
+    dicc res ← copiar(s.casas)
+    for(nat i ← 0; i < long(s.uniones); i ← i + 1) : 
+        itDicc(Pos, Nivel) itCs ← crearIt(s.uniones[i].sc->casas);
+        while(haySiguiente(itCs)) :
+            Pos p ← siguienteClave(itCs)
+            Nivel n ← siguienteSignificado(itCs)
+            if(¬def?(res, p)) :
+                definir(res, p, n + s.uniones[i].turnosDesdeUnion)
+            avanzar(itCs)
+    return res
+//----------------------------------------
+
+//----------------------------------------
+comercios(in SimCity s) ➝ res : dicc(Pos, Nivel)
+    dicc res ← copiar(s.comercios)
+    for(nat i ← 0; i < long(s.uniones); i ← i + 1) : 
+        itDicc(Pos, Nivel) itCs ← crearIt(s.uniones[i].sc->comercios);
+        while(haySiguiente(itCs)) :
+            Pos p ← siguienteClave(itCs)
+            Nivel n ← siguienteSignificado(itCs)
+            if(¬def?(res, p) ∧ ¬def?(casas(s), p)) :
+                Nivel m ← max(n + s.uniones[i].turnosDesdeUnion, nivelCom(p, casas(s)))
+                definir(res, p, m)
+            avanzar(itCs)
+    return res
+//----------------------------------------
+
+//----------------------------------------
+popularidad(in SimCity s) ➝ res : Nat
+    return s.popularidad
+//----------------------------------------
+
+===================================== 
+
+
+========= Otras Operaciones =========
+//----------------------------------------
+nivelCom(in Pos p, in dicc(pos, Nivel) casas) ➝ Nat
+    nat maxLvl ← 1
+    for(int i = -3; i <= 3; ++i) :
+        for(int j = |i|-3; j <= 3-|i|; ++j) :
+            Pos p2 ← <p.x+i, p.y+j> 
+            // tengo quilombo con el tipo de dato
+            // porque pos es <nat, nat> y p.x+i puede ser negativo
+            // de hecho nisiquiera esta definido p.x + i porque son
+            // distintos tipos de dato
+            if(def?(casas, p2)) :
+                maxLvl = max(maxLvl, obtener(casas, p2))
+    return maxLvl
+//----------------------------------------
+
+//----------------------------------------
+agCasa(inout dicc(Pos, Nivel) casas, in Pos p, in Nivel n) :
+    definirRapido(casas, p, n) // agregar casa
+//----------------------------------------
+
+//----------------------------------------
+agComercio(inout dicc(Pos, Nivel) comercios, in Pos p, in Nivel n) :
+    definirRapido(comercio, p, n) // agregar casa
+//----------------------------------------
+
+//----------------------------------------
+turnos(in SimCity s) ➝ res : Nat
+    return s.turno
+//----------------------------------------
+
+//----------------------------------------
+• ⋃ • (in dicc(α, β) d1, in dicc(α, β) d2) ➝ res : dicc(α, β)
+    dicc(α, β) res = copiar(d1)
+    itDicc(α, β) itCs ← crearIt(d2);
+    while(haySiguiente(itCs)) :
+        α a ← siguienteClave(itCs)
+        β b ← siguienteSignificado(itCs)
+        if(¬def?(res, a)) :
+            definir(res, a, b)
+        avanzar(itCs)
+    return res
+//----------------------------------------
+
+//----------------------------------------
+construcc(in SimCity s) ➝ res : Nat
+    return casas(s) ⋃ comercios(s)
+//----------------------------------------
+===================================== 
 
 
 

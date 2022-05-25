@@ -36,7 +36,7 @@ natan   pasar a latex   interfaz Mapa ok
 fede    interfaz SimCity    
 manu   interfaz Servidor   
 
-natan   pasar a latex   implementacion Mapa ok
+natan   pasar a latex   implementacion Mapa 
     horizontales
     verticales
     esRio
@@ -59,17 +59,18 @@ fede    agregarCasa
 
     + auxiliares ?
 
-natan   implementacion SimCity
-    Mapa            
+natan   implementacion SimCity 
+    ok todo pero falta calculo de complejidad + latexear
+    Mapa
     casas           
-    comercios       
+    comercios      
     popularidad     
-    iniciar         
+    iniciar    
     avanzarTurno    
-    unir            
-    turnos          
-
-    + auxiliares ?
+    unir           
+    turnos     
+    + auxiliares
+    
 
 - debatir si agregar a servidor el agregarCasa, agregarComercio
 
