@@ -288,3 +288,32 @@ sumarDiferencia(h) ≡
         0
     else
         h.diferenciaPorUnion + sumarDiferencia(h.proximo) fi 
+
+
+
+
+// V3
+
+servidor src diccTrie(Nombre, registro) donde
+    reg ≡ tupla<
+        sc: puntero(SimCity),
+        modificable: bool,
+        pendientes: dicc(Pos, Construccion)
+    >
+
+simCity src estr donde:
+    estr ≡ Tupla< 
+        turno: Nat, 
+        popularidad: Nat,       
+        mapa: Mapa,
+        casas: diccLineal(pos, Nivel), 
+        comercios: diccLineal(pos, NivelBase),
+        uniones: lista(hijo)
+    >
+    hijo ≡ tupla<
+        sc: puntero(estr),
+        turnosDesdeUnion: nat  
+    >
+    Pos ≡ tupla<x: Nat, y: Nat>  
+
+    
