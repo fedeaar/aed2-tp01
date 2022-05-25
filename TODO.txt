@@ -1,4 +1,4 @@
-natan       pasar a latex       tad Mapa ok
+natan       pasar a latex FALTA tad Mapa 
 natan/manu  corregir/simplif    tad SimCity
     ok Agarrar el UnirDicc de tad Servidor
     Agarrar el esRio de tad Mapa (nat subilo plssss :DD)

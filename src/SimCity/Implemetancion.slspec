@@ -70,7 +70,7 @@ casas(in SimCity s) ➝ res : dicc(Pos, Nivel)
         while(haySiguiente(itCs)) :
             Pos p ← siguienteClave(itCs)
             Nivel n ← siguienteSignificado(itCs)
-            if(¬def?(res, p)) :
+            if(¬def?(res, p) ∧ ¬esRio(Mapa(s))) :
                 definir(res, p, n + s.uniones[i].turnosDesdeUnion)
             avanzar(itCs)
     return res
@@ -84,7 +84,7 @@ comercios(in SimCity s) ➝ res : dicc(Pos, Nivel)
         while(haySiguiente(itCs)) :
             Pos p ← siguienteClave(itCs)
             Nivel n ← siguienteSignificado(itCs)
-            if(¬def?(res, p) ∧ ¬def?(casas(s), p)) :
+            if(¬esRio(Mapa(s)) ∧ ¬def?(res, p) ∧ ¬def?(casas(s), p)) :
                 Nivel m ← max(n + s.uniones[i].turnosDesdeUnion, nivelCom(p, casas(s)))
                 definir(res, p, m)
             avanzar(itCs)
@@ -105,13 +105,10 @@ nivelCom(in Pos p, in dicc(pos, Nivel) casas) ➝ Nat
     nat maxLvl ← 1
     for(int i = -3; i <= 3; ++i) :
         for(int j = |i|-3; j <= 3-|i|; ++j) :
-            Pos p2 ← <p.x+i, p.y+j> 
-            // tengo quilombo con el tipo de dato
-            // porque pos es <nat, nat> y p.x+i puede ser negativo
-            // de hecho nisiquiera esta definido p.x + i porque son
-            // distintos tipos de dato
-            if(def?(casas, p2)) :
-                maxLvl = max(maxLvl, obtener(casas, p2))
+            if(p.x + i >= 0 ∧ p.y + j >= 0) :
+                Pos p2 ← <p.x+i, p.y+j> 
+                if(def?(casas, p2)) :
+                    maxLvl = max(maxLvl, obtener(casas, p2))
     return maxLvl
 //----------------------------------------
 
