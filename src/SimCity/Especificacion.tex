@@ -152,7 +152,7 @@
     \tadAlinearAxiomas{popularidad(avanzarTurno($s, cs$))}
     \tadAxioma{popularidad(iniciar(m))}{0}
     \tadAxioma{popularidad(avanzarTurno($s, cs$))}{popularidad($s$)}
-    \tadAxioma{popularidad(unir($s, s'$))}{popularidad($s$) + 1}
+    \tadAxioma{popularidad(unir($s, s'$))}{popularidad($s$) + 1 + popularidad $s'$}
     
     \tadAlinearAxiomas{turnos(avanzarTurno($s, cs$))}
     \tadAxioma{turnos(iniciar(m))}{0}

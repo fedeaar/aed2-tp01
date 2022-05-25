@@ -8,60 +8,54 @@
     \InterfazFuncion{nuevoServer}{}{server}
     {$res \igobs nuevoServer$}
     [$O()$]
-    [crea un servidor]
+    [Crea un servidor]
     [No tiene]
-
+    %Revisar 
     \InterfazFuncion{partidas}{\In{s}{server}}{dicc(string, SimCity)}
     {$res \igobs partidas(s)$}
     [$O()$]
     [Devuelve un diccionario con todas las partidas del servidor]
-    [Devuelve una referencia no modificable]
+    [Devuelve una copia]
 
     \InterfazFuncion{congeladas}{\In{s}{server}}{conj(string)}
     {$res \igobs congeladas(s)$}
     [$O()$]
     [Devuelve el conjunto con los nombres de las partidas no modificables]
-    [Devuelve una referencia no modificable]
+    [Devuelve una copia]
 
     \InterfazFuncion{nuevaPartida}{\Inout{s}{server}, \In{p}{string}, \In{m}{mapa}}{}
     [$s \igobs\ s0\ \wedge\ \lnot def?(p, partidas(s))$]
     {$s \igobs nuevaPartida(s0, p, m)$}
     [$O()$]
-    [agrega una partida nueva al servidor]
+    [Agrega una partida nueva al servidor]
     [No tiene]
 
     \InterfazFuncion{unirPartidas}{\Inout{s}{server}, \In{p1}{string}, \In{p2}{string}}{}
     [$*unionValida(s, p1, p2)$]
-    {$s \igobs nuevaPartida(s0, p, m)$}
+    {$s \igobs unirPartidas(s0, p1, p2)$}
     [$O()$]
-    [une dos partidas de simcity en una, y p2 pasa a ser no modificable]
+    [Une dos partidas de simcity en una, p2 pasa a ser no modificable]
     [No tiene]
 
     \InterfazFuncion{avanzarTurnoPartida}{\Inout{s}{server}, \In{p}{string}, \In{cs}{dicc(Pos, Nat)}}{}
     [$*avanzarTurnoValido(s, p, cs)$]
     {$s \igobs avanzarTurnoPartida(s0, p, cs)$}
     [$O()$]
-    [avanza el turno de una partida y agrega las construcciones definidas en el diccionario de entrada]
+    [Avanza el turno de una partida y agrega las construcciones definidas en el diccionario de entrada]
     [No tiene]
 
     \InterfazFuncion{agregarCasa}{\Inout{s}{server}, \In{p}{string}, \In{pos}{Pos}}{}
-    [$
-        s \igobs\ s0\ \wedge\ def?(p, partidas(s))\ $\yluego$\ \lnot p\ \in\ congeladas(s)\ \wedge\ $\\$
-        $\tab\tab$ \lnot def?(pos, verCasas(s, p))\ \wedge\ \lnot esRio(pos, verMapa(s, p))
-    $]
-    {$construccionesSeMantienen(s, s0, p, pos)\ \wedge\ casaAgregada(s, p, pos)$}
+    [$s \igobs s0\ \wedge\ *agregarValido(s, p, pos)$]
+    {$s \igobs agregarCasa(s0, p, Pos)$}
     [$O()$]
-    [agrega una nueva casa a la partida]
+    [Agrega una nueva casa a la partida]
     [No tiene]
 
     \pagebreak
     
     \InterfazFuncion{agregarComercio}{\Inout{s}{server}, \In{p1}{string}, \In{p2}{string}}{}
-    [$
-        s \igobs\ s0\ \wedge\ def?(p, partidas(s))\ $\yluego$\ \lnot p\ \in\ congeladas(s)\ \wedge\ $\\$
-        $\tab\tab$ \lnot def?(pos, verComercios(s, p))\ \wedge\ \lnot esRio(pos, verMapa(s, p))
-    $]
-    {$s \igobs nuevaPartida(s0, p, m)$}
+    [$s \igobs s0\ \wedge\ *agregarValido(s, p, pos)$]
+    {$s \igobs agregarComercio(s0, p, Pos)$}
     [$O()$]
     [agrega un nuevo comercio a la partida]
     [No tiene]
@@ -156,6 +150,18 @@
 \tab donde $sim \equiv obtener(p,\ partidas(s))$  
 \\
 
+\tadOperacion
+    {agregarValido}
+    {server\ s, Nombre\ p, Pos\ pos}
+    {boolean}
+    {}
+\tadAxioma{agregarValido($s, p, pos$)}{$
+    def?(p, partidas(s))\ $\yluego$\ \lnot p \in congeladas(s)\ \wedge\ $\\$
+    \lnot def?(pos, verCasas(s, p))\ \wedge\ \lnot def?(pos, verComercios(s, p))\ \wedge\ $\\$
+    \lnot esRio(pos, verMapa(s, p))
+$}
+
+
 \tadOperacion{$\bullet\ \cup_{dicc}\ \bullet$}{dicc($\alpha$, $\beta$),dicc($\alpha$, $\beta$)}{dicc($\alpha$, $\beta$)}{}
 \tadAxioma{$d$\ $\cup_{dicc}$ $d'$}{
     $\LIF$ $vacio?$(claves($d'$)) $\LTHEN$ \\
@@ -167,23 +173,9 @@
     $\LFI$
 }
 
-\tadOperacion{casaAgregada}{servidor,string,pos}{boolean}{}
-\tadAxioma{casaAgregada($s, p, pos$)}{
-    $def?(pos, verCasas(s, p))\ $\yluego$\ obtener(pos, verCasas(s, p))\ \igobs\ 1$
-}
 
-\tadOperacion{construccionesSeMantienen}{servidor,servidor,string,Pos}{boolean}{}
-\tadAxioma{construccionesSeMantienen($s, s0, p, pos$)}{$
-    partidas(s)
-    (\forall\ partida: string)(def?(partida, s)\ \Leftrightarrow\ def?(partida, s0)) $\\$
-    $\yluego \\$
-    (\forall\ partida: string)(def?(partida, s0)\ \wedge\ partida\ \neq\ p\ $\impluego \\$ 
-        $\tab$ (\forall\ pos2: Pos)(def?(pos2, verCasas(partida, s0))\ \Leftrightarrow\ def?(pos2, verCasas(partida, s))) $\\$
-        $\tab$ \wedge $\\$
-        $\tab$ (\forall\ pos2: Pos)(def?(pos2, verCasas(partida, s0))\ \Leftrightarrow\ def?(pos2, verCasas(partida, s)))
-    ) 
-$}
-    
+
+
 \end{Interfaz}
 
 \pagebreak

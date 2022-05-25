@@ -4,14 +4,16 @@
     \tadUsa{SimCity,\ Mapa,\ Nombre,\ Pos,\ Construccion,\ Nivel,\ Nat,\ bool,\ dicc$(\alpha,\ \beta)$,\ conj$(\alpha)$}
     
     \tadIgualdadObservacional{s}{s'}{server}{
-        partidas($s$) $\igobs$ partidas($s'$) $\land$ \\
-        congeladas($s$) $\igobs$ congeladas($s'$) 
+        partidas($s$) $\igobs$ partidas($s'$) \yluego \\
+        congeladas($s$) $\igobs$ congeladas($s'$) $\land$ \\
+        ($\forall n$: Nombre)(def?($n$, partidas($s$)) \impluego \\
+        pendientes($s, p$) $\igobs$ pendientes($s', p$))
     }
 \vspace{3mm}
     \tadObservadores
         \tadAlinearFunciones
-            {congeladas}
-            {server}
+            {pendientes}
+            {server\ s, Nombre\ p}
         \tadOperacion
             {partidas}
             {server}
@@ -22,6 +24,11 @@
             {server}
             {conj(Nombre)}
             {}
+        \tadOperacion
+            {pendientes}
+            {server\ s, Nombre\ p}
+            {dicc(Pos, Construccion)}
+            {$def?(p,\ partidas(s))$}
             
 \vspace{3mm}
     \tadGeneradores
@@ -52,6 +59,19 @@
             {server\ s, Nombre\ p, dicc(Pos, Construccion)\ cs}
             {server}
             {*$avanzarTurnoValido(s,\ p,\ cs)$} 
+    \tadAlinearFunciones
+    {agregarComercio}
+    {server\ s, Nombre\ p, Pos\ pos}
+        \tadOperacion
+            {agregarCasa}
+            {server\ s, Nombre\ p, Pos\ pos}
+            {server}
+            {*$agregarValido(s,\ p,\ pos)$}
+        \tadOperacion
+            {agregarComercio}
+            {server\ s, Nombre\ p, Pos\ pos}
+            {server}
+            {*$agregarValido(s,\ p,\ pos)$}
        
 %\vspace{3mm}
     \tadOtrasOperaciones
@@ -112,7 +132,7 @@
             $\tab$ partidas(s))$}
 
         \tadAxioma
-            {congeladas(nuevaPartida)}
+            {congeladas(nuevoServer)}
             {$\emptyset$}         
         \tadAxioma    
             {congeladas(nuevaPartida(s,\ p,\ m))}
@@ -123,7 +143,21 @@
         \tadAxioma
             {congeladas(unirPartidas(s,\ p1,\ p2))}
             {$ Ag(p2,\ congeladas(s))  $}
-        
+
+        \tadAxioma
+            {pendientes(nuevaPartida(s,\ p1,\ m),\ p)}
+            {$\LIF\ p \igobs p1\ \LTHEN\ vacio\ \LELSE\ pendientes(s,\ p)\ \LFI$}
+        \tadAxioma
+            {pendientes(unirPartidas(s,\ p1,\ p2),\ p)}
+            {$pendientes(s,\ p)$}
+        \tadAxioma
+            {pendientes(agregarCasa(s,\ p1,\ pos),\ p)}
+            {$\LIF\ p \igobs p1\ \LTHEN\ $\\$
+            $\tab$ definir(pos,\ 1,\ pendientes(s,\ p)) $\\$
+            \LELSE\ $\\$
+            $\tab$ pendientes(s,\ p)\ $\\$
+            \LFI$}    
+
         \ \ \ // $oo$
         \tadAxioma
             {verMapa(s,\ p)}
@@ -201,6 +235,18 @@
     $}
 \tab donde $sim \equiv obtener(p,\ partidas(s))$  
 \\
+\tadOperacion
+    {agregarValido}
+    {server\ s, Nombre\ p, Pos\ pos}
+    {boolean}
+    {}
+\tadAxioma
+    {agregarValido($s, p, pos$)}
+    {$
+        def?(p, partidas(s))\ $\yluego$\ \lnot p \in congeladas(s)\ \wedge\ $\\$
+        \lnot def?(pos, verCasas(s, p))\ \wedge\ \lnot def?(pos, verComercios(s, p))\ \wedge\ $\\$
+        \lnot esRio(pos, verMapa(s, p)) $\\$
+$}
 
 \tadOperacion
     {$\bullet\ \cup\ \bullet$}
