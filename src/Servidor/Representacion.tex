@@ -10,7 +10,7 @@
         \begin{Tupla}[partida]
             \tupItem{modificable\ }{bool}
             \tupItem{\\sim\ }{puntero(SimCity)}
-            \tupItem{\\pendientes\ }{dicc(Pos, Nat)}
+            \tupItem{\\pendientes\ }{dicc(Pos, Construccion)}
         \end{Tupla}
 
         \vspace{2mm}
@@ -22,17 +22,31 @@
         \vspace{2mm}
         donde Nombre es string
 
+        \vspace{2mm}
+        donde Construccion es string
+
     \end{Estructura}
     
     \vspace{2mm}
     \Rep[estr]{ \\
-            ($\forall\ partida_{1}, partida_{2}$: string) \\
-            (def?($partida_{1}, e$) $\wedge$ def?($partida_{2}, e$) $\wedge\ partida_{1} \neq partida_{2}$ \impluego \\
-                \tab obtener($partida_{1}, e$).sim $\neq$ obtener($partida_{2}, e$).sim \\
+            ($\forall\ partida_{1},\ partida_{2}$\ : Nombre) \\
+                ((def?($partida_{1},\ e$) $\wedge$ def?($partida_{2},\ e$) $\wedge\ partida_{1} \neq partida_{2}$) \impluego \\
+                \tab obtener($partida_{1},\ e$).sim $\neq$ obtener($partida_{2},\ e$).sim \\
             )\ $\wedge$ \\
-            ($\forall\ partida$: string)(def?($partida, e$) \impluego\ obtener($partida, e$) $\neq$ NULL)
+            ($\forall\ partida$: Nombre)(def?($partida,\ e$) \impluego\ \\
+                \tab $p$.sim $\neq$ NULL $\wedge$ \\
+                \tab ($p$.modificable $\igobs$ \false\ \impluego\ $vacio?$(claves($p$.pendientes))) $\wedge$\\
+                \tab ($\forall$ $pos$: Pos)(def?($pos$, $p$.pendientes) \impluego \\
+                    \tab\tab (obtener($pos$, $p$.pendientes) $\in \{"casa",\ "comercio"\}\ \wedge\ $ \\
+                    \tab\tab $\lnot$ def?($pos$, construcciones(*$p$.sim))) \\
+                    %Se puede usar construcc aca?
+                \tab ) \\
+            )
       }
-    
+
+    \vspace{2mm}
+    donde $p$ es obtener($partida,\ e$) \\
+
     \AbsFc[estr]{servidor}[e]{
         s: servidor | \\
             \tab ($\forall\ nombre$: Nombre)\\
