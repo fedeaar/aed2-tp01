@@ -130,7 +130,7 @@ representacion SimCity:
                 pos_i ≡ dameUno(c)
                 nivel_i ≡ nivel(e, pos_i)
 
-        nivel: ^estr × pos ➝ Nat
+        nivel: estr × pos ➝ Nat
         nivel(e, pos) ≡
             if def?(pos, conjCasas) then
                 obtener(pos, conjCasas) + nivelesPorUnion(e, pos)
@@ -212,7 +212,7 @@ representacion SimCity:
         (∀ e: ^estr)
         abs(e) ≡ sc: SimCity |
             mapa(sc) =ob conjMapas ∧
-            casas(sc) =obs conjCasas ∧
+            casas(sc) =obs nivelar(conjCasas) ∧
             comercios(sc) =obs nivelar(conjComercios) ∧
             popularidad(sc) =obs e.popularidad
 
