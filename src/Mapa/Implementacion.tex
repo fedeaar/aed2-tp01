@@ -1,48 +1,34 @@
 \begin{Algoritmos}
-
-    \begin{algorithm}[H]{\textbf{crear}(\In{hs}{conj(Nat)}, \In{vs}{conj(Nat)}) $\to$ $res$ : estr}
-        \begin{algorithmic}[1]
-            \State $estr.horizontales \gets hs$
-            \State $estr.verticales \gets vs$
-            \Return estr
-            \medskip
-            \Statex \underline{Complejidad:} $O(copy(hs) + copy(vs))$
-        \end{algorithmic}
-    \end{algorithm}
-
-    \begin{algorithm}[H]{\textbf{esRio}(\In{m1}{Mapa}, \In{p}{Pos}) $\to$ $res$ : Bool}
-        \begin{algorithmic}[1]
-            \State $bool \ res \gets false$
-            \State $for(Nat \ y : estr.horizontales)$
-            \State \indent $if(y \ = _{obs} \ p.y) \ then$
-            \State \indent \indent$res \gets true$
-            \State \indent $else$
-            \State \indent \indent $skip$
-            \State $for(Nat \ x : estr.verticales)$
-            \State \indent $if(x \ = _{obs} \ p.x) \ then$
-            \State \indent \indent $res \gets true$
-            \State \indent $else$
-            \State \indent \indent$skip$
-            \Return res
-            \medskip
-            \Statex \underline{Complejidad:} $O( \# horizontales(m1) + \# verticales(m1))$
-        \end{algorithmic}
-    \end{algorithm}
-
-
-    \begin{algorithm}[H]{\textbf{Suma}(\In{hs}{conj(Nat)}, \In{vs}{conj(Nat)}) $\to$ $res$ : estr}
-        \begin{algorithmic}[1]
-            \State $for(Nat \ n : m1.horizontales)$
-            \State \indent $Ag(n, \ estr.horizontales)$
-            \State $for(Nat \ n : m2.horizontales)$
-            \State \indent $Ag(n, \ estr.horizontales)$
-            \State $for(Nat \ n : m1.verticales)$
-            \State \indent $Ag(n, \ estr.verticales)$
-            \State $for(Nat \ n : m2.verticales)$
-            \State \indent $Ag(n, \ estr.verticales)$
-            \Return estr
-            \medskip
-            \Statex \underline{Complejidad:} $O( \# horizontales(m1) + \# verticales(m1) \# horizontales(m2) + \# verticales(m2))$
-        \end{algorithmic}
-    \end{algorithm}
+    \\
+    \noindent \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \textbf{crear}(\textbf{in \ }hs \ : \ conj(Nat), \ \textbf{in \ }vs \ : \ conj(Nat)) \ $\longrightarrow$ \ res \ : \ estr\\
+    1: \ estr.horizontales \ $\leftarrow$ \ hs\\
+    2: \ estr.verticales \ $\leftarrow$ \ vs \ \\
+    3: \ \textbf{return} \ estr\\
+    \textbf{Complejidad}: \ O(copy(hs) \ + \ copy(vs))\\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \textbf{Suma}(\textbf{in \ }m1: \ mapa, \ \textbf{in \ }m2: \ mapa) \ $\longrightarrow$ \ res \ : \ mapa\\
+    \indent mapa \ res \ $\leftarrow$ \ copiar(m1)\\
+    \\
+    \indent itConj(Nat) \ itH \ $\leftarrow$ \ crearIt(horizontales(m2))\\
+    \indent \textbf{while}(haySiguiente(itH)) \ :\\
+    \indent \indent Ag(horizontales(res), \ siguiente(itH))\\
+    \indent \indent avanzar(itH)\\
+    \\
+    \indent itConj(Nat) \ itV \ $\leftarrow$ \ crearIt(verticales(m2))\\
+    \indent \textbf{while}(haySiguiente(itV)) \ :\\
+    \indent \indent Ag(verticales(res), \ siguiente(itV))\\
+    \indent \indent avanzar(itV)\\
+    \\
+    \indent \textbf{return} \ res\\
+    \textbf{Complejidad}: \ O(copiar(m1) \ + \ copiar(m2))\\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \textbf{esRio}(\textbf{in \ }m1: \ mapa, \ \textbf{in \ }p: \ Pos) \ $\longrightarrow$ \ res \ : \ Bool\\
+    \indent \textbf{return} \ p.x \ $\in$ \ verticales(m1) \ $\vee$ \ p.y \ $\in$ \ horizontales(m1)\\
+    \textbf{Complejidad}: \ O($ \# $horizontales(m1) \ + \ $ \# $verticales(m1))\\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}    
 \end{Algoritmos}

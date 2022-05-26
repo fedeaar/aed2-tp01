@@ -43,6 +43,7 @@ bbb{avanzarTurno}(inout SimCity s,  in dicc(Pos, Construccion) cs)
         avanzar(itCs)
 
     estr.turno ⟵ estr.turno + 1 // actualizo el turno
+Complejidad: O(long(s.uniones) + #claves(s.casas) + #claves(s.comercios) + #claves(cs))
 //hline----------------------------------------
 
 //hline----------------------------------------
@@ -51,7 +52,7 @@ bbb{unir}(inout SimCity s1,  inout Simcity s2)
     turno ← max(s1.turno, s2.turno)
     hijo nuevoHijo ← <direccion(s2), 0>
     agregarAtras(s1.uniones, nuevoHijo)
-    
+Complejidad: O(1)
 //hline----------------------------------------
 ===================================== 
 
@@ -60,19 +61,20 @@ bbb{unir}(inout SimCity s1,  inout Simcity s2)
 bbb{mapa}(in SimCity s) ➝ res : Mapa 
     Mapa res ← s.mapa
     for(nat i ← 0; i < long(s.uniones); i ← i + 1) : 
-        res ← res + mapa(s.uniones[i].sc)
+        res ← res + bbb{mapa}(s.uniones[i].sc*)
     return res
+Complejidad: O()
 //hline----------------------------------------
 
 //hline--------------------------------------
 bbb{casas}(in SimCity s) ➝ res : dicc(Pos, Nivel)
     dicc res ← copiar(s.casas)
     for(nat i ← 0; i < long(s.uniones); i ← i + 1) : 
-        itDicc(Pos, Nivel) itCs ← crearIt(casas(s.uniones[i].sc*));
+        itDicc(Pos, Nivel) itCs ← crearIt(bbb{casas}(s.uniones[i].sc*));
         while(haySiguiente(itCs)) :
             Pos p ← siguienteClave(itCs)
             Nivel n ← siguienteSignificado(itCs)
-            if(¬def?(res, p) ∧ ¬esRio(Mapa(s))) :
+            if(¬def?(res, p) ∧ ¬bbb{esRio}(bbb{mapa}(s))) :
                 definir(res, p, n + s.uniones[i].turnosDesdeUnion)
             avanzar(itCs)
     return res
@@ -82,11 +84,11 @@ bbb{casas}(in SimCity s) ➝ res : dicc(Pos, Nivel)
 bbb{comercios}(in SimCity s) ➝ res : dicc(Pos, Nivel)
     dicc res ← copiar(s.comercios)
     for(nat i ← 0; i < long(s.uniones); i ← i + 1) : 
-        itDicc(Pos, Nivel) itCs ← crearIt(comercios(s.uniones[i].sc*));
+        itDicc(Pos, Nivel) itCs ← crearIt(bbb{comercios}(s.uniones[i].sc*));
         while(haySiguiente(itCs)) :
             Pos p ← siguienteClave(itCs)
             Nivel n ← siguienteSignificado(itCs)
-            if(¬esRio(Mapa(s)) ∧ ¬def?(res, p) ∧ ¬def?(casas(s), p)) :
+            if(¬bbb{esRio}(Mapa(s)) ∧ ¬def?(res, p) ∧ ¬def?(casas(s), p)) :
                 Nivel m ← max(n + s.uniones[i].turnosDesdeUnion, nivelCom(p, casas(s)))
                 definir(res, p, m)
             avanzar(itCs)
@@ -96,6 +98,7 @@ bbb{comercios}(in SimCity s) ➝ res : dicc(Pos, Nivel)
 //hline----------------------------------------
 bbb{popularidad}(in SimCity s) ➝ res : Nat
     return s.popularidad
+Complejidad: O(1)
 //hline----------------------------------------
 
 ===================================== 
@@ -116,21 +119,24 @@ bbb{nivelCom}(in Pos p, in dicc(pos, Nivel) casas) ➝ Nat
 
 //hline----------------------------------------
 bbb{agCasa}(inout dicc(Pos, Nivel) casas, in Pos p, in Nivel n) :
-    definirRapido(casas, p, n) // agregar casa
+    definirRapido(casas, p, n)
+Complejidad: O(1)
 //hline----------------------------------------
 
 //hline----------------------------------------
 bbb{agComercio}(inout dicc(Pos, Nivel) comercios, in Pos p, in Nivel n) :
-    definirRapido(comercio, p, n) // agregar casa
+    definirRapido(comercio, p, n)
+Complejidad: O(1)
 //hline----------------------------------------
 
 //hline----------------------------------------
 bbb{turnos}(in SimCity s) ➝ res : Nat
     return s.turno
+Complejidad: O(1)
 //hline----------------------------------------
 
 //hline----------------------------------------
-bbb{• ⋃ •}(in dicc(α, β) d1, in dicc(α, β) d2) ➝ res : dicc(α, β)
+• ⋃ •(in dicc(α, β) d1, in dicc(α, β) d2) ➝ res : dicc(α, β)
     dicc(α, β) res = copiar(d1)
     itDicc(α, β) itCs ← crearIt(d2);
     while(haySiguiente(itCs)) :
@@ -144,7 +150,7 @@ bbb{• ⋃ •}(in dicc(α, β) d1, in dicc(α, β) d2) ➝ res : dicc(α, β)
 
 //hline----------------------------------------
 bbb{construcc}(in SimCity s) ➝ res : Nat
-    return casas(s) ⋃ comercios(s)
+    return bbb{casas}(s) ⋃ bbb{comercios}(s)
 //hline----------------------------------------
 ===================================== 
 
