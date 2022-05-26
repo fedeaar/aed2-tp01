@@ -51,14 +51,15 @@
         s: servidor | \\
             \tab ($\forall\ nombre$: Nombre)\\
                 \tab\tab ($nombre$ $\in$ congelados($s$) $\Leftrightarrow$ \\
-                \tab\tab (def?($nombre$, partidas($e$)) \yluego\ obtener($nombre, e$).modificable $\igobs$ \false)) \\
+                \tab\tab (def?($nombre,\ e$) \yluego\ obtener($nombre,\ e$).modificable $\igobs$ \false)) \\
             \tab $\wedge$ \\
             \tab ($\forall\ nombre$: Nombre)\\
-                \tab\tab (def?($nombre$, partidas($s$)) $\Leftrightarrow$ def?($nombre$, $e$)) \\
+                \tab\tab (def?($nombre$, partidas($s$)) $\Leftrightarrow$ def?($nombre,\ e$)) \\
             \tab \yluego \\
             \tab ($\forall\ nombre$: Nombre)\\
                 \tab\tab (def?($nombre$, partidas($s$)) \impluego \\ 
-                \tab\tab  obtener($nombre$, partidas($s$)) $\igobs$ obtener($nombre, e$).sim) \\
+                \tab\tab (obtener($nombre$, partidas($s$)) $\igobs$ *(obtener($nombre,\ e$).sim) $\wedge$ \\
+                \tab\tab pendientes($s,\ nombre$) $\igobs$ obtener($nombre,\ e$).pendientes)) \\
     }
   
   \end{Representacion}
