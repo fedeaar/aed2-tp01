@@ -66,8 +66,8 @@
     \tadAxioma{casas(unir($s, s'$))}{
         agCasas(casas($s$), sacarRepes(construcc($s$), construcc($s'$)))
     }
-    %Como no se indica qué significa Construccion, asumo que es un nat
-    %donde 1 = casa, 2 = comercio
+    %Como no se indica qué significa Construccion, asumo que es un string
+    %donde "casa" = casa, "comercio" = comercio
     %Tecnicamente, agCasas serviria para unir un dicc de casas con uno de
     %casas y comercios. Terminaria quedando un dicc con las casas viejas + 
     %casas nuevas (no se definen los comercios de haber)
@@ -75,7 +75,7 @@
         $\LIF$ $vacio?$(claves($cs$)) $\LTHEN$ \\ 
             \tab $cn$ \\
         $\LELSE$ \\
-            \tab $\LIF$ obtener(dameUno(claves($cs$)), $cs$) $\igobs$ 1 $\LTHEN$ \\
+            \tab $\LIF$ obtener(dameUno(claves($cs$)), $cs$) $\igobs$ $"casa"$ $\LTHEN$ \\
                 \tab\tab agCasas(definir(dameUno(claves($cs$)), 1, $cn$), \\
                 \tab\tab\tab borrar(dameUno(claves($cs$)), $cs$)) \\
             \tab $\LELSE$ \\
@@ -102,7 +102,7 @@
         $\LIF$ $vacio?$(claves($cs$)) $\LTHEN$ \\
         \tab $cn$ \\
         $\LELSE$ \\
-            \tab $\LIF$ obtener(dameUno(claves($cs$)), $cs$) $\igobs$ 2 $\LTHEN$ \\
+            \tab $\LIF$ obtener(dameUno(claves($cs$)), $cs$) $\igobs$ $"comercio"$ $\LTHEN$ \\
                 \tab\tab agComercios(definir(dameUno(claves($cs$)), \\
                 \tab\tab\tab\tab nivelCom(dameUno(claves($cs$)), casas($s$)), $cn$), \\
                 \tab\tab\tab\tab borrar(dameUno(claves($cs$)), $cs$)) \\
@@ -214,7 +214,7 @@
     (\forall p : Pos) (def?(p, cs) \impluego $\\$
         $\tab$(\lnot p \in claves(construcc(s))\ \wedge $\\$
         $\tab$\lnot \pi_{0}(p) \in horizontales(mapa($s$)) \wedge \lnot \pi_{1}(p) \in verticales(mapa($s$))\ \wedge $\\$
-        $\tab$(obtener(p, cs) \igobs 1 \vee obtener(p, cs) \igobs 2)) $\\$
+        $\tab$(obtener(p, cs) \igobs "casa" \vee obtener(p, cs) \igobs "comercio")) $\\$
     )
 $}
 
