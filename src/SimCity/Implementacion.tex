@@ -1,0 +1,151 @@
+\noindent Algoritmos
+\\
+\\============ \ \textbf{Generadores} \ ============ \ 
+\\\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\\textbf{iniciar}(\textbf{in \ }m: \ Mapa) \ $\longrightarrow$ \ res \ : \ estr
+\\\indent \ estr.turno \ $\leftarrow$ \ 0
+\\\indent \ estr.popularidad \ $\leftarrow$ \ 0
+\\\indent \ estr.mapa \ $\leftarrow$ \ m
+\\\indent \ estr.casas \ $\leftarrow$ \ vacio()
+\\\indent \ estr.comercios \ $\leftarrow$ \ vacio()
+\\\indent \ estr.uniones \ $\leftarrow$ \ vacia()
+\\\indent \ return \ estr
+\\\textbf{Complejidad}: \ O(1)
+\\\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\
+\\\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\\textbf{avanzarTurno}(\textbf{inout} \ SimCity \ s, \  \ \textbf{in \ }dicc(Pos, \ Construccion) \ cs)
+\\\indent \ 
+\\\indent \ for(nat \ i \ $\leftarrow$ \ 0; \ i \ $<$ \ long(s.uniones); \ i \ $\leftarrow$ \ i \ + \ 1) \ : \ 
+\\\indent \ \indent \ turnoDesdeUnion \ $\leftarrow$ \ turnoDesdeUnion \ + \ 1;
+\\
+\\\indent \ 
+\\\indent \ itDicc(Pos, \ Nivel) \ itCasas \ $\leftarrow$ \ crearIt(s.casas);
+\\\indent \ while(haySiguiente(itCasas)) \ :
+\\\indent \ \indent \ siguienteSignificado(itCasas) \ $\leftarrow$ \ siguienteSignificado(itCasas) \ + \ 1
+\\\indent \ \indent \ avanzar(itCasas)
+\\
+\\\indent \ 
+\\\indent \ itDicc(Pos, \ Nivel) \ itComercios \ $\leftarrow$ \ crearIt(s.comercios);
+\\\indent \ while(haySiguiente(itComercios)) \ :
+\\\indent \ \indent \ siguienteSignificado(itComercios) \ $\leftarrow$ \ siguienteSignificado(itComercios) \ + \ 1
+\\\indent \ \indent \ avanzar(itComercios)
+\\
+\\\indent \ 
+\\\indent \ itDicc(Pos, \ Nivel) \ itCs \ $\leftarrow$ \ crearIt(cs);
+\\\indent \ while(haySiguiente(itCs)) \ :
+\\\indent \ \indent \ \textbf{if}(siguienteSignificado(itCs) \ $=_{obs}$ \ "casa") \ :
+\\\indent \ \indent \ \indent \ agCasa(s.casas, \ siguienteClave(itCs), \ 1)
+\\\indent \ \indent \ \textbf{else} \ \textbf{if}(siguienteSignificado(itCs) \ $=_{obs}$ \ "comercio") \ :
+\\\indent \ \indent \ \indent \ agComercio(s.comercio, \ siguienteClave(itCs), \ 1)
+\\\indent \ \indent \ avanzar(itCs)
+\\
+\\\indent \ estr.turno \ $\longleftarrow$ \ estr.turno \ + \ 1 \ 
+\\\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\
+\\\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\\textbf{unir}(\textbf{inout} \ SimCity \ s1, \  \ \textbf{inout} \ Simcity \ s2)
+\\\indent \ s1.popularidad \ $\leftarrow$ \ s1.popularidad \ + \ s2.popularidad
+\\\indent \ turno \ $\leftarrow$ \ max(s1.turno, \ s2.turno)
+\\\indent \ hijo \ nuevoHijo \ $\leftarrow$ \ $<$direccion(s2), \ 0$>$
+\\\indent \ agregarAtras(s1.uniones, \ nuevoHijo)
+\\\indent \ 
+\\\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\===================================== \ 
+\\
+\\============ \ \textbf{Observadores} \ ============ \ 
+\\\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\\textbf{mapa}(\textbf{in \ }SimCity \ s) \ $\rightarrow $ \ res \ : \ Mapa \ 
+\\\indent \ Mapa \ res \ $\leftarrow$ \ s.mapa
+\\\indent \ for(nat \ i \ $\leftarrow$ \ 0; \ i \ $<$ \ long(s.uniones); \ i \ $\leftarrow$ \ i \ + \ 1) \ : \ 
+\\\indent \ \indent \ res \ $\leftarrow$ \ res \ + \ s.uniones[i].sc-$>$mapa
+\\\indent \ return \ res
+\\\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\
+\\\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\\textbf{casas}(\textbf{in \ }SimCity \ s) \ $\rightarrow $ \ res \ : \ dicc(Pos, \ Nivel)
+\\\indent \ dicc \ res \ $\leftarrow$ \ copiar(s.casas)
+\\\indent \ for(nat \ i \ $\leftarrow$ \ 0; \ i \ $<$ \ long(s.uniones); \ i \ $\leftarrow$ \ i \ + \ 1) \ : \ 
+\\\indent \ \indent \ itDicc(Pos, \ Nivel) \ itCs \ $\leftarrow$ \ crearIt(s.uniones[i].sc-$>$casas);
+\\\indent \ \indent \ while(haySiguiente(itCs)) \ :
+\\\indent \ \indent \ \indent \ Pos \ p \ $\leftarrow$ \ siguienteClave(itCs)
+\\\indent \ \indent \ \indent \ Nivel \ n \ $\leftarrow$ \ siguienteSignificado(itCs)
+\\\indent \ \indent \ \indent \ \textbf{if}($\neg$def?(res, \ p) \ $\wedge$ \ $\neg$esRio(Mapa(s))) \ :
+\\\indent \ \indent \ \indent \ \indent \ definir(res, \ p, \ n \ + \ s.uniones[i].turnosDesdeUnion)
+\\\indent \ \indent \ \indent \ avanzar(itCs)
+\\\indent \ return \ res
+\\\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\
+\\\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\\textbf{comercios}(\textbf{in \ }SimCity \ s) \ $\rightarrow $ \ res \ : \ dicc(Pos, \ Nivel)
+\\\indent \ dicc \ res \ $\leftarrow$ \ copiar(s.comercios)
+\\\indent \ for(nat \ i \ $\leftarrow$ \ 0; \ i \ $<$ \ long(s.uniones); \ i \ $\leftarrow$ \ i \ + \ 1) \ : \ 
+\\\indent \ \indent \ itDicc(Pos, \ Nivel) \ itCs \ $\leftarrow$ \ crearIt(s.uniones[i].sc-$>$comercios);
+\\\indent \ \indent \ while(haySiguiente(itCs)) \ :
+\\\indent \ \indent \ \indent \ Pos \ p \ $\leftarrow$ \ siguienteClave(itCs)
+\\\indent \ \indent \ \indent \ Nivel \ n \ $\leftarrow$ \ siguienteSignificado(itCs)
+\\\indent \ \indent \ \indent \ \textbf{if}($\neg$esRio(Mapa(s)) \ $\wedge$ \ $\neg$def?(res, \ p) \ $\wedge$ \ $\neg$def?(casas(s), \ p)) \ :
+\\\indent \ \indent \ \indent \ \indent \ Nivel \ m \ $\leftarrow$ \ max(n \ + \ s.uniones[i].turnosDesdeUnion, \ nivelCom(p, \ casas(s)))
+\\\indent \ \indent \ \indent \ \indent \ definir(res, \ p, \ m)
+\\\indent \ \indent \ \indent \ avanzar(itCs)
+\\\indent \ return \ res
+\\\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\
+\\\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\\textbf{popularidad}(\textbf{in \ }SimCity \ s) \ $\rightarrow $ \ res \ : \ Nat
+\\\indent \ return \ s.popularidad
+\\\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\
+\\===================================== \ 
+\\
+\\
+\\========= \ \textbf{Otras \ Operaciones} \ =========
+\\\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\\textbf{nivelCom}(\textbf{in \ }Pos \ p, \ \textbf{in \ }dicc(pos, \ Nivel) \ casas) \ $\rightarrow $ \ Nat
+\\\indent \ nat \ maxLvl \ $\leftarrow$ \ 1
+\\\indent \ for(int \ i \ = \ -3; \ i \ $\leq$ \ 3; \ ++i) \ :
+\\\indent \ \indent \ for(int \ j \ = \ $\mid$i$\mid$-3; \ j \ $\leq$ \ 3-$\mid$i$\mid$; \ ++j) \ :
+\\\indent \ \indent \ \indent \ \textbf{if}(p.x \ + \ i \ $\geq$ \ 0 \ $\wedge$ \ p.y \ + \ j \ $\geq$ \ 0) \ :
+\\\indent \ \indent \ \indent \ \indent \ Pos \ p2 \ $\leftarrow$ \ $<$p.x+i, \ p.y+j$>$ \ 
+\\\indent \ \indent \ \indent \ \indent \ \textbf{if}(def?(casas, \ p2)) \ :
+\\\indent \ \indent \ \indent \ \indent \ \indent \ maxLvl \ = \ max(maxLvl, \ obtener(casas, \ p2))
+\\\indent \ return \ maxLvl
+\\\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\
+\\\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\\textbf{agCasa}(\textbf{inout} \ dicc(Pos, \ Nivel) \ casas, \ \textbf{in \ }Pos \ p, \ \textbf{in \ }Nivel \ n) \ :
+\\\indent \ definirRapido(casas, \ p, \ n) \ 
+\\\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\
+\\\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\\textbf{agComercio}(\textbf{inout} \ dicc(Pos, \ Nivel) \ comercios, \ \textbf{in \ }Pos \ p, \ \textbf{in \ }Nivel \ n) \ :
+\\\indent \ definirRapido(comercio, \ p, \ n) \ 
+\\\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\
+\\\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\\textbf{turnos}(\textbf{in \ }SimCity \ s) \ $\rightarrow $ \ res \ : \ Nat
+\\\indent \ return \ s.turno
+\\\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\
+\\\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\\textbf{$\bullet$ \ $\cup$ \ $\bullet$}(\textbf{in \ }dicc($\alpha$, \ $\beta$) \ d1, \ \textbf{in \ }dicc($\alpha$, \ $\beta$) \ d2) \ $\rightarrow $ \ res \ : \ dicc($\alpha$, \ $\beta$)
+\\\indent \ dicc($\alpha$, \ $\beta$) \ res \ = \ copiar(d1)
+\\\indent \ itDicc($\alpha$, \ $\beta$) \ itCs \ $\leftarrow$ \ crearIt(d2);
+\\\indent \ while(haySiguiente(itCs)) \ :
+\\\indent \ \indent \ $\alpha$ \ a \ $\leftarrow$ \ siguienteClave(itCs)
+\\\indent \ \indent \ $\beta$ \ b \ $\leftarrow$ \ siguienteSignificado(itCs)
+\\\indent \ \indent \ \textbf{if}($\neg$def?(res, \ a)) \ :
+\\\indent \ \indent \ \indent \ definir(res, \ a, \ b)
+\\\indent \ \indent \ avanzar(itCs)
+\\\indent \ return \ res
+\\\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\
+\\\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\\textbf{construcc}(\textbf{in \ }SimCity \ s) \ $\rightarrow $ \ res \ : \ Nat
+\\\indent \ return \ casas(s) \ $\cup$ \ comercios(s)
+\\\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\===================================== \ 
+\\
+\\
+\\
+\\
