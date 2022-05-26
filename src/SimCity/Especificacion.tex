@@ -30,7 +30,9 @@
     \tadOtrasOperaciones
     \tadOperacion{turnos}{SimCity}{Nat}{}
     %Junta los diccionarios casas y comercios
-    \tadOperacion{construcc}{SimCity}{dicc(Pos, Nivel)}{}
+    \tadAlinearFunciones{construcciones}{SimCity/s,dicc(Pos,Construccion)/c}
+    \tadOperacion{construcciones}{SimCity}{dicc(Pos, Nivel)}{}
+    \tadAlinearFunciones{avanzarTurno}{SimCity/s,dicc(Pos,Construccion)/cs}
     \tadOperacion{$\bullet\ \cup_{dicc}\ \bullet$}{dicc($\alpha$, $\beta$),dicc($\alpha$, $\beta$)}{dicc($\alpha$, $\beta$)}{}
     %Calcula las construcciones de mayor nivel
         %\tadOperacion{masNivel}{SimCity}{conj(Pos)}{}
@@ -64,10 +66,10 @@
     \tadAxioma{casas(iniciar(m))}{vacio}
     \tadAxioma{casas(avanzarTurno($s, cs$))}{agCasas(casas($s$), $cs$)}
     \tadAxioma{casas(unir($s, s'$))}{
-        agCasas(casas($s$), sacarRepes(construcc($s$), construcc($s'$)))
+        agCasas(casas($s$), sacarRepes(construcciones($s$), construcciones($s'$)))
     }
-    %Como no se indica qué significa Construccion, asumo que es un nat
-    %donde 1 = casa, 2 = comercio
+    %Como no se indica qué significa Construccion, asumo que es un string
+    %donde "casa" = casa, "comercio" = comercio
     %Tecnicamente, agCasas serviria para unir un dicc de casas con uno de
     %casas y comercios. Terminaria quedando un dicc con las casas viejas + 
     %casas nuevas (no se definen los comercios de haber)
@@ -75,7 +77,7 @@
         $\LIF$ $vacio?$(claves($cs$)) $\LTHEN$ \\ 
             \tab $cn$ \\
         $\LELSE$ \\
-            \tab $\LIF$ obtener(dameUno(claves($cs$)), $cs$) $\igobs$ 1 $\LTHEN$ \\
+            \tab $\LIF$ obtener(dameUno(claves($cs$)), $cs$) $\igobs$ $"casa"$ $\LTHEN$ \\
                 \tab\tab agCasas(definir(dameUno(claves($cs$)), 1, $cn$), \\
                 \tab\tab\tab borrar(dameUno(claves($cs$)), $cs$)) \\
             \tab $\LELSE$ \\
@@ -92,7 +94,7 @@
     \tadAxioma{comercios(unir($s, s'$))}{
         agComercios($s$, \\
         \tab\tab comercios($s$), \\
-        \tab\tab sacarRepes(construcc($s$), construcc($s'$)))
+        \tab\tab sacarRepes(construcciones($s$), construcciones($s'$)))
     }
     %Similar a agCasas, pero aparte chequea distancia Manhattan para el nivel.
     %Terminaria quedando un dicc con los comercios viejos + 
@@ -102,7 +104,7 @@
         $\LIF$ $vacio?$(claves($cs$)) $\LTHEN$ \\
         \tab $cn$ \\
         $\LELSE$ \\
-            \tab $\LIF$ obtener(dameUno(claves($cs$)), $cs$) $\igobs$ 2 $\LTHEN$ \\
+            \tab $\LIF$ obtener(dameUno(claves($cs$)), $cs$) $\igobs$ $"comercio"$ $\LTHEN$ \\
                 \tab\tab agComercios(definir(dameUno(claves($cs$)), \\
                 \tab\tab\tab\tab nivelCom(dameUno(claves($cs$)), casas($s$)), $cn$), \\
                 \tab\tab\tab\tab borrar(dameUno(claves($cs$)), $cs$)) \\
@@ -152,7 +154,7 @@
     \tadAlinearAxiomas{popularidad(avanzarTurno($s, cs$))}
     \tadAxioma{popularidad(iniciar(m))}{0}
     \tadAxioma{popularidad(avanzarTurno($s, cs$))}{popularidad($s$)}
-    \tadAxioma{popularidad(unir($s, s'$))}{popularidad($s$) + 1}
+    \tadAxioma{popularidad(unir($s, s'$))}{popularidad($s$) + 1 + popularidad $s'$}
     
     \tadAlinearAxiomas{turnos(avanzarTurno($s, cs$))}
     \tadAxioma{turnos(iniciar(m))}{0}
@@ -161,7 +163,7 @@
         $\LIF$ turnos($s$) <$\ $turnos($s'$) $\LTHEN$ turnos($s'$) $\LELSE$ turnos($s$) $\LFI$
     }
 
-    \tadAxioma{construcc($s$)}{casas($s$) $\cup_{dicc}$ comercios($s$)}
+    \tadAxioma{construcciones($s$)}{casas($s$) $\cup_{dicc}$ comercios($s$)}
     
     \tadAlinearAxiomas{sacarRepes($cs, cs'$)}
 
@@ -212,27 +214,27 @@
 \tadAxioma{avanzarTurnoValido($s, cs$)}{$
     \lnot vacio?(claves(cs)) \wedge $\\$ 
     (\forall p : Pos) (def?(p, cs) \impluego $\\$
-        $\tab$(\lnot p \in claves(construcc(s))\ \wedge $\\$
+        $\tab$(\lnot p \in claves(construcciones(s))\ \wedge $\\$
         $\tab$\lnot \pi_{0}(p) \in horizontales(mapa($s$)) \wedge \lnot \pi_{1}(p) \in verticales(mapa($s$))\ \wedge $\\$
-        $\tab$(obtener(p, cs) \igobs 1 \vee obtener(p, cs) \igobs 2)) $\\$
+        $\tab$(obtener(p, cs) \igobs "casa" \vee obtener(p, cs) \igobs "comercio")) $\\$
     )
 $}
 
 \tadOperacion{unirValido}{Simcity/a,SimCity/b}{boolean}{}
 \tadAxioma{unirValido($a, b$)}{$
-    (\forall p : Pos)(def?(p, construcc(a)) \impluego $\\$
+    (\forall p : Pos)(def?(p, construcciones(a)) \impluego $\\$
         $\tab$ (\lnot \pi_{0}(p) \in horizontales(mapa(b)) \wedge \lnot \pi_{1}(p) \in verticales(mapa(b))\ \wedge $\\$
         %$\tab$ (p \in masNivel(a) \implies \lnot p \in construcc(b))) $\\$
-        $\tab$ (\lnot\ (\exists\ otra : Pos)(def?(otra, construcc(a))\ $\yluego$ $\\$
-            $\tab\tab$ obtener(otra, construcc(a))\ >\ obtener(p, construcc(a))\ $\impluego \\$ 
-                $\tab\tab\tab$ \lnot\ def?(p, construcc(b))))) $\\$
+        $\tab$ (\lnot\ (\exists\ otra : Pos)(def?(otra, construcciones(a))\ $\yluego$ $\\$
+            $\tab\tab$ obtener(otra, construcciones(a))\ >\ obtener(p, construcciones(a))\ $\impluego \\$ 
+                $\tab\tab\tab$ \lnot\ def?(p, construcciones(b))))) $\\$
     )\ \wedge $\\$
-    (\forall p : Pos)(def?(p, construcc(b)) \impluego $\\$
+    (\forall p : Pos)(def?(p, construcciones(b)) \impluego $\\$
         $\tab$ (\lnot \pi_{0}(p) \in horizontales(mapa(a)) \wedge \lnot \pi_{1}(p) \in verticales(mapa(a))\ \wedge $\\$
         %$\tab$(p \in masNivel(b) \implies \lnot p \in construcc(a))) $\\$
-        $\tab$ (\lnot\ (\exists\ otra : Pos)(def?(otra, construcc(b))\ $\yluego$ $\\$
-            $\tab\tab$ obtener(otra, construcc(b))\ >\ obtener(p, construcc(b))\ $\impluego \\$ 
-                $\tab\tab\tab$ \lnot\ def?(p, construcc(a)))))
+        $\tab$ (\lnot\ (\exists\ otra : Pos)(def?(otra, construcciones(b))\ $\yluego$ $\\$
+            $\tab\tab$ obtener(otra, construcciones(b))\ >\ obtener(p, construcciones(b))\ $\impluego \\$ 
+                $\tab\tab\tab$ \lnot\ def?(p, construcciones(a)))))
     )
 $}
 

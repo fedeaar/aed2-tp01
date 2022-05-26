@@ -10,27 +10,14 @@ ok  representacion Mapa
     ok representacion
 
 fede    representacion SimCity
-    abstraccion     
-    invariante      
-    ok  estr
-    simCity src estr donde:
-        estr = Tupla<
-            Turno: nat, 
-            Popu: nat,
-            Mapa: conjLineal(puntero(mapa)), 
-            ListaCons: Lista(puntero(cons))
-        >
-        cons = Lista(tupla<
-            pos: tupla<x: nat, y: nat>, 
-            tipo: string,
-            turnoAgregada: nat
-        >)
-
+    pasar a latex abstraccion     
+    pasar a latex invariante      
+    pasar a latex  estr
+    
 manu    representacion Servidor
     ok abstraccion     
     ok invariante      
-    servidor src estr donde:
-        estr = diccTrie(nombre, tupla<modificable: bool, puntero(SimCity)>)
+    ok estr 
 
 natan   pasar a latex   interfaz Mapa ok
 fede    interfaz SimCity    

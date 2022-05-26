@@ -26,13 +26,13 @@ representacion SimCity:
             e.popularidad = #(conjUnidos) ∧L // la popularidad es igual a la cantidad de uniones
             (∀p: pos)(pos ∈ claves(conjCasas) ⟹L
                 obtener(pos, conjCasas) < e.turno  ∧ // el turno es mas grande que el nivel de cualquier casa
-                ¬def(pos, conjComercios) ∧  // ningun comercio está en esta posicion
+                ¬def(pos, e.comercios) ∧  // ningun comercio de este sc está en esta posicion
                 ¬esRio(pos, conjMapas) // ninguna casa esta sobre un río 
             ) ∧
             (∀p: pos)(pos ∈ claves(conjComercios) ⟹L
-                obtener(pos, e.comercios) < e.turno  ∧ // el turno es mas grande que el nivel base de cualquier comercio
-                ¬def(pos, conjCasas) ∧  // ninguna casa está en esta posicion
-                ¬esRio(pos, mapa) // ningun comercio está sobre un río 
+                obtener(pos, conjComercios) < e.turno  ∧ // el turno es mas grande que el nivel base de cualquier comercio
+                ¬def(pos, e.casas) ∧  // ninguna casa de este simcity está en esta posicion
+                ¬esRio(pos, conjMapas) // ningun comercio está sobre un río 
             ) ∧
             (∀ n: Nat)(0 ≤ n < e.turno ⟹L  // se agregó al menos una consrucción cada turno hasta el actual
                 (∃p: pos)(def?(p, conjCasas) ∧L
@@ -130,12 +130,12 @@ representacion SimCity:
                 pos_i ≡ dameUno(c)
                 nivel_i ≡ nivel(e, pos_i)
 
-        nivel: ^estr × pos ➝ Nat
+        nivel: estr × pos ➝ Nat
         nivel(e, pos) ≡
             if def?(pos, conjCasas) then
                 obtener(pos, conjCasas) + nivelesPorUnion(e, pos)
             else 
-                max(manhattan(pos, pos, conjCasas), obtener(pos, conjComercios) + nivelesPorUnion(e, pos))
+                maximo(obtener(pos, conjComercios) • significados(manhattan(pos, 3), conjCasas)) + nivelesPorUnion(e, pos)
             fi
 
         nivelesPorUnion: ^estr × pos ➝ Nat
@@ -158,30 +158,61 @@ representacion SimCity:
             donde:
                 h ≡ Ag(prim(s).sc, ∅)
         
-        manhattan: Pos × Pos × dicc(Pos, Nat) ➝ Nat
-        manhattan(h, d, cc) ≡ 
-            if |h.x - d.x| + |h.y - d.y| ≤ 3 then
-                max(
-                    if def?(h, cc) then obtener(h, cc) else 0 fi,
-                    maxsecu(
-                        manhattan({h.x, h.y + 1}, d, cc), 
-                        manhattan({h.x + 1, h.y}, d, cc), 
-                        if h.y - 1 ≥ 0 then manhattan({h.x, h.y - 1}, d, cc) else 0 fi, 
-                        if h.x - 1 ≥ 0 then manhattan({h.x - 1, h.1}, d, cc) else 0 fi
-                    ))
-            else
-                0
+        manhattan: Pos × Nat ➝ Conj(Pos)
+        manhattan(p, dist) ≡ 
+            if dist = 0 then 
+                Ag(p, ∅)
+            else 
+                diagonal({p.x, p.y + dist}, {p.x + dist, p.y}) ⋃
+                if p.x - dist ≥ 0 then diagonal({p.x, p.y + dist}, {p.x - dist, p.y}) else ∅ fi ⋃
+                if p.y - dist ≥ 0 then diagonal({p.x, p.y - dist}, {p.x + dist, p.y}) else ∅ fi ⋃
+                if p.x - dist ≥ 0 ∧ p.y - dist ≥ 0 then diagonal({p.x , p.y - dist}, {p.x - dist, p.y}) else ∅ fi ⋃
+                manhattan(p, dist - 1)
             fi  
 
-        maxsecu: secu(Nat) a ➝ Nat   {long(a) > 0}
-        maxsecu(s) ≡ if long(s) = 1 then prim(s) else max(prim(s), maxsecu(fin(s))) fi 
+        diagonal: Pos p1 × Pos p2 × Nat n ➝ Conj(Pos)  {|p1.x - p2.x| = |p1.y - p2.y| ∧ 0 ≤ y ≤ |p2.y - p1.y|}
+        diagonal(d, h, y) ≡ 
+            if y = |h.y - d.y| then
+                Ag(h,  ∅) 
+            else 
+                Ag(caminar(d, h, y), diagonal(d, h, y + 1)) 
+            fi
+
+        caminar: Pos × Pos × Nat ➝ Pos {|p1.x - p2.x| = |p1.y - p2.y| ∧ 0 ≤ y ≤ |p2.y - p1.y|}
+        caminar(d, h, y) ≡
+            if d.y ≤ h.y then  
+                if d.x ≤ h.x then 
+                    {d.x + y, d.y + y}
+                else
+                    {d.x - y, d.y + y}
+                fi
+            else
+                if d.x ≤ h.x then 
+                    {d.x + y, d.y - y}
+                else
+                    {d.x - y, d.y - y}
+                fi
+            fi 
+
+        significados: conj(α) × dicc(α, β) ➝ secu(α)
+        significados(c, d) ≡ 
+            if vacio?(c) then 
+                <>
+            else if def?(dameUno(c), d) then 
+                obtener(c, d) • significados(sinUno(c), d) 
+            else
+                significados(sinUno(c), d)
+            fi 
+
+        maximo: secu(Nat) a ➝ Nat   {long(a) > 0}
+        maximo(s) ≡ if long(s) = 1 then prim(s) else max(prim(s), maximo(fin(s))) fi 
 
     abstraccion:
         abs: ^estr e ➝ SimCity {rep(e)}
         (∀ e: ^estr)
         abs(e) ≡ sc: SimCity |
             mapa(sc) =ob conjMapas ∧
-            casas(sc) =obs conjCasas ∧
+            casas(sc) =obs nivelar(conjCasas) ∧
             comercios(sc) =obs nivelar(conjComercios) ∧
             popularidad(sc) =obs e.popularidad
 
