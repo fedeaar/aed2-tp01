@@ -20,7 +20,7 @@ manu    representacion Servidor
     ok estr 
 
 natan   pasar a latex   interfaz Mapa ok
-fede    interfaz SimCity    
+ok fede    interfaz SimCity    
 manu   interfaz Servidor   
 
 natan   pasar a latex   implementacion Mapa 
@@ -36,13 +36,13 @@ manu    partidas
         nuevaPartida    
         unirPartidas    
         avanzarTurnoPartida 
-fede    agregarCasa 
-        agregarComercio 
-        verMapa 
-        verCasas 
-        verComercios 
-        verPopularidad 
-        verTurno 
+fede    agregarCasa         ok
+        agregarComercio     ok
+        verMapa             ok
+        verCasas            ok
+        verComercios        ok
+        verPopularidad      ok
+        verTurno            ok
 
     + auxiliares ?
 

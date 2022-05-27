@@ -1,0 +1,72 @@
+\begin{Algoritmos}
+
+    \textcolor{red}{agregar a pre: la pos no está definida en pendientes}
+    \begin{algorithm}[H]{\textbf{agregarCasa}(\Inout{s}{estr}, \In{partida}{String}, \In{pos}{Pos})} %$\to$ $res$ : estr}
+    \begin{algorithmic}[1]
+        \State $definirRapido(Pos,\ "casa",\ obtener(partida,\ s))$
+        \medskip
+        \Statex \underline{Complejidad:} $O(|partida|)$
+    \end{algorithmic}
+    \end{algorithm}
+    
+    \textcolor{red}{same agregarCasas}
+    \begin{algorithm}[H]{\textbf{agregarComercio}(\Inout{s}{estr}, \In{partida}{String}, \In{pos}{Pos})} %$\to$ $res$ : estr}
+    \begin{algorithmic}[1]
+        \State $definirRapido(Pos,\ "comercio",\ obtener(partida,\ s))$ 
+        \medskip
+        \Statex \underline{Complejidad:} $O(|partida|)$
+    \end{algorithmic}
+    \end{algorithm}
+
+    \begin{algorithm}[H]{\textbf{verMapa}(\In{s}{estr}, \In{partida}{String}) $\to$ $res$ : Mapa}
+    \begin{algorithmic}[1]
+        \State $sc\ \leftarrow\ obtener(partida,\ s).sim$
+        \State $res\ \leftarrow\ mapa(*sc)$ 
+        \State \Return $res$
+        \medskip
+        \Statex \underline{Complejidad:} $O(|partida|) + O(mapa(*sc))$
+    \end{algorithmic}
+    \end{algorithm}
+      
+    \begin{algorithm}[H]{\textbf{verCasas}(\In{s}{estr}, \In{partida}{String}) $\to$ $res$ : DiccLineal(Pos,\ Nivel)}
+    \begin{algorithmic}[1]
+        \State $sc\ \leftarrow\ obtener(partida,\ s).sim$
+        \State $res\ \leftarrow\ casas(*sc)$
+        \State \Return $res$
+        \medskip
+        \Statex \underline{Complejidad:} $O(|partida|) + O(casas(*sc))$
+    \end{algorithmic}
+    \end{algorithm}
+
+    \begin{algorithm}[H]{\textbf{verComercios}(\In{s}{estr}, \In{partida}{String}) $\to$ $res$ : DiccLineal(Pos,\ Nivel)}
+    \begin{algorithmic}[1]
+        \State $sc\ \leftarrow\ obtener(partida,\ s).sim$
+        \State $res\ \leftarrow\ comercios(*sc)$
+        \State \Return $res$
+        \medskip
+        \Statex \underline{Complejidad:} $O(|partida|) + O(comercios(*sc))$
+    \end{algorithmic}
+    \end{algorithm}
+
+    \begin{algorithm}[H]{\textbf{verPopularidad}(\In{s}{estr}, \In{partida}{String}) $\to$ $res$ : Nat}
+    \begin{algorithmic}[1]
+        \State $sc\ \leftarrow\ obtener(partida,\ s).sim$
+        \State $res\ \leftarrow\ popularidad(*sc)$
+        \State \Return $res$
+        \medskip
+        \Statex \underline{Complejidad:} $O(|partida|)$
+    \end{algorithmic}
+    \end{algorithm}
+
+    \begin{algorithm}[H]{\textbf{verTurno}(\In{s}{estr}, \In{partida}{String}) $\to$ $res$ : Nat}
+    \begin{algorithmic}[1]
+        \State $sc\ \leftarrow\ obtener(partida,\ s).sim$
+        \State $res\ \leftarrow\ turnos(*sc)$
+        \State \Return $res$
+        \medskip
+        \Statex \underline{Complejidad:} $O(|partida|)$
+    \end{algorithmic}
+    \end{algorithm}
+
+\end{Algoritmos}
+    
