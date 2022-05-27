@@ -154,8 +154,8 @@
     {}
 \tadAxioma{agregarValido($s, p, pos$)}{$
     def?(p,\ partidas(s))\ $\yluego$\ \lnot p \in congeladas(s)\ \wedge\ $\\$
-    \lnot def?(pos,\ verCasas(s, p))\ \wedge\ \lnot def?(pos,\ verComercios(s, p))\ \wedge\ $\\$
-    \lnot esRio(pos,\ verMapa(s, p))
+    \lnot def?(pos,\ verCasas(s,\ p))\ \wedge\ \lnot def?(pos,\ verComercios(s,\ p))\ \wedge\ $\\$
+    \lnot def?(pos,\ pendientes(s,\ p))\ \wedge\ \lnot esRio(pos,\ verMapa(s,\ p))
 $}
 
 
