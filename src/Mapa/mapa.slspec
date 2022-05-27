@@ -49,13 +49,16 @@ Operaciones básicas
     Descripción: verifica si en determinada pos hay rio
 
 Algoritmos
-crear(in hs : conj(Nat), in vs : conj(Nat)) ⟶ res : estr
+//hline ------------------------------------
+bbb{crear}(in hs : conj(Nat), in vs : conj(Nat)) ⟶ res : estr
 1: estr.horizontales ← hs
 2: estr.verticales ← vs 
 3: return estr
 Complejidad: O(copy(hs) + copy(vs))
+//hline ------------------------------------
 
-Suma(in m1: mapa, in m2: mapa) ⟶ res : mapa
+//hline ------------------------------------
+bbb{Suma}(in m1: mapa, in m2: mapa) ⟶ res : mapa
     mapa res ← copiar(m1)
 
     itConj(Nat) itH ← crearIt(horizontales(m2))
@@ -70,7 +73,10 @@ Suma(in m1: mapa, in m2: mapa) ⟶ res : mapa
 
     return res
 Complejidad: O(copiar(m1) + copiar(m2))
+//hline --------------------------------------
 
-esRio(in m1: mapa, in p: Pos) ⟶ res : Bool
+//hline --------------------------------------
+bbb{esRio}(in m1: mapa, in p: Pos) ⟶ res : Bool
     return p.x ∈ verticales(m1) ∨ p.y ∈ horizontales(m1)
 Complejidad: O(#horizontales(m1) + #verticales(m1))
+//hline --------------------------------------
