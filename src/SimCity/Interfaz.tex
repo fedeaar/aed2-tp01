@@ -1,22 +1,118 @@
 \begin{Interfaz}
-    \textbf{usa}: \completar
+    \textbf{usa}: Mapa, Diccionario Lineal, Pos $\equiv$ tupla<Nat, Nat>, Nivel $\equiv$ Nat, Nat 
     
-    \textbf{exporta}: \completar 
+    \textbf{exporta}: todo
 
     \textbf{se explica con}: \tadNombre{SimCity}
   
     \textbf{géneros}: \TipoVariable{SimCity}
     
-    \vspace*{2ex}%
-    \noindent\textbf{\Large Operaciones básicas de SimCity}
+    \Titulo{Operaciones básicas de SimCity}
     
+    Sea $S: SimCity$, $N = popularidad(S)$, $\{u_0\ ...\ u_{N}\}\ =\ U:$ el conjunto de SimCities en union con S$^{1}$ y S, 
+
+    $casas = \#(claves(casas(\hat{S})))$ y $comercios = \#(claves(comercios(\hat{S})))$.
+
+    \vspace{4mm}
     \InterfazFuncion
-    {verMapa}{\In{s}{SimCity}}{Mapa}
-    {$\hat{res}\ \igobs\ mapa(\hat{s})$}
-    [$\Theta(\displaystyle\sum_{s_i\ \in\ U}{copy(mapa(s_i))})$ donde $U$ es el conjunto de SimCities en union con S, y S.]
-    [Crea una copia del mapa sobre el que se desarrolla el juego actual. \textcolor{orange}{podria ser por ref?}]
+    {mapa}{\In{S}{SimCity}}{Mapa}
+    {$\hat{res}\ \igobs\ mapa(\hat{S})$}
+    [$\Theta(\sum_{i = 0}^{N}{copy(mapa_i)})$,
+        donde $mapa_i$ es el Mapa original$^{2}$ de $u_i$.
+    ]
+    [Retorna el mapa sobre el que se desarrolla el juego actual.]
+    [No. Genera una copia.]
 
+    \vspace{4mm}
+    \InterfazFuncion
+    {casas}{\In{S}{SimCity}}{DiccLineal(Pos,\ Nivel)}
+    {$\hat{res}\ \igobs\ casas(\hat{S})$}
+    %[$\Theta(\sum_{i = 0}^{N}{(hasta_i \times casas_i)})$, \textcolor{red}{enrealidad falta tmb sumarle el camino hasta u_i}  \\ \tab 
+    %    donde $hasta_i$ y $casas_i$ son respectivamente la cantidad de casas definidas$^{3}$ en $\{u_0\ ...\ u_{i - 1}\}$ y $u_i$.$^{4}$ 
+    %]
+    [$\bold{O}(casas^{2})$ $\supset^{3}$ $\Theta(\sum_{i = 0}^{N}{(hasta_i \times casas_i + camino_i)})$, \\ \tab 
+        donde $hasta_i$ y $casas_i$ son respectivamente la cantidad de casas definidas$^{4}$ en $\{u_0\ ...\ u_{i - 1}\}$ y $u_i$$^{5}$, \\
+        \tab y $camino_i$ representa la cantidad de uniones para llegar de S a $u_i$$^{6}$.
+    ]
+    [Retorna las posiciones y respectivos niveles de todas las casas en el juego actual.]
+    [No. Genera una copia.]
 
+    \vspace{4mm}
+    \InterfazFuncion
+    {comercios}{\In{S}{SimCity}}{DiccLineal(Pos,\ Nivel)}
+    {$\hat{res}\ \igobs\ comercios(\hat{S})$}
+    [$\bold{O}(comercios^{2} \times casas)$ $\supset$ $\Theta(\sum_{i = 0}^{N}{(hasta_i \times comercios_i \times casas + camino_i)})$,\\ \tab
+        donde $hasta_i$ y $comercios_i$ son respectivamente la cantidad de comercios definidos en $\{u_0\ ...\ u_{i - 1}\}$ y $u_i$, 
+        \\ \tab y $camino_i$ representa la cantidad de uniones para llegar de S a $u_i$.$^{7}$ 
+    ]
+    [Retorna las posiciones y respectivos niveles de todos los comercios en el juego actual.]
+    [No. Genera una copia.]
+
+    \vspace{4mm}
+    \InterfazFuncion
+    {popularidad}{\In{S}{SimCity}}{Nat}
+    {$\hat{res}\ \igobs\ popularidad(\hat{S})$}
+    [$\Theta(1)$]
+    [retorna la cantidad total de uniones que se realizaron para conformar la partida actual.]
+
+    \pie{
+        \item Este conjunto incluye también a los SimCities provenientes de las uniones propias a cada SimCity en unión directa con S.
+        \item Es decir, aquel con el que se inició originalmente el simCity.
+        \item se proveen dos complejidades, una más abstracta y una evaluada en consideración de las representaciones posibles dadas las restricciones impuestas. 
+        \item Donde se entiende por 'definida' como aquellas casas que provienen del propio simCity y no de alguna de sus uniones. 
+        \item Dado que consideramos la resolución de colisiones durante una unión válida como 'queda el primero', y se requiere una 
+        complejidad de $\Theta(1)$ para la unión, es esperable que crear una copia del conjunto total de casas en $U$ requiera chequear
+        para cada casa definida en $u_i$ su pertenencia al resultado parcial de la copia. Donde, en el peor caso, equivale al total de casas
+        definidas hasta entonces.
+        \item Entendiendo las relaciones en U como un rosetree con $raiz = S$ y la necesidad de inmutabilidad de cada $u_i \neq S$, 
+        es razonable considerar que el nivel de cada casa o comercio en $u_i$ va a tener que calcularse en relación con su posición en el árbol.
+        \item Similar a $casas(S)$. En este caso se agrega la posibilidad de tener que evaluar por pertenencia en el total de las casas
+        al conjunto de posiciones a distancia manhattan $\leq$ 3 del comercio actualmente siendo copiado, para conocer su nivel. 
+    }
+
+    \vspace{4mm}
+    \InterfazFuncion
+    {turnos}{\In{S}{SimCity}}{Nat}
+    {$\hat{res}\ \igobs\ turnos(\hat{S})$}
+    [$\Theta(1)$]
+    [retorna la cantidad de turnos que pasaron desde que se inició el SimCity.]
+
+    
+    \vspace{4mm}
+    \InterfazFuncion
+    {iniciar}{\In{m}{Mapa}}{SimCity}
+    {$\hat{res}\ \igobs\ iniciar(\hat{m})$}
+    [$\Theta(1)$]
+    [crea un nuevo SimCity.]
+    [se guarda una referencia a m en res. No se modifica.]
+
+    \vspace{4mm}
+    \InterfazFuncion
+    {avanzarTurno}{\Inout{S}{SimCity},\ \In{cs}{dicc(Pos, Construccion)}}{}
+    [$avanzarTurnoValido(\hat{s},\ \hat{cs})\ \land\ \hat{S}\ =\ S_0$]
+    {$\hat{S}\ \igobs\ avanzarTurno(S_0,\ \hat{cs})$}
+    [$\bold{O}(casas \times \#(claves(\hat{cs})) + N)$ $\supset$ $\Theta(casas_{S} \times \#(claves(\hat{cs})) + U_S)$, \\ \tab
+        donde $casas_{S}$ es el conjunto de casas definidas en éste SimCity particular y $U_S$ es el conjunto \\
+        \tab de uniones directas a S.$^{1}$
+    ]
+    [avanza el turno de un SimCity.]
+    [genera una copia de las posiciones en el diccionario.]
+
+    \vspace{4mm}
+    \InterfazFuncion
+    {unir}{\Inout{S1}{SimCity},\ \In{S2}{SimCity}}{}
+    [$unionValida(\hat{S1},\ \hat{S2})\ \land\ \hat{S1}\ =\ S_0$]
+    {$\hat{S1}\ \igobs\ unir(S_0,\ \hat{S2})$}
+    [$\Theta(1)$]
+    [Une dos SimCities.]
+    [Se guarda una referencia a S2 en S1. Cualquier cambio sobre S2 modificará a S1.]
+
+    \vfill{}
+    \pie{
+        \item Esto se debe a que avanzar turno requiere agregar $\#(claves(\hat{cs}))$ elementos a un diccionario lineal y,
+        nuevamente en relación al cálculo de niveles, requiere al menos avanzar los niveles propios e, indirectamente, los de 
+        todos los simCities en unión directa. 
+    }
     %Mapa
     %casas           
     %comercios      

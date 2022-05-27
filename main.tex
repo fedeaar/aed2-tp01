@@ -3,11 +3,11 @@
 \usepackage[spanish]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage{hyperref}
+\usepackage{caratula}
 \usepackage{aed2-tad,aed2-itef,aed2-symb,aed2-diseno}
 \usepackage{algorithmicx, algpseudocode, algorithm}
 \usepackage{xcolor}
-\usepackage{multicol}
-\usepackage{caratula} % Version modificada para usar las macros de algo1 de ~> https://github.com/bcardiff/dc-tex
+\usepackage{multicol} % Version modificada para usar las macros de algo1 de ~> https://github.com/bcardiff/dc-tex
 %\usepackage{minted}
 
 \renewcommand{\labelenumii}{\theenumii}
@@ -35,6 +35,14 @@
     \setlength{\tadAnchoIzquierdaAxioma}{0cm}%
 }
 
+\newcommand{\pie}[1]{
+  \begin{footnotesize}
+  \begin{enumerate}
+    #1
+  \end{enumerate}
+  \end{footnotesize}
+}
+
 \begin{document}
 
 % caratula
@@ -52,6 +60,10 @@
 \maketitle
 
 \newpage
+
+\renewcommand{\Titulo}[1]{
+  \vspace*{1ex}\par\noindent\textbf{\large #1}\par
+}
 
 % especificacion
 \section{Especificación}
