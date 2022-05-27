@@ -10,9 +10,9 @@ ok  representacion Mapa
     ok representacion
 
 fede    representacion SimCity
-    pasar a latex abstraccion     
-    pasar a latex invariante      
-    pasar a latex  estr
+    ok abstraccion     
+    ok invariante      
+    ok  estr
     
 manu    representacion Servidor
     ok abstraccion     
@@ -57,9 +57,4 @@ natan   implementacion SimCity
     unir           
     turnos     
     + auxiliares
-    
-
-- debatir si agregar a servidor el agregarCasa, agregarComercio
-
-
     
