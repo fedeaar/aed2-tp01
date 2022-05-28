@@ -46,8 +46,8 @@
 \begin{document}
 
 % caratula
-\titulo{TP de Especificaci\'on y Dise\~no}
-\subtitulo{Modelado de SimCity}
+\titulo{TP 1: Dise\~no}
+\subtitulo{SimCity}
 \fecha{1 de Junio de 2022}
 \materia{Algoritmos y Estructuras de Datos II}
 \grupo{Grupo 01 - hasTADlaVista, turno ma\~nana}
@@ -56,52 +56,72 @@
 \integrante{Lakowsky, Manuel}{511/21}{mlakowsky@gmail.com}
 \integrante{Vekselman, Nat\'an}{338/21}{natanvek11@gmail.com}
 \integrante{Arienti, Federico}{316/21}{fa.arienti@gmail.com}
-
 \maketitle
-
-\newpage
 
 \renewcommand{\Titulo}[1]{
   \vspace*{1ex}\par\noindent\textbf{\large #1}\par
 }
 
+\newpage
+
+\input{src/Abstracto.tex}
+\tableofcontents
+\newpage
+
 % especificacion
 \section{Especificación}
 \subsection{Mapa}
 \input{src/Mapa/especificacion}
+
 \newpage
 \subsection{SimCity}
 \input{src/SimCity/especificacion}
+
 \newpage
 \subsection{Servidor}
 \input{src/Servidor/especificacion}
-\newpage
 
 \newpage
 
 % diseño
-\section{Módulos de referencia}
+\section{Diseño}
 \subsection{Módulo Mapa}
+\subsubsection{Interfaz}
 \input{src/Mapa/Interfaz.tex}
+
 \newpage
+\subsubsection{Representación}
 \input{src/Mapa/Representacion.tex}
+
 \newpage
+\subsubsection{Implementación}
 \input{src/Mapa/Implementacion.tex}
+
 \newpage
 \subsection{Módulo SimCity}
+\subsubsection{Interfaz}
 \input{src/SimCity/Interfaz.tex}
+
 \newpage
+\subsubsection{Representación}
 \input{src/SimCity/Representacion.tex}
+
 \newpage
+\subsubsection{Implementación}
 \input{src/SimCity/Implementacion.tex}
+
 \newpage
 \subsection{Módulo Servidor}
+\subsubsection{Interfaz}
 \input{src/Servidor/Interfaz.tex}
+
 \newpage
+\subsubsection{Representación}
 \input{src/Servidor/Representacion.tex}
+
 \newpage
+\subsubsection{Implementación}
 \input{src/Servidor/Implementacion.tex}
-\newpage
 
 \end{document}
 
