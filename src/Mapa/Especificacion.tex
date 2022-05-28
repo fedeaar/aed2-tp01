@@ -1,38 +1,52 @@
 \begin{tad}{\tadNombre{Mapa}}
-    \tadIgualdadObservacional{m}{m'}{Mapa}{
-        horizontales($m$) $\igobs$ horizontales($m'$) $\yluego$ \\
-        verticales($m$) $\igobs$ verticales($m'$) 
-    }
-    
+    \vspace{0.5mm}
     \tadGeneros{Mapa}
-    \tadExporta{Mapa,\ observadores,\ generadores,\ $\bullet + \bullet$, \ esRio}
-    \tadUsa{Nat, \ conj(a), \ Pos, \ Bool}
     
+    \vspace{2mm}
+    \tadExporta{Mapa,\ observadores,\ generadores,\ $\bullet + \bullet$,\ esRio}
+    
+    \vspace{2mm}
+    \tadUsa{Nat,\ conj($\alpha$),\ Pos,\ Bool}
+
+    \vspace{2mm}
+    \tadIgualdadObservacional{m}{m'}{Mapa}{
+        horizontales($m$)\ $\igobs$\ horizontales($m'$)\ $\yluego$\ \\
+        verticales($m$)\ $\igobs$\ verticales($m'$) 
+    }
+
     \tadAlinearFunciones{horizontales}{Mapa}
-    
+
+    \vspace{2mm}
     \tadObservadores
     \tadOperacion{horizontales}{Mapa}{conj(Nat)}{}
     \tadOperacion{verticales}{Mapa}{conj(Nat)}{}
     
-    \tadAlinearFunciones{crear}{conj(Nat),conj(Nat)}{Mapa}{}
-    
+    \vspace{2mm}
+    \tadAlinearFunciones{crear}{conj(Nat), conj(Nat)}%{Mapa}{}
     \tadGeneradores
-    \tadOperacion{crear}{conj(Nat),conj(Nat)}{Mapa}{}
+    \tadOperacion{crear}{conj(Nat), conj(Nat)}{Mapa}{}
 
+    \vspace{2mm}
     \tadOtrasOperaciones
-    \tadAlinearFunciones{$\bullet \ + \ \bullet$}{Mapa, Mapa}{Mapa}{}
-        \tadOperacion{$\bullet \ + \ \bullet$}{Mapa, Mapa}{Mapa}{}
-        \tadOperacion{esRio}{Mapa,Pos}{Bool}{}
-    
+    \tadAlinearFunciones{$\bullet\ +\ \bullet$}{Mapa, Mapa}%{Mapa}{}
+        \tadOperacion{$\bullet\ +\ \bullet$}{Mapa, Mapa}{Mapa}{}
+        \tadOperacion{esRio}{Mapa, Pos}{Bool}{}
+ 
+    \vspace{2mm}
+    \tadAxiomas[\paratodo{conj(Nat)}{hs,\ vs}]
+    \tadAlinearAxiomas{horizontales(crear($hs$,\ $vs$))}
 
-    \tadAxiomas[\paratodo{conj(Nat)}{hs,vs},\ \paratodo{Mapa}{m1,m2},\ \paratodo{Pos}{p}]
-    \tadAlinearAxiomas{horizontales(crear(hs, vs))}
+    \tadAxioma{horizontales(crear($hs$,\ $vs$))}{$hs$}
+    \tadAxioma{verticales(crear($hs$,\ $vs$))}{$vs$}
 
-    \tadAxioma{horizontales(crear(hs, vs))}{hs}
-    \tadAxioma{verticales(crear(hs, vs))}{vs}
+    \vspace{2mm}
+    \tadEncabezado{otros ax.}{\paratodo{Mapa}{m1,\ m2},\ \paratodo{Pos}{p}}
+    \vspace{1mm}
 
-    \tadAlinearAxiomas{esRio(m1, p)}
-    \tadAxioma{m1 + m2}{crear(horizontales(m1) $\cup$ horizontales(m2), verticales(m1) $\cup$ verticales(m2))}
-    \tadAxioma{esRio(m1, p)}{p.x $\in$ verticales(m1) \ $\vee$ \ p.y $\in$ horizontales(m1)}
+    \tadAlinearAxiomas{esRio($m1$,\ $p$)}
+    \tadAxioma{$m1$\ +\ $m2$}{crear(horizontales($m1$) $\cup$ horizontales($m2$), verticales($m1$) $\cup$ verticales($m2$))}
+    \tadAxioma{esRio($m1$,\ $p$)}{$p.x$\ $\in$\ verticales($m1$)\ $\vee$\ $p.y$\ $\in$\ horizontales($m1$)}
+
+    \vspace{1mm}
 \end{tad}
 
