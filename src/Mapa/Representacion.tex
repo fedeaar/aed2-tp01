@@ -2,25 +2,27 @@
   
     \Titulo{Representación de mapa}
   
-    Un mapa contiene rios infinitos horizontales y verticales. Los rios se
+    Un mapa contiene ríos infinitos horizontales y verticales. Los ríos se
     representan como conjuntos lineales de naturales que indican la posición en
-    los ejes de los ríos.
+    los ejes cartesianos de los ríos.
   
-    \begin{Estructura}{mapa}[estr]
+    \begin{Estructura}{Mapa}[estr]
       \begin{Tupla}[estr]
         \tupItem{horizontales}{conj(Nat)}%
-        \tupItem{verticales}{conj(Nat)}%
+        \tupItem{\\ verticales}{conj(Nat)}%
       \end{Tupla}
   
     \end{Estructura}
     
-      \Rep[estr]{true}
+    ~ 
+
+    \Rep[estr]{true}
   
-      ~ 
+    ~ 
   
-    \AbsFc[estr]{mapa}[m]{
-        horizontales(m) = $estr$.horizontales $\land$ 
-        verticales(m) = $estr$.verticales
+    \AbsFc[estr]{Mapa}[m]{
+        horizontales($m$) = $estr$.horizontales $\land$ 
+        verticales($m$) = $estr$.verticales \textcolor{orange}{igobs?}
     }
   
   \end{Representacion}

@@ -1,24 +1,31 @@
 \begin{Interfaz}
   
+    \textbf{usa}: \textcolor{orange}{se requiere?}
+
+    \textbf{exporta}: \textcolor{orange}{se requiere?}
+
     \textbf{se explica con}: \tadNombre{Mapa}
   
-    \textbf{géneros}: \TipoVariable{mapa}
+    \textbf{géneros}: \TipoVariable{Mapa}
   
-    \Titulo{Operaciones básicas de mapa}
+    \Titulo{Operaciones básicas de Mapa}
   
-    \InterfazFuncion{crear}{\In{hs}{conj(Nat)},\In{vs}{conj(Nat)}}{mapa}%
-    {$res \igobs mapa(hs, vs)$}%
-      [$O(copy(hs), copy(vs))$]
-    [crea un mapa]
+    \textcolor{orange}{no se si hace falta agregar para los obs?}
 
-    \InterfazFuncion{esRio}{\In{m1}{Mapa},\In{p}{Pos}}{Bool}%
-    {$res \igobs esRio(m1, p)$}%
-      [$O(1)$]
-    [verifica si en determinada pos hay rio] 
+    \InterfazFuncion{crear}{\In{hs}{conj(Nat)}, \In{vs}{conj(Nat)}}{Mapa}%
+    {$\hat{res}$ $\igobs$ mapa($\hat{hs}$, $\hat{vs}$)}%
+    [O(copy($hs$) + copy($vs$)) \textcolor{orange}{puede ser theta?}]
+    [Crea un mapa.]
 
-    \InterfazFuncion{Suma}{\In{m1}{Mapa},\In{m2}{Mapa}}{Mapa}%
-    {$res \igobs m1 + m2$}%
-      [$O(crear(m1) + crear(m2)$]
-    [une 2 mapas] 
-    \\
+    \InterfazFuncion{esRio}{\In{m}{Mapa}, \In{p}{Pos}}{Bool}%
+    {$\hat{res}$ $\igobs$ esRio($\hat{m}$, $\hat{p}$)}%
+    [$O(1)$ \textcolor{orange}{como rep los conj(Nat)?, si es sobre un array creo que hay q implementarlo. Tmb podria ser theta creo}]
+    [Verifica si en determinada pos hay un río.] 
+
+    \InterfazFuncion{suma}{\In{m1}{Mapa}, \In{m2}{Mapa}}{Mapa}%
+    {$\hat{res}$ $\igobs$ $\hat{m1}$ + $\hat{m2}$}%
+    [O(crear($m1$) + crear($m2$))]
+    [Une dos Mapas.] 
+
+    %\\
   \end{Interfaz}
