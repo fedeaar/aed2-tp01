@@ -145,7 +145,7 @@
 \Titulo{Definiciones Auxiliares de Servidor}
 \vspace{3mm}
 
-\tadOperacion{unionValida}{Server, Nombre, Nombre}{boolean}{}
+\tadOperacion{unionValida}{Server /s, Nombre /p, Nombre /p'}{boolean}{}
 \tadAxioma{unionValida($s$,\ $p$,\ $p'$)}{
         def?($p$,\ partidas($s$))\ $\land$\ def?($p'$,\ partidas($s$))\ $\land$\ $p$\ $\notin$\ congeladas($s$)\ $\yluego$\ $\\$
         %\land\ p'\ \notin\ congeladas(s)\ 
@@ -154,14 +154,14 @@
 }
 \vspace{2mm}
 
-\tadOperacion{avanzarValido}{Server, Nombre}{boolean}{}
+\tadOperacion{avanzarValido}{Server /s, Nombre /p}{boolean}{}
 \tadAxioma{avanzarValido($s$,\ $p$)}{
         def?($p$,\ partidas($s$))\ $\land$\ $p$\ $\notin$\ congeladas($s$)\ $\yluego$\ $\\$
         $\neg$ vacio?(claves(pendientes(obtener($p$, partidas($s$)))))\ 
 }
 \vspace{2mm}
 
-\tadOperacion{agregarValido}{Server, Nombre, Pos}{boolean}{}
+\tadOperacion{agregarValido}{Server /s, Nombre /p, Pos /pos}{boolean}{}
 \tadAxioma{agregarValido($s$, $p$, $pos$)}{
         def?($p$, partidas($s$))\ $\land$\ $p$ $\notin$ congeladas($s$)\ $\wedge$\  
         $\lnot$ def?($pos$,\ pendientes($s$,\ $p$))\ $\land$ $\\$
