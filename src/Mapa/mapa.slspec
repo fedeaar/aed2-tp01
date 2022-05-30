@@ -59,24 +59,23 @@ Complejidad: O(copy(hs) + copy(vs))
 
 //hline ------------------------------------
 bbb{Suma}(in m1: mapa, in m2: mapa) ⟶ res : mapa
-    mapa res ← copiar(m1)
+1:    mapa res ← copiar(m1)
 
-    itConj(Nat) itH ← crearIt(horizontales(m2))
-    while(haySiguiente(itH)) :
-        Ag(horizontales(res), siguiente(itH))
-        avanzar(itH)
+2:    itConj(Nat) itH ← crearIt(horizontales(m2))
+3:    while(haySiguiente(itH)) :
+4:        Ag(horizontales(res), siguiente(itH))
+5:        avanzar(itH)
 
-    itConj(Nat) itV ← crearIt(verticales(m2))
-    while(haySiguiente(itV)) :
-        Ag(verticales(res), siguiente(itV))
-        avanzar(itV)
-
-    return res
+6:    itConj(Nat) itV ← crearIt(verticales(m2))
+7:    while(haySiguiente(itV)) :
+8:        Ag(verticales(res), siguiente(itV))
+9:        avanzar(itV)
+10:    return res
 Complejidad: O(copiar(m1) + copiar(m2))
 //hline --------------------------------------
 
 //hline --------------------------------------
 bbb{esRio}(in m1: mapa, in p: Pos) ⟶ res : Bool
-    return p.x ∈ verticales(m1) ∨ p.y ∈ horizontales(m1)
+1:  return p.x ∈ verticales(m1) ∨ p.y ∈ horizontales(m1)
 Complejidad: O(#horizontales(m1) + #verticales(m1))
 //hline --------------------------------------

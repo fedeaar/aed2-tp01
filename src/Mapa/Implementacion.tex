@@ -1,40 +1,30 @@
-\begin{Algoritmos}
-    \\
-    \textcolor{orange}{
-        aca estaria bueno tenerlo mas cercano al formato de los de servidor, o pasar los de servidor a este formato. \\
-        No se si hace falta declarar el tipo de variables nuevas \\
-        habria que agregar justificaciones?
-    }
-    \\
-    \noindent \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-    \textbf{crear}(\textbf{in \ }hs \ : \ conj(Nat), \ \textbf{in \ }vs \ : \ conj(Nat)) \ $\longrightarrow$ \ res \ : \ estr\\
-    1: \ \indent estr.horizontales \ $\leftarrow$ \ hs\\
-    2: \ \indent estr.verticales \ $\leftarrow$ \ vs \ \\
-    3: \ \indent \textbf{return} \ estr\\
-    \textbf{Complejidad}: \ O(copy(hs) \ + \ copy(vs))\\
-    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-    \\
-    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-    \textbf{Suma}(\textbf{in \ }m1: \ mapa, \ \textbf{in \ }m2: \ mapa) \ $\longrightarrow$ \ res \ : \ mapa\\
-    1: \ \indent mapa \ res \ $\leftarrow$ \ copiar(m1)\\
-    2: \ \\
-    3: \ \indent itConj(Nat) \ itH \ $\leftarrow$ \ crearIt(horizontales(m2))\\
-    4: \ \indent \textbf{while}(haySiguiente(itH)) \ :\\
-    5: \ \indent \indent Ag(horizontales(res), \ siguiente(itH))\\
-    6: \ \indent \indent avanzar(itH)\\
-    7: \ \\
-    8: \ \indent itConj(Nat) \ itV \ $\leftarrow$ \ crearIt(verticales(m2))\\
-    9: \ \indent \textbf{while}(haySiguiente(itV)) \ :\\
-    10:\ \indent \indent Ag(verticales(res), \ siguiente(itV))\\
-    11:\ \indent \indent avanzar(itV)\\
-    12:\ \\
-    13:\ \indent \textbf{return} \ res\\
-    \textbf{Complejidad}: \ O(copiar(m1) \ + \ copiar(m2))\\
-    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-    \\
-    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-    \textbf{esRio}(\textbf{in \ }m1: \ mapa, \ \textbf{in \ }p: \ Pos) \ $\longrightarrow$ \ res \ : \ Bool\\
-    1:\ \indent \textbf{return} \ p.x \ $\in$ \ verticales(m1) \ $\vee$ \ p.y \ $\in$ \ horizontales(m1)\\
-    \textbf{Complejidad}: \ O($ \# $horizontales(m1) \ + \ $ \# $verticales(m1))\\
-    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}    
-\end{Algoritmos}
+\noindent \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\textbf{crear}(\textbf{in \ }hs \ : \ conj(Nat), \ \textbf{in \ }vs \ : \ conj(Nat)) \ $\longrightarrow$ \ res \ : \ estr\\
+1: \ estr.horizontales \ $\leftarrow$ \ hs\\
+2: \ estr.verticales \ $\leftarrow$ \ vs \ \\
+3: \ \textbf{return} \ estr\\
+\textbf{Complejidad}: \ O(copy(hs) \ + \ copy(vs))\\
+\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\
+\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\textbf{Suma}(\textbf{in \ }m1: \ mapa, \ \textbf{in \ }m2: \ mapa) \ $\longrightarrow$ \ res \ : \ mapa\\
+1:\indent mapa \ res \ $\leftarrow$ \ copiar(m1)\\
+\\
+2:\indent itConj(Nat) \ itH \ $\leftarrow$ \ crearIt(horizontales(m2))\\
+3:\indent \textbf{while}(haySiguiente(itH)) \ :\\
+4:\indent \indent Ag(horizontales(res), \ siguiente(itH))\\
+5:\indent \indent avanzar(itH)\\
+\\
+6:\indent itConj(Nat) \ itV \ $\leftarrow$ \ crearIt(verticales(m2))\\
+7:\indent \textbf{while}(haySiguiente(itV)) \ :\\
+8:\indent \indent Ag(verticales(res), \ siguiente(itV))\\
+9:\indent \indent avanzar(itV)\\
+10:\indent \textbf{return} \ res\\
+\textbf{Complejidad}: \ O(copiar(m1) \ + \ copiar(m2))\\
+\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\
+\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\textbf{esRio}(\textbf{in \ }m1: \ mapa, \ \textbf{in \ }p: \ Pos) \ $\longrightarrow$ \ res \ : \ Bool\\
+1: \  \ \textbf{return} \ p.x \ $\in$ \ verticales(m1) \ $\vee$ \ p.y \ $\in$ \ horizontales(m1)\\
+\textbf{Complejidad}: \ O($ \# $horizontales(m1) \ + \ $ \# $verticales(m1))\\
+\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
