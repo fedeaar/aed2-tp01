@@ -3,7 +3,7 @@
     \begin{algorithm}[H]{\textbf{nuevoServer}() $\to$ $res$ : estr}
         \begin{algorithmic}[1]
             \State $res\ \gets\ vacio()$
-            \Return $res$
+            \State \Return $res$
             \medskip
             \Statex \underline{Complejidad:} $O(1)$
         \end{algorithmic}
@@ -11,28 +11,31 @@
 
     \begin{algorithm}[H]{\textbf{partidas}(\In{e}{estr}) $\to$ $res$ : diccTrie(Nombre, SimCity)}
         \begin{algorithmic}[1]
-            \State $dicc(Nombre,\ SimCity)\ res\ \gets\ vacio()$
-            \State $itDicc(Nombre,\ Partida)\ it\ \gets\ crearIt(e)$
-            \State $while(haySiguiente(it))$
-            \State \indent $definirRapido(res,\ siguienteClave(it),\ siguienteSignificado(it).sim)$
+            \State $res\ \gets\ vacio()$
+            \State $it\ \gets\ crearIt(e)$
+            \State $while(haySiguiente(it)):$
+            \State \indent $nom\ \gets\ siguienteClave(it)$
+            \State \indent $sc\ \gets\ *(siguienteSignificado(it).sim)$
+            \State \indent $definirRapido(res,\ nom,\ sc)$
             \State \indent $avanzar(it)$ 
-            \Return $res$
+            \State \Return $res$
             \medskip
-            \Statex \underline{Complejidad:} $O(copy(estr))$
+            \Statex \underline{Complejidad:} $\bold{O}(\sum_{i = 0}^{N}{copy(nom_i) + copy(sc_i)}$)
         \end{algorithmic}
     \end{algorithm}
 
     \begin{algorithm}[H]{\textbf{congeladas}(\In{e}{estr}) $\to$ $res$ : conj(Nombre)}
         \begin{algorithmic}[1]
-            \State $conj(Nombre)\ res\ \gets\ vacio()$
-            \State $itDicc(Nombre,\ Partida)\ it\ \gets\ crearIt(e)$
-            \State $while(haySiguiente(it))$
-            \State \indent $if (siguienteSignificado(it).modificable == false)$
-            \State \indent \indent $agregarRapido(res,\ siguienteClave(it))$
+            \State $res\ \gets\ vacio()$
+            \State $it\ \gets\ crearIt(e)$
+            \State $while(haySiguiente(it)):$
+            \State \indent $if\ (\neg siguienteSignificado(it).modificable):$
+            \State \indent \indent $nom\ \gets\ siguienteClave(it)$
+            \State \indent \indent $agregarRapido(res,\ nom)$
             \State \indent $avanzar(it)$ 
-            \Return $res$
+            \State \Return $res$
             \medskip
-            \Statex \underline{Complejidad:} $O(\# Partidas + |NombreMasLargo|)$
+            \Statex \underline{Complejidad:} $\bold{O}(\sum_{i = 0}^{N}{copy(nom_i)})$
         \end{algorithmic}
     \end{algorithm}
 
@@ -40,136 +43,91 @@
         \begin{algorithmic}[1]
             \State $definirRapido(e,\ p,\ \langle true,\ \&(iniciar(m)), vacio() \rangle )$ \Comment{Reservamos memoria para el nuevo SimCity}
             \medskip
-            \Statex \underline{Complejidad:} $O(|p|)$
+            \Statex \underline{Complejidad:} $\bold{O}($copy$(p)\ +\ $copy$(m))$
         \end{algorithmic}
     \end{algorithm}
 
     \begin{algorithm}[H]{\textbf{unirPartidas}(\Inout{e}{estr}, \In{p1}{Nombre}, \In{p2}{Nombre})}
         \begin{algorithmic}[1]
-            \State $definir(e,\ p1, \langle true,\ \&(unir(*significado(p1,\ e).sim,\ *significado(p2,\ e).sim)), vacio()\rangle)$
+            \State $definir(e,\ p1, \langle true,\ \&(unir(*(significado(p1,\ e).sim),\ *(significado(p2,\ e).sim))), vacio()\rangle)$
             \State $definir(e,\ p2, \langle false,\ significado(p2,\ e).sim,\ vacio() \rangle)$
             \medskip
-            \Statex \underline{Complejidad:} $O(|Nombre|)$
-            \Statex \underline{Justificacion:} $unir \in O(1),\ definir \in O(|Nombre|) + O(1) = O(|Nombre|)$
+            \Statex \underline{Complejidad:} $\bold{O}(|nombreMasLargo|)$
+            \Statex \underline{Justificacion:} $unir \in O(1),\ definir \in O(|nombreMasLargo|) + O(1) = O(|nombreMasLargo|)$
         \end{algorithmic}
-    \end{algorithm}    
-    %\begin{algorithm}[H]{\textbf{nuevoServer}() $\to$ $res$ : estr}
-    %    \begin{algorithmic}[1]
-    %        \State $res\ \gets\ vacio()$
-    %        \Return $res$
-    %        \medskip
-    %        \Statex \underline{Complejidad:} $O(1)$
-    %    \end{algorithmic}
-    %\end{algorithm}
-
-    %\begin{algorithm}[H]{\textbf{partidas}(\In{e}{estr}) $\to$ $res$ : diccTrie(Nombre, SimCity)}
-    %    \begin{algorithmic}[1]
-    %        \State $dicc(Nombre,\ SimCity)\ res\ \gets\ vacio()$
-    %        \State $itDicc(Nombre,\ Partida)\ it\ \gets\ crearIt(e)$
-    %        \State $while(haySiguiente(it))$
-    %        \State \indent $definirRapido(res,\ siguienteClave(it),\ siguienteSignificado(it).sim)$
-    %        \State \indent $avanzar(it)$ 
-    %        \Return $res$
-    %        \medskip
-    %        \Statex \underline{Complejidad:} $O(copy(estr))$
-    %    \end{algorithmic}
-    %\end{algorithm}
-
-    %\begin{algorithm}[H]{\textbf{congeladas}(\In{e}{estr}) $\to$ $res$ : conj(Nombre)}
-    %    \begin{algorithmic}[1]
-    %        \State $conj(Nombre)\ res\ \gets\ vacio()$
-    %        \State $itDicc(Nombre,\ Partida)\ it\ \gets\ crearIt(e)$
-    %        \State $while(haySiguiente(it))$
-    %        \State \indent $if (siguienteSignificado(it).modificable == false)$
-    %        \State \indent \indent $agregarRapido(res,\ siguienteClave(it))$
-    %        \State \indent $avanzar(it)$ 
-    %        \Return $res$
-    %        \medskip
-    %        \Statex \underline{Complejidad:} $O(\# Partidas + |NombreMasLargo|)$
-    %    \end{algorithmic}
-    %\end{algorithm}
-
-    %\begin{algorithm}[H]{\textbf{nuevaPartida}(\Inout{e}{estr}, \In{p}{Nombre}, \In{m}{Mapa})}
-    %    \begin{algorithmic}[1]
-    %        \State $definirRapido(e,\ p,\ \langle true,\ \&(iniciar(m)), vacio() \rangle )$ \Comment{Reservamos memoria para el nuevo SimCity}
-    %        \medskip
-    %        \Statex \underline{Complejidad:} $O(|p|)$
-    %    \end{algorithmic}
-    %\end{algorithm}
-
-    %\begin{algorithm}[H]{\textbf{unirPartidas}(\Inout{e}{estr}, \In{p1}{Nombre}, \In{p2}{Nombre})}
-    %    \begin{algorithmic}[1]
-    %        \State $definir(e,\ p1, \langle true,\ \&(unir(*significado(p1,\ e).sim,\ *significado(p2,\ e).sim)), vacio()\rangle)$
-    %        \State $definir(e,\ p2, \langle false,\ significado(p2,\ e).sim,\ vacio() \rangle)$
-    %        \medskip
-    %        \Statex \underline{Complejidad:} $O(|Nombre|)$
-    %        \Statex \underline{Justificacion:} $unir \in O(1),\ definir \in O(|Nombre|) + O(1) = O(|Nombre|)$
-    %    \end{algorithmic}
-    %\end{algorithm}
+    \end{algorithm}   
+    
+    \begin{algorithm}[H]{\textbf{avanzarTurnoPartida}(\Inout{e}{estr}, \In{p}{Nombre})}
+        \begin{algorithmic}[1]
+            \State $definir(e,\ p, \langle true,\ avanzarTurno(*(significado(p,\ e).sim),\ significado(p,\ e).pendientes),\ vacio()\rangle)$
+            \medskip
+            \Statex \underline{Complejidad:} $\bold{O}(|nombreMasLargo| + avanzarTurno)$
+        \end{algorithmic}
+    \end{algorithm}   
 
     \begin{algorithm}[H]{\textbf{agregarCasa}(\Inout{s}{estr}, \In{partida}{String}, \In{pos}{Pos})} %$\to$ $res$ : estr}
     \begin{algorithmic}[1]
-        \State $definirRapido(Pos,\ "casa",\ obtener(partida,\ s))$
+        \State $definirRapido(obtener(partida,\ s).pendientes,\ pos,\ "casa")$
         \medskip
-        \Statex \underline{Complejidad:} $O(|partida|)$
+        \Statex \underline{Complejidad:} $O(|nombreMasLargo|)$
     \end{algorithmic}
     \end{algorithm}
     
     \begin{algorithm}[H]{\textbf{agregarComercio}(\Inout{s}{estr}, \In{partida}{String}, \In{pos}{Pos})} %$\to$ $res$ : estr}
     \begin{algorithmic}[1]
-        \State $definirRapido(Pos,\ "comercio",\ obtener(partida,\ s))$ 
+        \State $definirRapido(obtener(partida,\ s).pendientes, pos,\ "comercio")$ 
         \medskip
-        \Statex \underline{Complejidad:} $O(|partida|)$
+        \Statex \underline{Complejidad:} $O(|nombreMasLargo|)$
     \end{algorithmic}
     \end{algorithm}
 
-    \begin{algorithm}[H]{\textbf{verMapa}(\In{s}{estr}, \In{partida}{String}) $\to$ $res$ : Mapa}
+    \begin{algorithm}[H]{\textbf{verMapa}(\In{s}{estr}, \In{partida}{Nombre}) $\to$ $res$ : Mapa}
     \begin{algorithmic}[1]
         \State $sc\ \leftarrow\ obtener(partida,\ s).sim$
         \State $res\ \leftarrow\ mapa(*sc)$ 
         \State \Return $res$
         \medskip
-        \Statex \underline{Complejidad:} $O(|partida|) + O(mapa(*sc))$
+        \Statex \underline{Complejidad:} $O(|nombreMasLargo|) + O(mapa(*sc))$
     \end{algorithmic}
     \end{algorithm}
       
-    \begin{algorithm}[H]{\textbf{verCasas}(\In{s}{estr}, \In{partida}{String}) $\to$ $res$ : DiccLineal(Pos,\ Nivel)}
+    \begin{algorithm}[H]{\textbf{verCasas}(\In{s}{estr}, \In{partida}{Nombre}) $\to$ $res$ : DiccLineal(Pos,\ Nivel)}
     \begin{algorithmic}[1]
         \State $sc\ \leftarrow\ obtener(partida,\ s).sim$
         \State $res\ \leftarrow\ casas(*sc)$
         \State \Return $res$
         \medskip
-        \Statex \underline{Complejidad:} $O(|partida|) + O(casas(*sc))$
+        \Statex \underline{Complejidad:} $O(|nombreMasLargo|) + O(casas(*sc))$
     \end{algorithmic}
     \end{algorithm}
 
-    \begin{algorithm}[H]{\textbf{verComercios}(\In{s}{estr}, \In{partida}{String}) $\to$ $res$ : DiccLineal(Pos,\ Nivel)}
+    \begin{algorithm}[H]{\textbf{verComercios}(\In{s}{estr}, \In{partida}{Nombre}) $\to$ $res$ : DiccLineal(Pos,\ Nivel)}
     \begin{algorithmic}[1]
         \State $sc\ \leftarrow\ obtener(partida,\ s).sim$
         \State $res\ \leftarrow\ comercios(*sc)$
         \State \Return $res$
         \medskip
-        \Statex \underline{Complejidad:} $O(|partida|) + O(comercios(*sc))$
+        \Statex \underline{Complejidad:} $O(|nombreMasLargo|) + O(comercios(*sc))$
     \end{algorithmic}
     \end{algorithm}
 
-    \begin{algorithm}[H]{\textbf{verPopularidad}(\In{s}{estr}, \In{partida}{String}) $\to$ $res$ : Nat}
+    \begin{algorithm}[H]{\textbf{verPopularidad}(\In{s}{estr}, \In{partida}{Nombre}) $\to$ $res$ : Nat}
     \begin{algorithmic}[1]
         \State $sc\ \leftarrow\ obtener(partida,\ s).sim$
         \State $res\ \leftarrow\ popularidad(*sc)$
         \State \Return $res$
         \medskip
-        \Statex \underline{Complejidad:} $O(|partida|)$
+        \Statex \underline{Complejidad:} $O(|nombreMasLargo|)$
     \end{algorithmic}
     \end{algorithm}
 
-    \begin{algorithm}[H]{\textbf{verTurno}(\In{s}{estr}, \In{partida}{String}) $\to$ $res$ : Nat}
+    \begin{algorithm}[H]{\textbf{verTurno}(\In{s}{estr}, \In{partida}{Nombre}) $\to$ $res$ : Nat}
     \begin{algorithmic}[1]
         \State $sc\ \leftarrow\ obtener(partida,\ s).sim$
         \State $res\ \leftarrow\ turnos(*sc)$
         \State \Return $res$
         \medskip
-        \Statex \underline{Complejidad:} $O(|partida|)$
+        \Statex \underline{Complejidad:} $O(|nombreMasLargo|)$
     \end{algorithmic}
     \end{algorithm}
 

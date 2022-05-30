@@ -40,14 +40,6 @@
     \tadOtrasOperaciones
     \tadAlinearFunciones{construcciones}{dicc($\alpha$, $\beta$),dicc($\alpha$, $\beta$)}
     \tadOperacion{turnos}{SimCity}{Nat}{}
-    %Calcula el nivel de un comercio al ser agregado al SimCity
-    \tadOperacion{nivelComercio}{Pos,dicc(Pos, Nivel)}{Nat}{}
-    %Calcula la distancia Manhattan de dos posiciones
-    \tadOperacion{distManhattan}{Pos,Pos}{Nat}{}
-    \tadOperacion{$\bullet\ \cup_{dicc}\ \bullet$}{dicc($\alpha$, $\beta$),dicc($\alpha$, $\beta$)}{dicc($\alpha$ $\times$ $\beta$)}{}
-
-    \vspace{2mm}
-    \tadAlinearFunciones{construcciones}{SimCity,dicc(Pos, Nivel),dicc(Pos $\times$ Construcción)}
     %Junta los diccionarios casas y comercios
     \tadOperacion{construcciones}{SimCity}{dicc(Pos $\times$ Nivel)}{}
     %Calcula las construcciones de mayor nivel
@@ -56,9 +48,19 @@
     %Calcula el nivel mas alto de entre todas las construcciones
         %\tadOperacion{nivelMaximo}{dicc(Pos, Nivel)}{Nat}{}
     %Junta dos diccionarios de casas
+    \tadAlinearFunciones{construcciones}{SimCity,dicc(Pos, Nivel),dicc(Pos $\times$ Construcción)}
+    
     \tadOperacion{agCasas}{dicc(Pos, Nivel),dicc(Pos, Construcción)}{dicc(Pos $\times$ Nivel)}{}
     %Junta dos diccionarios de comercios
     \tadOperacion{agComercios}{SimCity,dicc(Pos, Nivel),dicc(Pos, Construcción)}{dicc(Pos $\times$ Nivel)}{}
+    %Calcula el nivel de un comercio al ser agregado al SimCity
+    \tadOperacion{nivelComercio}{Pos,dicc(Pos, Nivel)}{Nat}{}
+    %Calcula la distancia Manhattan de dos posiciones
+    \tadOperacion{distManhattan}{Pos,Pos}{Nat}{}
+    \tadOperacion{$\bullet\ \cup_{dicc}\ \bullet$}{dicc($\alpha$, $\beta$),dicc($\alpha$, $\beta$)}{dicc($\alpha$ $\times$ $\beta$)}{}
+
+    %\vspace{2mm}
+    
     %Devuelve el diccionario de conostrucciones a distancia manhattan <= 3 
     %\tadOperacion{conjManhatt}{Pos,dicc(Pos, Nivel)}{dicc(Pos, Nivel)}{}
      %Devuelve el segundo diccionario sin las claves que tambien aparecian en el primero
@@ -129,66 +131,7 @@
     }
     \vspace{1mm}
     \tadAlinearAxiomas{agComercios($s,\ cn,\ cs$)}
-    \tadAxioma{nivelComercio($p,\ cn$)}{
-        %    $\LIF$ $\lnot vacio?$(manhattan($p$, casas($s$))) $\LTHEN$\\
-        %        nivelMaximo(manhattan($p$), casas($s$)) \\
-        %    $\LELSE$
-        %        1
-        %    $\LFI$
-        
-        %$\LIF\ vacio?$(claves($cn$)) $\LTHEN$ \\
-        %    \tab 1 \\
-        %$\LELSE$ \\
-        %    \tab $\LIF$ distManhatt($p$, dameUno(claves($cn$))) $\leq$ 3 $\LTHEN$ \\
-        %        \tab\tab max(obtener(dameUno(claves($cn$)), $cn$), \\
-        %        \tab\tab\tab nivelComercio($p$, borrar(dameUno(claves($cn$)), $cn$))) \\
-        %    \tab $\LELSE$ \\
-        %        \tab\tab nivelComercio($p$, borrar(dameUno(claves($cn$)), $cn$)) \\
-        %    \tab $\LFI$ \\ 
-        %$\LFI$
 
-        $\LIF$\ vacio?(claves($cn$)) $\LTHEN$ \\
-            \tab 1 \\
-        $\LELSE$ $\LIF$ distManhattan($p$, proximo) $\leq$ 3 $\LTHEN$ \\
-            \tab max(obtener(proximo, $cn$), nivelComercio($p$, borrar(proximo, $cn$))) \\
-        $\LELSE$ \\
-            \tab nivelComercio($p$, borrar(proximo, $cn$)) \\
-        $\LFI$  
-        \\ donde proximo $\equiv$ dameUno(claves($cn$)) 
-    }
-   % \tadAxioma{conjManhatt($p, cs$)}{
-   %     $\LIF vacio?$($cs$) $\LTHEN$ 
-   %         $\emptyset$ 
-   %     $\LELSE$ \\
-   %         $\LIF$ distManhattan($p$, dameUno(claves($cs$))) $\leq$ 3 $\LTHEN$ \\
-   %             definir(dameUno(claves($cs$)), 
-   %                     obtener(dameUno(claves($cs$)), $cs$), \\
-   %                     conjManhatt($p$, borrar(dameUno(claves($cs$)), $cs$))) \\
-   %         $\LELSE$ \\
-   %             conjManhatt($p$, borrar(dameUno(claves($cs$)), $cs$)) \\
-   %     $\LFI$
-   % }
-    %la distancia manhattan entre dos puntos p y q es
-    %d(p,q) = |p0 - q0| + |p1 - q1|
-    %\vspace{2mm}
-    \tadAxioma{distManhattan($p,\ q$)}{
-        %$\LIF\ \pi_{0}(p) < \pi_{0}(q)\ \LTHEN\ q - p\ \LELSE\ p - q\ \LFI$ \\
-        %+ \\
-        %$\LIF\ \pi_{1}(p) < \pi_{1}(q)\ \LTHEN\ q - p\ \LELSE\ p - q\ \LFI$
-        $\LIF$\ $p.x$ <\ $q.x$\ $\LTHEN$\ $q.x$ - $p.x$\ $\LELSE$\ $p.x$ - $q.x$\ $\LFI$ $\\$
-        + \\
-        $\LIF$\ $p.y$ <\ $q.y$\ $\LTHEN$\ $q.y$ - $p.y$\ $\LELSE$\ $p.y$ - $q.y$\ $\LFI$
-    }
-
-    %\vspace{2mm}
-    \tadAxioma{$d$ $\cup_{dicc}$ $d'$}{
-        $\LIF$ vacio?(claves($d'$)) $\LTHEN$ \\
-            \tab $d$ \\
-        $\LELSE$ \\
-            \tab definir(proximo, obtener(proximo, $d'$), $d\ \cup_{dicc}$ borrar(proximo, $d'$)) \\
-        $\LFI$
-        \\ donde proximo $\equiv$ dameUno(claves($d'$)) 
-    }
     
     %%\vspace{2mm}
     %\tadTitulo{axiomas privados}
@@ -252,6 +195,68 @@
         \\ donde proximo $\equiv$ dameUno(claves($cs$)) 
     }
 
+    
+    \tadAxioma{nivelComercio($p,\ cn$)}{
+        %    $\LIF$ $\lnot vacio?$(manhattan($p$, casas($s$))) $\LTHEN$\\
+        %        nivelMaximo(manhattan($p$), casas($s$)) \\
+        %    $\LELSE$
+        %        1
+        %    $\LFI$
+        
+        %$\LIF\ vacio?$(claves($cn$)) $\LTHEN$ \\
+        %    \tab 1 \\
+        %$\LELSE$ \\
+        %    \tab $\LIF$ distManhatt($p$, dameUno(claves($cn$))) $\leq$ 3 $\LTHEN$ \\
+        %        \tab\tab max(obtener(dameUno(claves($cn$)), $cn$), \\
+        %        \tab\tab\tab nivelComercio($p$, borrar(dameUno(claves($cn$)), $cn$))) \\
+        %    \tab $\LELSE$ \\
+        %        \tab\tab nivelComercio($p$, borrar(dameUno(claves($cn$)), $cn$)) \\
+        %    \tab $\LFI$ \\ 
+        %$\LFI$
+
+        $\LIF$\ vacio?(claves($cn$)) $\LTHEN$ \\
+            \tab 1 \\
+        $\LELSE$ $\LIF$ distManhattan($p$, proximo) $\leq$ 3 $\LTHEN$ \\
+            \tab max(obtener(proximo, $cn$), nivelComercio($p$, borrar(proximo, $cn$))) \\
+        $\LELSE$ \\
+            \tab nivelComercio($p$, borrar(proximo, $cn$)) \\
+        $\LFI$  
+        \\ donde proximo $\equiv$ dameUno(claves($cn$)) 
+    }
+   % \tadAxioma{conjManhatt($p, cs$)}{
+   %     $\LIF vacio?$($cs$) $\LTHEN$ 
+   %         $\emptyset$ 
+   %     $\LELSE$ \\
+   %         $\LIF$ distManhattan($p$, dameUno(claves($cs$))) $\leq$ 3 $\LTHEN$ \\
+   %             definir(dameUno(claves($cs$)), 
+   %                     obtener(dameUno(claves($cs$)), $cs$), \\
+   %                     conjManhatt($p$, borrar(dameUno(claves($cs$)), $cs$))) \\
+   %         $\LELSE$ \\
+   %             conjManhatt($p$, borrar(dameUno(claves($cs$)), $cs$)) \\
+   %     $\LFI$
+   % }
+    %la distancia manhattan entre dos puntos p y q es
+    %d(p,q) = |p0 - q0| + |p1 - q1|
+    %\vspace{2mm}
+    \tadAxioma{distManhattan($p,\ q$)}{
+        %$\LIF\ \pi_{0}(p) < \pi_{0}(q)\ \LTHEN\ q - p\ \LELSE\ p - q\ \LFI$ \\
+        %+ \\
+        %$\LIF\ \pi_{1}(p) < \pi_{1}(q)\ \LTHEN\ q - p\ \LELSE\ p - q\ \LFI$
+        $\LIF$\ $p.x$ <\ $q.x$\ $\LTHEN$\ $q.x$ - $p.x$\ $\LELSE$\ $p.x$ - $q.x$\ $\LFI$ $\\$
+        + \\
+        $\LIF$\ $p.y$ <\ $q.y$\ $\LTHEN$\ $q.y$ - $p.y$\ $\LELSE$\ $p.y$ - $q.y$\ $\LFI$
+    }
+
+    %\vspace{2mm}
+    \tadAxioma{$d$ $\cup_{dicc}$ $d'$}{
+        $\LIF$ vacio?(claves($d'$)) $\LTHEN$ \\
+            \tab $d$ \\
+        $\LELSE$ \\
+            \tab definir(proximo, obtener(proximo, $d'$), $d\ \cup_{dicc}$ borrar(proximo, $d'$)) \\
+        $\LFI$
+        \\ donde proximo $\equiv$ dameUno(claves($d'$)) 
+    }
+    
     %\tadAlinearAxiomas{sacarRepes($cs, cs'$)}
    
     %Tal vez pueda hacerse sin nivelMaximo

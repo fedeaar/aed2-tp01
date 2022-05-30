@@ -30,7 +30,7 @@
     \tadOtrasOperaciones
     \tadAlinearFunciones{$\bullet\ +\ \bullet$}{Mapa, Mapa}%{Mapa}{}
         \tadOperacion{$\bullet\ +\ \bullet$}{Mapa, Mapa}{Mapa}{}
-        \tadOperacion{esRio}{Mapa, Pos}{Bool}{}
+        \tadOperacion{esRio}{Pos, Mapa}{Bool}{}
  
     \vspace{2mm}
     \tadAxiomas[\paratodo{conj(Nat)}{hs,\ vs}]
@@ -45,7 +45,7 @@
 
     \tadAlinearAxiomas{esRio($m1$,\ $p$)}
     \tadAxioma{$m1$\ +\ $m2$}{crear(horizontales($m1$) $\cup$ horizontales($m2$), verticales($m1$) $\cup$ verticales($m2$))}
-    \tadAxioma{esRio($m1$,\ $p$)}{$p.x$\ $\in$\ verticales($m1$)\ $\vee$\ $p.y$\ $\in$\ horizontales($m1$)}
+    \tadAxioma{esRio($p$, $m1$)}{$p.x$\ $\in$\ verticales($m1$)\ $\vee$\ $p.y$\ $\in$\ horizontales($m1$)}
 
     \vspace{1mm}
 \end{tad}
