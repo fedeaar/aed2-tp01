@@ -4,8 +4,13 @@
   
     Un servidor almacena y actualiza los diferentes SimCity. Se representa como un 
     diccionario implementado en un trie, donde las claves son los nombres de las partidas
-    y los significados un puntero al SimCity, un diccionario de construcciones pendientes a agregar, y su estado (si es modificable o no).
-  
+    y los significados un puntero al SimCity, un diccionario de construcciones pendientes a agregar, y su estado (si es modificable o no).\\
+
+    Elegimos esta estructura para cumplir con las restricciones dadas de complejidad. Buscar una clave en el diccTrie está acotado
+    por la clave más larga definida en el mismo. Con lo cual, todas las operaciones del servidor en relación a una partida específica
+    serán por lo menos $\bold{O}(|nombreMasLargo|)$.
+    
+
     \begin{Estructura}{servidor}[diccTrie(Nombre, partida)]
         \begin{Tupla}[partida]
             \tupItem{modificable\ }{bool}
@@ -38,7 +43,7 @@
                 \tab ($\neg$ $p$.modificable \impluego\ $vacio?$(claves($p$.pendientes))) $\wedge$\\
                 \tab ($\forall$ $pos$: Pos)(def?($pos$, $p$.pendientes) \impluego \\
                     \tab\tab (obtener($pos$, $p$.pendientes) $\in \{"casa",\ "comercio"\}\ \wedge\ $ \\
-                    \tab\tab $\lnot$ def?($pos$, construcciones(*$p$.sim))) \\
+                    \tab\tab $\lnot$ def?($pos$, construcciones(*$p$.sim)) $\wedge$ $\lnot$ esRio($pos$, mapa(*$p$.sim)) ) \\
                     %Se puede usar construcc aca?
                 \tab ) \\
             )
