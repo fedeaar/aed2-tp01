@@ -1,170 +1,168 @@
-\begin{Algoritmos}
-    
-\noindent \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-\textbf{iniciar}(\textbf{in \ }m: \ Mapa) \ $\longrightarrow$ \ res \ : \ estr\\
-\indent estr.turno \ $\leftarrow$ \ 0\\
-\indent estr.popularidad \ $\leftarrow$ \ 0\\
-\indent estr.mapa \ $\leftarrow$ \ m\\
-\indent estr.casas \ $\leftarrow$ \ vacio()\\
-\indent estr.comercios \ $\leftarrow$ \ vacio()\\
-\indent estr.uniones \ $\leftarrow$ \ vacia()\\
-\indent \textbf{return} \ estr\\
-\textbf{Complejidad}: \ O(1)\\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-\\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-\textbf{avanzarTurno}(\textbf{inout} \ SimCity \ s, \  \ \textbf{in \ }dicc(Pos, \ Construccion) \ cs)\\
-\indent \textbf{for}(nat \ i \ $\leftarrow$ \ 0; \ i \ $<$ \ long(s.uniones); \ i \ $\leftarrow$ \ i \ + \ 1) \ : \ \\
-\indent \indent turnoDesdeUnion \ $\leftarrow$ \ turnoDesdeUnion \ + \ 1;\\
-\\
-\indent itDicc(Pos, \ Nivel) \ itCasas \ $\leftarrow$ \ crearIt(s.casas);\\
-\indent \textbf{while}(haySiguiente(itCasas)) \ :\\
-\indent \indent siguienteSignificado(itCasas) \ $\leftarrow$ \ siguienteSignificado(itCasas) \ + \ 1\\
-\indent \indent avanzar(itCasas)\\
-\\
-\indent itDicc(Pos, \ Nivel) \ itComercios \ $\leftarrow$ \ crearIt(s.comercios);\\
-\indent \textbf{while}(haySiguiente(itComercios)) \ :\\
-\indent \indent siguienteSignificado(itComercios) \ $\leftarrow$ \ siguienteSignificado(itComercios) \ + \ 1\\
-\indent \indent avanzar(itComercios)\\
-\\
-\indent itDicc(Pos, \ Nivel) \ itCs \ $\leftarrow$ \ crearIt(cs);\\
-\indent \textbf{while}(haySiguiente(itCs)) \ :\\
-\indent \indent \textbf{if}(siguienteSignificado(itCs) \ $=_{obs}$ \ ``casa'') \ :\\
-\indent \indent \indent agCasa(s.casas, \ siguienteClave(itCs), \ 1)\\
-\indent \indent \textbf{else} \ \textbf{if}(siguienteSignificado(itCs) \ $=_{obs}$ \ ``comercio'') \ :\\
-\indent \indent \indent agComercio(s.comercio, \ siguienteClave(itCs), \ 1)\\
-\indent \indent avanzar(itCs)\\
-\\
-\textbf{Complejidad}: \ O(long(s.uniones) \ + \ $ \# $claves(s.casas) \ + \ $ \# $claves(s.comercios) \ + \ $ \# $claves(cs))\\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-\\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-\textbf{unir}(\textbf{inout} \ SimCity \ s1, \  \ \textbf{inout} \ Simcity \ s2)\\
-\indent s1.popularidad \ $\leftarrow$ \ s1.popularidad \ + \ s2.popularidad \ + \ 1\\
-\indent turno \ $\leftarrow$ \ max(s1.turno, \ s2.turno)\\
-\indent hijo \ nuevoHijo \ $\leftarrow$ \ $<$direccion(s2), \ 0$>$\\
-\indent agregarAtras(s1.uniones, \ nuevoHijo)\\
-\textbf{Complejidad}: \ O(1)\\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-\\
-Asumo \ que \ existe \ un \ conjunto \ U \ $\equiv$ \ \{u$_1$, \ u$_2$, \ ... \ , \ u$_n$\}\\
-tal \ que \ cada \ uno \ de \ esos \ U$_i$ \ son \ los \ simcities \ que \ componen \ al \ simcity \ original\\
-llamamos \ nodos \ : \ $ \# $U\\
-llamamos \ sumCasas \ : \ $\sum$\_\{i=1, \ nodos\}\^{}\{copiar(u$_i$.casas)\}\\
-llamamos \ sumComercios \ : \ $\sum$\_\{i=1, \ nodos\}\^{}\{copiar(u$_i$.comercios)\}\\
-llamamos \ sumMapas \ : \ $\sum$\_\{i=1, \ nodos\}\^{}\{u$_i$.mapa\}\\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-\textbf{mapa}(\textbf{in \ }SimCity \ s) \ $\rightarrow $ \ res \ : \ Mapa \ \\
-\indent Mapa \ res \ $\leftarrow$ \ s.mapa\\
-\indent \textbf{for}(nat \ i \ $\leftarrow$ \ 0; \ i \ $<$ \ long(s.uniones); \ i \ $\leftarrow$ \ i \ + \ 1) \ : \ \\
-\indent \indent res \ $\leftarrow$ \ res \ + \ \textbf{mapa}(s.uniones[i].sc*)\\
-\indent \textbf{return} \ res\\
-\textbf{Complejidad}: \ O(sumMapas) \ \\
-cabe \ aclarar \ que \ la \ suma \ de \ los \ mapas \ esta \ definida\\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-\\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-\textbf{casas}(\textbf{in \ }SimCity \ s) \ $\rightarrow $ \ res \ : \ dicc(Pos, \ Nivel)\\
-\indent dicc \ res \ $\leftarrow$ \ copiar(s.casas)\\
-\indent dicc \ comerciosTotales \ $\leftarrow$ \ copiar(s.comercios)\\
-\indent \textbf{for}(nat \ i \ $\leftarrow$ \ 0; \ i \ $<$ \ long(s.uniones); \ i \ $\leftarrow$ \ i \ + \ 1) \ : \ \\
-\indent \indent itDicc(Pos, \ Nivel) \ itCs \ $\leftarrow$ \ crearIt(\textbf{casas}(s.uniones[i].sc*));\\
-\indent \indent \textbf{while}(haySiguiente(itCs)) \ :\\
-\indent \indent \indent Pos \ p \ $\leftarrow$ \ siguienteClave(itCs)\\
-\indent \indent \indent Nivel \ n \ $\leftarrow$ \ siguienteSignificado(itCs)\\
-\indent \indent \indent \textbf{if}($\neg$def?(res, \ p) \ $\wedge$ \ $\neg$def?(comerciosTotales, \ p)) \ :\\
-\indent \indent \indent \indent definir(res, \ p, \ n \ + \ s.uniones[i].turnosDesdeUnion)\\
-\indent \indent \indent avanzar(itCs)\\
-\indent \indent comerciosTotales \ $\leftarrow$ \ comerciosTotales \ $\cup$ \ s.uniones[i].sc-$>$comercios\\
-\indent \textbf{return} \ res\\
-\textbf{Complejidad}: \ O([sumComercios \ + \ sumCasas]$^2$ \ + \ nodos)\\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-\\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-\textbf{comercios}(\textbf{in \ }SimCity \ s) \ $\rightarrow $ \ res \ : \ dicc(Pos, \ Nivel)\\
-1: \  \ \textbf{return} \ comerciosAux(s, \ casas(s), \ 0)\\
-\textbf{Complejidad}: \ O(casas(s))\\
-\\
-\textbf{comerciosAux}(\textbf{in \ }SimCity \ s, \ \textbf{in \ }casasTotales \ dicc(Pos, \ Nivel), \ \textbf{in \ }Nat \ tdu) \ $\rightarrow $ \ res \ : \ dicc(Pos, \ Nivel)\\
-1: \  \ dicc \ res \ $\leftarrow$ \ vacio()\\
-2: \  \ itDicc(Pos, \ Nivel) \ itCs \ $\leftarrow$ \ crearIt(s.comercios);\\
-3: \  \ \textbf{while}(haySiguiente(itCs)) \ :\\
-4:\indent  \  \ Pos \ p \ $\leftarrow$ \ siguienteClave(itCs)\\
-5:\indent  \  \ Nivel \ n \ $\leftarrow$ \ siguienteSignificado(itCs)\\
-6:\indent  \  \ Nivel \ m \ $\leftarrow$ \ max(n \ + \ tdu, \ nivelCom(p, \ casasTotales))\\
-7:\indent  \  \ definir(res, \ p, \ m)\\
-8:\indent  \  \ avanzar(itCs)\\
-9: \  \ \textbf{for}(nat \ i \ $\leftarrow$ \ 0; \ i \ $<$ \ long(s.uniones); \ i \ $\leftarrow$ \ i \ + \ 1) \ : \ \\
-10:\indent  \ tdu \ $\leftarrow$ \ s.uniones[i].turnosDesdeUnion\\
-11:\indent  \ itDicc(Pos, \ Nivel) \ itCs \ $\leftarrow$ \ crearIt(\textbf{comerciosAux}(s.uniones[i].sc*, \ casasTotales, \ tdu));\\
-12:\indent  \ \textbf{while}(haySiguiente(itCs)) \ :\\
-13:\indent \indent  \ Pos \ p \ $\leftarrow$ \ siguienteClave(itCs)\\
-14:\indent \indent  \ Nivel \ n \ $\leftarrow$ \ siguienteSignificado(itCs)\\
-15:\indent \indent  \ \textbf{if}($\neg$def?(res, \ p) \ $\wedge$ \ $\neg$def?(casasTotales, \ p)) \ :\\
-16:\indent \indent \indent  \ definir(res, \ p, \ n)\\
-17:\indent \indent  \ avanzar(itCs)\\
-18: \ \textbf{return} \ res\\
-\textbf{Complejidad}: \ O(sumComercios*sumCasas \ + \ sumComercios$^2$ \ + \ nodos)\\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-\\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-\textbf{popularidad}(\textbf{in \ }SimCity \ s) \ $\rightarrow $ \ res \ : \ Nat\\
-1: \  \ \textbf{return} \ s.popularidad\\
-\textbf{Complejidad}: \ O(1)\\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-\\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-\textbf{nivelCom}(\textbf{in \ }Pos \ p, \ \textbf{in \ }dicc(pos, \ Nivel) \ cs) \ $\rightarrow $ \ Nat\\
-1: \  \ nat \ maxLvl \ $\leftarrow$ \ 1\\
-2: \  \ \textbf{for}(int \ i \ = \ -3; \ i \ $\leq$ \ 3; \ ++i) \ :\\
-3:\indent  \  \ \textbf{for}(int \ j \ = \ $\mid$i$\mid$-3; \ j \ $\leq$ \ 3-$\mid$i$\mid$; \ ++j) \ :\\
-4:\indent \indent  \  \ \textbf{if}(p.x \ + \ i \ $\geq$ \ 0 \ $\wedge$ \ p.y \ + \ j \ $\geq$ \ 0) \ :\\
-5:\indent \indent \indent  \  \ Pos \ p2 \ $\leftarrow$ \ $<$p.x+i, \ p.y+j$>$ \ \\
-6:\indent \indent \indent  \  \ \textbf{if}(def?(cs, \ p2)) \ :\\
-7:\indent \indent \indent \indent  \  \ maxLvl \ = \ max(maxLvl, \ obtener(cs, \ p2))\\
-8: \  \ \textbf{return} \ maxLvl\\
-\textbf{Complejidad}: \ O($ \# $claves(cs))\\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-\\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-\textbf{agCasa}(\textbf{inout} \ dicc(Pos, \ Nivel) \ casas, \ \textbf{in \ }Pos \ p, \ \textbf{in \ }Nivel \ n) \ :\\
-1: \  \ definirRapido(casas, \ p, \ n)\\
-\textbf{Complejidad}: \ O(1)\\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-\\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-\textbf{agComercio}(\textbf{inout} \ dicc(Pos, \ Nivel) \ comercios, \ \textbf{in \ }Pos \ p, \ \textbf{in \ }Nivel \ n) \ :\\
-1: \  \ definirRapido(comercio, \ p, \ n)\\
-\textbf{Complejidad}: \ O(1)\\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-\\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-\textbf{turnos}(\textbf{in \ }SimCity \ s) \ $\rightarrow $ \ res \ : \ Nat\\
-1: \  \ \textbf{return} \ s.turno\\
-\textbf{Complejidad}: \ O(1)\\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-\\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-$\bullet$ \ $\cup$ \ $\bullet$(\textbf{in \ }dicc($\alpha$, \ $\beta$) \ d1, \ \textbf{in \ }dicc($\alpha$, \ $\beta$) \ d2) \ $\rightarrow $ \ res \ : \ dicc($\alpha$, \ $\beta$)\\
-1: \  \ dicc($\alpha$, \ $\beta$) \ res \ = \ copiar(d1)\\
-2: \  \ itDicc($\alpha$, \ $\beta$) \ itCs \ $\leftarrow$ \ crearIt(d2);\\
-3: \  \ \textbf{while}(haySiguiente(itCs)) \ :\\
-4:\indent  \  \ $\alpha$ \ a \ $\leftarrow$ \ siguienteClave(itCs)\\
-5:\indent  \  \ $\beta$ \ b \ $\leftarrow$ \ siguienteSignificado(itCs)\\
-6:\indent  \  \ \textbf{if}($\neg$def?(res, \ a)) \ :\\
-7:\indent \indent  \  \ definir(res, \ a, \ b)\\
-8:\indent  \  \ avanzar(itCs)\\
-9: \  \ \textbf{return} \ res\\
-\textbf{Complejidad}: \ O(copy(d1) \ + \ $ \# $claves(d2))\\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-\\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-\textbf{construcc}(\textbf{in \ }SimCity \ s) \ $\rightarrow $ \ res \ : \ Nat\\
-1: \  \ \textbf{return} \ \textbf{casas}(s) \ $\cup$ \ \textbf{comercios}(s)\\
-\textbf{Complejidad}: \ O(\textbf{casas}(d1) \ + \ \textbf{comercios}(d2))\\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-\\
-\\
-\\
+\begin{Algoritmos} \\
+    \makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \textbf{iniciar}(\textbf{in \ }m: \ Mapa) \ $\longrightarrow$ \ res \ : \ estr\\
+    1: \  \ estr.turno \ $\leftarrow$ \ 0\\
+    2: \  \ estr.popularidad \ $\leftarrow$ \ 0\\
+    3: \  \ estr.mapa \ $\leftarrow$ \ m\\
+    4: \  \ estr.casas \ $\leftarrow$ \ vacio()\\
+    5: \  \ estr.comercios \ $\leftarrow$ \ vacio()\\
+    6: \  \ estr.uniones \ $\leftarrow$ \ vacia()\\
+    7: \  \ \textbf{return} \ estr\\
+    \textbf{Complejidad}: \ O(1)\\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \textbf{avanzarTurno}(\textbf{inout} \ SimCity \ s, \  \ \textbf{in \ }dicc(Pos, \ Construccion) \ cs)\\
+    1: \  \ \textbf{for}(nat \ i \ $\leftarrow$ \ 0; \ i \ $<$ \ long(s.uniones); \ i \ $\leftarrow$ \ i \ + \ 1) \ : \ \\
+    2:\indent  \  \ turnoDesdeUnion \ $\leftarrow$ \ turnoDesdeUnion \ + \ 1;\\
+    \indent \\
+    3: \  \ itDicc(Pos, \ Nivel) \ itCasas \ $\leftarrow$ \ crearIt(s.casas);\\
+    4: \  \ \textbf{while}(haySiguiente(itCasas)) \ :\\
+    5:\indent  \  \ siguienteSignificado(itCasas) \ $\leftarrow$ \ siguienteSignificado(itCasas) \ + \ 1\\
+    6:\indent  \  \ avanzar(itCasas)\\
+    \indent \\
+    7: \  \ itDicc(Pos, \ Nivel) \ itComercios \ $\leftarrow$ \ crearIt(s.comercios);\\
+    8: \  \ \textbf{while}(haySiguiente(itComercios)) \ :\\
+    9:\indent  \  \ siguienteSignificado(itComercios) \ $\leftarrow$ \ siguienteSignificado(itComercios) \ + \ 1\\
+    10:\indent  \ avanzar(itComercios)\\
+     \  \  \ \\
+    11: \ itDicc(Pos, \ Nivel) \ itCs \ $\leftarrow$ \ crearIt(cs);\\
+    12: \ \textbf{while}(haySiguiente(itCs)) \ :\\
+    13:\indent  \ \textbf{if}(siguienteSignificado(itCs) \ $=_{obs}$ \ ``casa'') \ :\\
+    14:\indent \indent  \ agCasa(s.casas, \ siguienteClave(itCs), \ 1)\\
+    15:\indent  \ \textbf{else} \ \textbf{if}(siguienteSignificado(itCs) \ $=_{obs}$ \ ``comercio'') \ :\\
+    16:\indent \indent  \ agComercio(s.comercio, \ siguienteClave(itCs), \ 1)\\
+    17:\indent  \ avanzar(itCs)\\
+    18: \ estr.turno \ $\longleftarrow$ \ estr.turno \ + \ 1 \ \\
+    \textbf{Complejidad}: \ O(long(s.uniones) \ + \ $ \# $claves(s.casas) \ + \ $ \# $claves(s.comercios) \ + \ $ \# $claves(cs))\\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \textbf{unir}(\textbf{inout} \ SimCity \ s1, \  \ \textbf{inout} \ Simcity \ s2)\\
+    1: \  \ s1.popularidad \ $\leftarrow$ \ s1.popularidad \ + \ s2.popularidad \ + \ 1\\
+    2: \  \ turno \ $\leftarrow$ \ max(s1.turno, \ s2.turno)\\
+    3: \  \ hijo \ nuevoHijo \ $\leftarrow$ \ $<$direccion(s2), \ 0$>$\\
+    4: \  \ agregarAtras(s1.uniones, \ nuevoHijo)\\
+    \textbf{Complejidad}: \ O(1)\\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \pagebreak\\
+    Asumo \ que \ existe \ un \ conjunto \ U \ $\equiv$ \ \{u$_1$, \ u$_2$, \ ... \ , \ u$_n$\}\\
+    tal \ que \ cada \ uno \ de \ esos \ u$_i$ \ son \ los \ simcities \ que \ componen \ al \ simcity \ original\\
+    llamamos \ nodos \ : \ $ \# $U\\
+    llamamos \ sumCasas \ : \ $\sum$\_\{i=1, \ nodos\}\^{}\{copiar(u$_i$.casas)\}\\
+    llamamos \ sumComercios \ : \ $\sum$\_\{i=1, \ nodos\}\^{}\{copiar(u$_i$.comercios)\}\\
+    llamamos \ sumMapas \ : \ $\sum$\_\{i=1, \ nodos\}\^{}\{u$_i$.mapa\}\\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \textbf{mapa}(\textbf{in \ }SimCity \ s) \ $\rightarrow $ \ res \ : \ Mapa \ \\
+    1: \  \ Mapa \ res \ $\leftarrow$ \ s.mapa\\
+    2: \  \ \textbf{for}(nat \ i \ $\leftarrow$ \ 0; \ i \ $<$ \ long(s.uniones); \ i \ $\leftarrow$ \ i \ + \ 1) \ : \ \\
+    3:\indent  \  \ res \ $\leftarrow$ \ res \ + \ \textbf{mapa}(s.uniones[i].sc*)\\
+    4: \  \ \textbf{return} \ res\\
+    \textbf{Complejidad}: \ O(sumMapas) \ \\
+    cabe \ aclarar \ que \ la \ suma \ de \ los \ mapas \ esta \ definida\\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \textbf{casas}(\textbf{in \ }SimCity \ s) \ $\rightarrow $ \ res \ : \ dicc(Pos, \ Nivel)\\
+    1: \  \ dicc \ res \ $\leftarrow$ \ copiar(s.casas)\\
+    2: \  \ dicc \ comerciosTotales \ $\leftarrow$ \ copiar(s.comercios)\\
+    3: \  \ \textbf{for}(nat \ i \ $\leftarrow$ \ 0; \ i \ $<$ \ long(s.uniones); \ i \ $\leftarrow$ \ i \ + \ 1) \ : \ \\
+    4:\indent  \  \ itDicc(Pos, \ Nivel) \ itCs \ $\leftarrow$ \ crearIt(\textbf{casas}(s.uniones[i].sc*));\\
+    5:\indent  \  \ \textbf{while}(haySiguiente(itCs)) \ :\\
+    6:\indent \indent  \  \ Pos \ p \ $\leftarrow$ \ siguienteClave(itCs)\\
+    7:\indent \indent  \  \ Nivel \ n \ $\leftarrow$ \ siguienteSignificado(itCs)\\
+    8:\indent \indent  \  \ \textbf{if}($\neg$def?(res, \ p) \ $\wedge$ \ $\neg$def?(comerciosTotales, \ p)) \ :\\
+    9:\indent \indent \indent  \  \ definir(res, \ p, \ n \ + \ s.uniones[i].turnosDesdeUnion)\\
+    10:\indent \indent  \ avanzar(itCs)\\
+    11:\indent  \ comerciosTotales \ $\leftarrow$ \ comerciosTotales \ $\cup$ \ s.uniones[i].sc-$>$comercios\\
+    12: \ \textbf{return} \ res\\
+    \textbf{Complejidad}: \ O([sumComercios \ + \ sumCasas]$^2$ \ + \ nodos)\\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \textbf{comercios}(\textbf{in \ }SimCity \ s) \ $\rightarrow $ \ res \ : \ dicc(Pos, \ Nivel)\\
+    1: \  \ \textbf{return} \ comerciosAux(s, \ casas(s), \ 0)\\
+    \textbf{Complejidad}: \ O(casas(s))\\
+    \\
+    \textbf{comerciosAux}(\textbf{in \ }SimCity \ s, \ \textbf{in \ }casasTotales \ dicc(Pos, \ Nivel), \ \textbf{in \ }Nat \ tdu) \ $\rightarrow $ \ res \ : \ dicc(Pos, \ Nivel)\\
+    1: \  \ dicc \ res \ $\leftarrow$ \ vacio()\\
+    2: \  \ itDicc(Pos, \ Nivel) \ itCs \ $\leftarrow$ \ crearIt(s.comercios);\\
+    3: \  \ \textbf{while}(haySiguiente(itCs)) \ :\\
+    4:\indent  \  \ Pos \ p \ $\leftarrow$ \ siguienteClave(itCs)\\
+    5:\indent  \  \ Nivel \ n \ $\leftarrow$ \ siguienteSignificado(itCs)\\
+    6:\indent  \  \ Nivel \ m \ $\leftarrow$ \ max(n \ + \ tdu, \ nivelCom(p, \ casasTotales))\\
+    7:\indent  \  \ definir(res, \ p, \ m)\\
+    8:\indent  \  \ avanzar(itCs)\\
+    9: \  \ \textbf{for}(nat \ i \ $\leftarrow$ \ 0; \ i \ $<$ \ long(s.uniones); \ i \ $\leftarrow$ \ i \ + \ 1) \ : \ \\
+    10:\indent  \ tdu \ $\leftarrow$ \ s.uniones[i].turnosDesdeUnion\\
+    11:\indent  \ itDicc(Pos, \ Nivel) \ itCs \ $\leftarrow$ \ crearIt(\textbf{comerciosAux}(s.uniones[i].sc*, \ casasTotales, \ tdu));\\
+    12:\indent  \ \textbf{while}(haySiguiente(itCs)) \ :\\
+    13:\indent \indent  \ Pos \ p \ $\leftarrow$ \ siguienteClave(itCs)\\
+    14:\indent \indent  \ Nivel \ n \ $\leftarrow$ \ siguienteSignificado(itCs)\\
+    15:\indent \indent  \ \textbf{if}($\neg$def?(res, \ p) \ $\wedge$ \ $\neg$def?(casasTotales, \ p)) \ :\\
+    16:\indent \indent \indent  \ definir(res, \ p, \ n)\\
+    17:\indent \indent  \ avanzar(itCs)\\
+    18: \ \textbf{return} \ res\\
+    \textbf{Complejidad}: \ O(sumComercios*sumCasas \ + \ sumComercios$^2$ \ + \ nodos)\\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \\
+    \pagebreak\\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \textbf{popularidad}(\textbf{in \ }SimCity \ s) \ $\rightarrow $ \ res \ : \ Nat\\
+    1: \  \ \textbf{return} \ s.popularidad\\
+    \textbf{Complejidad}: \ O(1)\\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \textbf{nivelCom}(\textbf{in \ }Pos \ p, \ \textbf{in \ }dicc(pos, \ Nivel) \ cs) \ $\rightarrow $ \ Nat\\
+    1: \  \ nat \ maxLvl \ $\leftarrow$ \ 1\\
+    2: \  \ \textbf{for}(int \ i \ = \ -3; \ i \ $\leq$ \ 3; \ ++i) \ :\\
+    3:\indent  \  \ \textbf{for}(int \ j \ = \ $\mid$i$\mid$-3; \ j \ $\leq$ \ 3-$\mid$i$\mid$; \ ++j) \ :\\
+    4:\indent \indent  \  \ \textbf{if}(p.x \ + \ i \ $\geq$ \ 0 \ $\wedge$ \ p.y \ + \ j \ $\geq$ \ 0) \ :\\
+    5:\indent \indent \indent  \  \ Pos \ p2 \ $\leftarrow$ \ $<$p.x+i, \ p.y+j$>$ \ \\
+    6:\indent \indent \indent  \  \ \textbf{if}(def?(cs, \ p2)) \ :\\
+    7:\indent \indent \indent \indent  \  \ maxLvl \ = \ max(maxLvl, \ obtener(cs, \ p2))\\
+    8: \  \ \textbf{return} \ maxLvl\\
+    \textbf{Complejidad}: \ O($ \# $claves(cs))\\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \textbf{agCasa}(\textbf{inout} \ dicc(Pos, \ Nivel) \ casas, \ \textbf{in \ }Pos \ p, \ \textbf{in \ }Nivel \ n) \ :\\
+    1: \  \ definirRapido(casas, \ p, \ n)\\
+    \textbf{Complejidad}: \ O(1)\\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \textbf{agComercio}(\textbf{inout} \ dicc(Pos, \ Nivel) \ comercios, \ \textbf{in \ }Pos \ p, \ \textbf{in \ }Nivel \ n) \ :\\
+    1: \  \ definirRapido(comercio, \ p, \ n)\\
+    \textbf{Complejidad}: \ O(1)\\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \textbf{turnos}(\textbf{in \ }SimCity \ s) \ $\rightarrow $ \ res \ : \ Nat\\
+    1: \  \ \textbf{return} \ s.turno\\
+    \textbf{Complejidad}: \ O(1)\\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    $\bullet$ \ $\cup$ \ $\bullet$(\textbf{in \ }dicc($\alpha$, \ $\beta$) \ d1, \ \textbf{in \ }dicc($\alpha$, \ $\beta$) \ d2) \ $\rightarrow $ \ res \ : \ dicc($\alpha$, \ $\beta$)\\
+    1: \  \ dicc($\alpha$, \ $\beta$) \ res \ = \ copiar(d1)\\
+    2: \  \ itDicc($\alpha$, \ $\beta$) \ itCs \ $\leftarrow$ \ crearIt(d2);\\
+    3: \  \ \textbf{while}(haySiguiente(itCs)) \ :\\
+    4:\indent  \  \ $\alpha$ \ a \ $\leftarrow$ \ siguienteClave(itCs)\\
+    5:\indent  \  \ $\beta$ \ b \ $\leftarrow$ \ siguienteSignificado(itCs)\\
+    6:\indent  \  \ \textbf{if}($\neg$def?(res, \ a)) \ :\\
+    7:\indent \indent  \  \ definir(res, \ a, \ b)\\
+    8:\indent  \  \ avanzar(itCs)\\
+    9: \  \ \textbf{return} \ res\\
+    \textbf{Complejidad}: \ O(copy(d1) \ + \ $ \# $claves(d2))\\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \textbf{construcc}(\textbf{in \ }SimCity \ s) \ $\rightarrow $ \ res \ : \ Nat\\
+    1: \  \ \textbf{return} \ \textbf{casas}(s) \ $\cup$ \ \textbf{comercios}(s)\\
+    \textbf{Complejidad}: \ O(\textbf{casas}(d1) \ + \ \textbf{comercios}(d2))\\
+    \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+    \\    
 \end{Algoritmos}
 
