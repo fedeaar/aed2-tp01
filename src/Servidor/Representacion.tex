@@ -19,11 +19,11 @@
             \tupItem{y\ }{Nat}
         \end{Tupla}
 
-        \vspace{2mm}
-        donde Nombre es string
+        %\vspace{2mm}
+        %donde Nombre es string
 
-        \vspace{2mm}
-        donde Construccion es string
+        %\vspace{2mm}
+        %donde Construccion es string
 
     \end{Estructura}
     
@@ -35,7 +35,7 @@
             )\ $\wedge$ \\
             ($\forall\ partida$: Nombre)(def?($partida,\ e$) \impluego\ \\
                 \tab $p$.sim $\neq$ NULL $\wedge$ \\
-                \tab ($p$.modificable $\igobs$ \false\ \impluego\ $vacio?$(claves($p$.pendientes))) $\wedge$\\
+                \tab ($\neg$ $p$.modificable \impluego\ $vacio?$(claves($p$.pendientes))) $\wedge$\\
                 \tab ($\forall$ $pos$: Pos)(def?($pos$, $p$.pendientes) \impluego \\
                     \tab\tab (obtener($pos$, $p$.pendientes) $\in \{"casa",\ "comercio"\}\ \wedge\ $ \\
                     \tab\tab $\lnot$ def?($pos$, construcciones(*$p$.sim))) \\
@@ -45,13 +45,13 @@
       }
 
     \vspace{2mm}
-    donde $p$ es obtener($partida,\ e$) \\
+    donde $p$ $\equiv$ obtener($partida,\ e$) \\
 
     \AbsFc[estr]{servidor}[e]{
         s: servidor | \\
             \tab ($\forall\ nombre$: Nombre)\\
                 \tab\tab ($nombre$ $\in$ congelados($s$) $\Leftrightarrow$ \\
-                \tab\tab (def?($nombre,\ e$) \yluego\ obtener($nombre,\ e$).modificable $\igobs$ \false)) \\
+                \tab\tab (def?($nombre,\ e$) \yluego\ $\neg$ obtener($nombre,\ e$).modificable)) \\
             \tab $\wedge$ \\
             \tab ($\forall\ nombre$: Nombre)\\
                 \tab\tab (def?($nombre$, partidas($s$)) $\Leftrightarrow$ def?($nombre,\ e$)) \\

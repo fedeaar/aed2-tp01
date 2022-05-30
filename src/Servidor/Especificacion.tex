@@ -163,7 +163,7 @@
 
 \tadOperacion{agregarValido}{Server /s, Nombre /p, Pos /pos}{boolean}{}
 \tadAxioma{agregarValido($s$, $p$, $pos$)}{
-        def?($p$, partidas($s$))\ $\land$\ $p$ $\notin$ congeladas($s$)\ $\wedge$\  
+        def?($p$, partidas($s$))\ $\land$\ $p$ $\notin$ congeladas($s$)\ $\yluego$\  
         $\lnot$ def?($pos$,\ pendientes($s$,\ $p$))\ $\land$ $\\$
         $\lnot$ def?($pos$, verCasas($s$, $p$))\ $\wedge$\ $\lnot$ def?($pos$, verComercios($s$, $p$))\ $\wedge$\ $\\$
         $\lnot$ esRio($pos$,\ verMapa($s$,\ $p$))
