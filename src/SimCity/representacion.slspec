@@ -2,55 +2,54 @@ representacion SimCity:
 
     simCity src estr donde:
         estr ≡ Tupla< 
+            antiguedad: Nat,
             turno: Nat, 
             popularidad: Nat,       
             mapa: Mapa,
-            casas: diccLineal(pos, Nivel), 
-            comercios: diccLineal(pos, NivelBase),
+            construcciones: lista(puntero(agregado)),
             uniones: lista(hijo)
         >
         hijo ≡ tupla<
             sc: puntero(estr),
-            turnosDesdeUnion: nat  
+            turnoUnido: nat  
         >
+        agregado ≡ diccLineal(pos, Construccion)
         Pos ≡ tupla<x: Nat, y: Nat>
+
+
+        
 
     invariante:
         rep: ^estr ➝ boolean
         (∀ e: ^estr)
         rep(e) ≡
-            &e ∉ conjUnidos ∧L // la estructura no loopea a sí misma 
+            (∀ h: hijo)(esta?(h, e.uniones) ⟹L
+                h.simCity ≠ null ∧L rep(*(h.simCity)) ∧L // la representación del hijo es válida
+                e.turno ≥ h.turnoUnido ∧  // el turno es >= al turno agregado 
+                (∀ h2: hijo)(esta?(h2, e.uniones) ∧L pos(h2, e.uniones) > pos(h, e.uniones) ⟹L
+                    h2.turnoUnido ≤ h.turnoUnido // las uniones van de más antiguas a más recientes
+                )
+            ) ∧
+            (∀p: puntero(agregado))(esta?(p, e.construcciones) ⟹L
+                (∄p': puntero(agregado))(esta?(p', e.construcciones) ∧L pos(p, e.construcciones) ≠ pos(p', e.construcciones) ∧L
+                    claves(*(p)) ⋂ claves(*(p')) ≠ ∅ // no hay posiciones repetidas en el mismo nivel
+                )
+            ) ∧
+            long(e.construcciones) = e.turnos ∧L // se agregó al menos una consrucción cada turno hasta el actual dentro de este sc
+            &e ∉ conjUnidos ∧L // la estructura no loopea consigo misma 
             (∀ p: puntero(^estr))(p ∈ conjUnidos ⟹L
-                e.turno ≥ (*p).turno // el turno actual es mayor o igual al turno de cualquier simCity hijo
+                e.antiguedad ≥ (*p).antiguedad // la antiguedad es mayor o igual a la antiguedad de  cualquier simCity hijo
             ) ∧
             e.popularidad = #(conjUnidos) ∧L // la popularidad es igual a la cantidad de uniones
-            (∀p: pos)(pos ∈ claves(conjCasas) ⟹L
-                obtener(pos, conjCasas) < e.turno  ∧ // el turno es mas grande que el nivel de cualquier casa
-                ¬def(pos, e.comercios) ∧  // ningun comercio de este sc está en esta posicion
+            (∀p: pos)(pos ∈ conjCasas ⟹L
+                nivel(e, pos) < e.antiguedad  ∧ // la antiguedad es mas grande que el nivel de cualquier casa
                 ¬esRio(pos, conjMapas) // ninguna casa esta sobre un río 
             ) ∧
-            (∀p: pos)(pos ∈ claves(conjComercios) ⟹L
-                obtener(pos, conjComercios) < e.turno  ∧ // el turno es mas grande que el nivel base de cualquier comercio
-                ¬def(pos, e.casas) ∧  // ninguna casa de este simcity está en esta posicion
+            (∀p: pos)(pos ∈ conjComercios ⟹L
+                nivel(e, pos) ≤ e.antiguedad  ∧ // la antiguedad es mas grande que el nivel base de cualquier comercio
                 ¬esRio(pos, conjMapas) // ningun comercio está sobre un río 
             ) ∧
-            (∀ n: Nat)(0 ≤ n < e.turno ⟹L  // se agregó al menos una consrucción cada turno hasta el actual
-                (∃p: pos)(def?(p, conjCasas) ∧L
-                    obtener(pos, conjCasas) = n 
-                ) ∨ 
-                (∃p: pos)(def?(p, conjComercios) ∧L
-                    obtener(pos, comercios) = n 
-                )
-            ) ∧ 
-            (∀ h: hijo)(esta?(h, e.uniones) ⟹L
-                h.simCity ≠ null ∧L // los punteros son validos
-                h.sc ∉ unirPunteros(remover(p, e.uniones)) ∧ // y no loopean a ningun otro hijo, ni sus descendientes
-                rep(*(h.simCity)) ∧L // la representación del hijo es válida
-                e.turno ≥ h.turnosDesdeUnion ∧  // el turno es >= a la cantidad de turnos desde la union
-                (∀ h2: hijo)(esta?(h2, e.uniones) ∧L pos(h2, e.uniones) > pos(h, e.uniones) ⟹L
-                    h2.turnosDesdeUnion ≤ h.turnosDesdeUnion // las uniones van de más antiguas a más recientes
-                )
-            ) ∧
+            (∃p: Pos)(pos ∈ conjComercios) ∨ pos ∈ conjCasas) ∧L nivel(e, pos) = e.antiguedad) ∧ // existe almenos una casa o comercio de nivel máximo
             unionesValidas(e, e.uniones)
             // no se solapan posiciones maximas entre la estructura hasta el hijo 'x' y ese hijo, para todo hijo
             // descontando las casas y comercios agregados despues de la union  
@@ -78,39 +77,44 @@ representacion SimCity:
         unirMapas: conj(puntero(^estr)) ➝ Mapa
         unirMapas(ps) ≡ if vacio?(ps) then crear(∅, ∅) else dameUno(ps)->mapa + UnirMapas(sinUno(ps)) fi
 
-        unirCasas: conj(puntero(^estr)) ➝ dicc(Pos, Nivel)
-        unirCasas(ps) ≡ if vacio?(ps) then vacio else p->casas ⋃ unirCasas(sinUno(ps)) fi
+        unirCasas: estr × conj(puntero(^estr)) ➝ Dicc(Pos, TurnoAgregado)
+        unirCasas(e, ps) ≡ if vacio?(ps) then vacio else it(dameUno(ps)->construcciones, "casa") ⋃ unirCasas(sinUno(ps)) fi
 
-        unirComercios: conj(puntero(^estr)) ➝ dicc(Pos, Nat)
-        unirComercios(ps) ≡ if vacio?(ps) then vacio else p->comercios ⋃ unirComercios(sinUno(ps)) fi
+        unirComercios: estr × conj(puntero(^estr)) ➝ Dicc(Pos, TurnoAgregado)
+        unirComercios(e, ps) ≡ if vacio?(ps) then vacio else it(dameUno(ps)->construcciones, "comercio") ⋃ unirComercios(sinUno(ps)) fi
 
-        remover: secu(α) × α ➝ secu(α) // remueve la primera aparicion
-        remover(s, a) ≡ if vacia?(s) then <> else if a = prim(s) then fin(s) else prim(s) • remover(fin(s), a) fi
+        it: secu(puntero(agregado)) × Construccion ➝ dicc(Pos, TurnoAgregado)
+        it(s, c) ≡ _it(s, c, 0)
+
+        _it: secu(puntero(agregado)) × Construccion × Nat n ➝ dicc(Pos, TurnoAgregado)
+        _it(s, c, n) ≡ if vacia?(s) then vacio else filtrar(*(prim(s)), c, n) ⋃ it(fin(s), c, n + 1) fi 
+
+        filtrar: dicc(Pos, Construccion) × Construccion × Nat ➝ dicc(Pos, TurnoAgregado)
+        filtrar(d, c, n) ≡ 
+            if vacio?(d) then 
+                ∅ 
+            else if obtener(clave, d) = c then 
+                definir(clave, n, filtrar(borrar(clave, d)))
+            else 
+                filtrar(borrar(clave, d))
+            fi
+            donde clave ≡ dameUno(claves(d))
+
+        //remover: secu(α) × α ➝ secu(α) // remueve la primera aparicion
+        //remover(s, a) ≡ if vacia?(s) then <> else if a = prim(s) then fin(s) else prim(s) • remover(fin(s), a) fi
         
         unionesValidas: ^estr × secu(hijo) ➝ bool
         unionesValidas(e, s) ≡ vacio?(s) ∨L (maxcons(e, izq) ⋂ maxcons(e, der) = ∅ ∧ unionesValidas(e, com(s)))
             donde:
                 com ≡ unirPunteros(com(e.uniones))
                 ult ≡ ult(e.uniones) • <>
-                casascom ≡ unirCasas(com) ⋃ filtrar(e.casas, ult(s).turnosDesdeUnion) 
-                comercom ≡ unirComercios(com) ⋃ filtrar(e.comercios, ult(s).turnosDesdeUnion)
+                casascom ≡ unirCasas(com) // obs: no puede haber cons maximas creadas despues de la union  
+                comercom ≡ unirComercios(com)
                 casasult ≡ unirCasas(ult)
                 comerult ≡ unirComercios(ult)
-                izq ≡ claves(casascom) ⋃ claves(comercom)
-                der ≡ claves(casasult) ⋃ claves(comerult)
+                izq ≡ casascom ⋃ comercom
+                der ≡ casasult ⋃ comerult
 
-        filtrar: dicc(Pos, Nat) × Nat ➝ dicc(Pos, Nat)
-        filtrar(d, n) ≡ 
-            if vacio?(d) then 
-                vacio 
-            else if sig ≤ n then // las nuevas cons dsp de una union son las de un nivel base < a los turnos desde la union
-                filtrar(borrar(clave, d), n) 
-            else 
-                definir(clave, sig, filtrar(borrar(clave, d), n)) 
-            fi
-            donde:
-                clave ≡ dameUno(claves(d))
-                sig ≡ obtener(clave, d)
 
         maxcons: ^estr × conj(Pos) ➝ conj(Pos)
         maxcons(e, c) ≡ _maxcons(e, c, ∅, 0)
@@ -132,80 +136,25 @@ representacion SimCity:
 
         nivel: estr × pos ➝ Nat
         nivel(e, pos) ≡
-            if def?(pos, conjCasas) then
-                obtener(pos, conjCasas) + nivelesPorUnion(e, pos)
+            if pos ∈ conjCasas then
+                nivelesPorUnion(e, pos)
             else 
-                maximo(obtener(pos, conjComercios) • significados(manhattan(pos, 3), conjCasas)) + nivelesPorUnion(e, pos)
+                maximo(nivelesPorUnion(e, pos) • significados(manhattan(pos, 3), conjCasas))
             fi
 
         nivelesPorUnion: ^estr × pos ➝ Nat
         nivelesPorUnion(e, pos) ≡ 
-            if def?(pos, e.casas) ∨ def?(pos, e.comercios) then
-                0
-            else
-                hijoCorrecto.turnosDesdeUnion + nivelesPorUnion(hijoCorrecto.sc, pos)
+            if def?(pos, Construcciones) then // ∨ def?(pos, e.comercios) then
+                e.turno - obtener(pos, Construcciones)
+            else 
+                e.turno - hijoCorrecto.turnoUnion + nivelesPorUnion(hijoCorrecto.sc, pos)
             fi  
             donde:
+                Construcciones ≡ it(e.construcciones, "casa") ⋃ it(e.construcciones, "comercio")
                 hijoCorrecto ≡ llegarAlHijoCorrecto(e.uniones, pos)
 
-        llegarAlHijoCorrecto: secu(^hijo) × pos 
-        llegarAlHijoCorrecto(s, p) ≡ // no puede quedar vacia, siempre se llama con un pos existente
-            if def?(pos, unirCasas(h) ∨ def?(pos, unirComercios(h)) then 
-                prim(s) 
-            else 
-                llegarAlHijoCorrecto(fin(s)) 
-            fi 
-            donde:
-                h ≡ Ag(prim(s).sc, ∅)
-        
-        manhattan: Pos × Nat ➝ Conj(Pos)
-        manhattan(p, dist) ≡ 
-            if dist = 0 then 
-                Ag(p, ∅)
-            else 
-                diagonal({p.x, p.y + dist}, {p.x + dist, p.y}) ⋃
-                if p.x - dist ≥ 0 then diagonal({p.x, p.y + dist}, {p.x - dist, p.y}) else ∅ fi ⋃
-                if p.y - dist ≥ 0 then diagonal({p.x, p.y - dist}, {p.x + dist, p.y}) else ∅ fi ⋃
-                if p.x - dist ≥ 0 ∧ p.y - dist ≥ 0 then diagonal({p.x , p.y - dist}, {p.x - dist, p.y}) else ∅ fi ⋃
-                manhattan(p, dist - 1)
-            fi  
+        ...
 
-        diagonal: Pos p1 × Pos p2 × Nat n ➝ Conj(Pos)  {|p1.x - p2.x| = |p1.y - p2.y| ∧ 0 ≤ y ≤ |p2.y - p1.y|}
-        diagonal(d, h, y) ≡ 
-            if y = |h.y - d.y| then
-                Ag(h,  ∅) 
-            else 
-                Ag(caminar(d, h, y), diagonal(d, h, y + 1)) 
-            fi
-
-        caminar: Pos × Pos × Nat ➝ Pos {|p1.x - p2.x| = |p1.y - p2.y| ∧ 0 ≤ y ≤ |p2.y - p1.y|}
-        caminar(d, h, y) ≡
-            if d.y ≤ h.y then  
-                if d.x ≤ h.x then 
-                    {d.x + y, d.y + y}
-                else
-                    {d.x - y, d.y + y}
-                fi
-            else
-                if d.x ≤ h.x then 
-                    {d.x + y, d.y - y}
-                else
-                    {d.x - y, d.y - y}
-                fi
-            fi 
-
-        significados: conj(α) × dicc(α, β) ➝ secu(α)
-        significados(c, d) ≡ 
-            if vacio?(c) then 
-                <>
-            else if def?(dameUno(c), d) then 
-                obtener(c, d) • significados(sinUno(c), d) 
-            else
-                significados(sinUno(c), d)
-            fi 
-
-        maximo: secu(Nat) a ➝ Nat   {long(a) > 0}
-        maximo(s) ≡ if long(s) = 1 then prim(s) else max(prim(s), maximo(fin(s))) fi 
 
     abstraccion:
         abs: ^estr e ➝ SimCity {rep(e)}

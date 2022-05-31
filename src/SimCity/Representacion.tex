@@ -3,24 +3,23 @@
 % descripcion
 Un $SimCity$ se compone por la $ubicacion$ y $nivel$ de una serie de $construcciones$, de tipo $Casa$ o $Comercio$, sobre un $Mapa$, y de una $Popularidad$ respecto a la cantidad de uniones que lo modificaron. \\
 
-La ubicación de las casas se representan sobre un diccionario lineal con clave $Pos$ y significado $Nivel$. La ubicación de los comercios se representan similarmente, pero su significado responde a un $NivelBase$ de tipo $Nat$ a partir del cual se calcula propiamente su $Nivel$. El mapa es de tipo $Mapa$ y las uniones se representan a través de una $lista$ de $Hijos$ que contiene punteros a los $SimCities$ unidos e información relevante para calcular el nivel de sus construcciones. Ya que, una vez unido a otro, un $SimCity$ debe permanecer sin modificar. 
+\textcolor{orange}{reescribir} La ubicación de las casas se representan sobre un diccionario lineal con clave $Pos$ y significado $Nivel$. La ubicación de los comercios se representan similarmente, pero su significado responde a un $NivelBase$ de tipo $Nat$ a partir del cual se calcula propiamente su $Nivel$. El mapa es de tipo $Mapa$ y las uniones se representan a través de una $lista$ de $Hijos$ que contiene punteros a los $SimCities$ unidos e información relevante para calcular el nivel de sus construcciones. Ya que, una vez unido a otro, un $SimCity$ debe permanecer sin modificar. 
 
-%\vspace{5mm}
 % estructura
     \begin{Estructura}{SimCity}[estr]
         \begin{Tupla}[estr]
-            \tupItem{turno\ }{Nat}%
+            \tupItem{antiguedad}{Nat}
+            \tupItem{\\turno\ }{Nat}%
             \tupItem{\\popularidad\ }{Nat}%
             \tupItem{\\mapa\ }{Mapa}%
-            \tupItem{\\casas\ }{diccLineal(pos,\ Nivel)}
-            \tupItem{\\comercios\ }{diccLineal(pos,\ NivelBase)}
+            \tupItem{\\construcciones\ }{lista(puntero(diccLineal(Pos, Construcción)))}
             \tupItem{\\uniones\ }{lista(hijo)}
         \end{Tupla}
         
         \vspace{2mm}
         \begin{Tupla}[hijo]
             \tupItem{sc\ }{puntero(estr)}
-            \tupItem{\\ turnosDesdeUnion\ }{Nat}
+            \tupItem{\\ turnoUnido\ }{Nat}
         \end{Tupla}
         
         \vspace{2mm}
@@ -33,63 +32,52 @@ La ubicación de las casas se representan sobre un diccionario lineal con clave 
 
 % representacion
     \Rep[estr$^{1}$]{$( \\
+        %
         \tab (\forall\  h:\ $hijo$)($esta?$(h,\ e.uniones)\ \impluego\ \\
-        %11, 12
-        \tab \tab h.sc\ \neq\ $NULL\ $\yluego\ rep(*(h.sc))^{2}\ \land\ h.sc\ \notin\ $unirPunteros$($remover$(p,\ e.uniones))^{3}\ \yluego\ \\
-        \tab \tab (e.turno\ \geq\ h.turnosDesdeUnion)^{4}\ \land\ \\
-        %15
-        \tab \tab (\forall\  h_2:\ $hijo$)($esta?$(h_2,\ e.uniones)\ \yluego\ $pos$(h_2,\ e.uniones)\ >\ $pos$(h,\ e.uniones)\ \impluego\ \\
-        \tab \tab \tab h_2.turnosDesdeUnion\ \leq\ h.turnosDesdeUnion\ \\
-        \tab \tab )^{5} \\
+        \tab \tab (h.sc\ \neq\ $NULL\ $\yluego\ rep(*(h.sc)))^{2} \yluego\ \\ %\land\ h.sc\ \notin\ $unirPunteros$($remover$(p,\ e.uniones))
+        \tab \tab (e.turno\ \geq\ h.turnoUnido)^{3} \land\ \\
+        \tab \tab (\forall\  h':\ $hijo$)($esta?$(h',\ e.uniones)\ \yluego\ $pos$(h',\ e.uniones)\ >\ $pos$(h,\ e.uniones)\ \impluego\ \\
+        \tab \tab \tab h'.turnoUnido\ \leq\ h.turnoUnido\ \\
+        \tab \tab )^{4}\\
         \tab )\ \yluego\ \\
-        \tab (\&e\ \notin\ $Unidos$)^{6} \yluego\ \\
-        %2
-        \tab (e.popularidad\ =\ \#($Unidos$))^{7}\ \land\ \\
-        %3
+        %
+        \tab (\forall\ p:\ $puntero(dicc(Pos,\ Construccion))$)($esta?$(p,\ e.construcciones)\ \impluego \\
+        \tab \tab (\nexists\ p':\ $puntero(dicc(Pos,\ Construccion))$)($esta?$(p',\ e.construcciones)\ \yluego\\ 
+        \tab \tab \tab $pos$(p,\ e.construcciones)\ \neq\ $pos$(p'\, e.construcciones)\ \yluego \\
+        \tab \tab \tab $claves$(*(p))\ \cap\ $claves$(*(p'))\ \neq\ \emptyset \\
+        \tab \tab) \\
+        \tab)^{5}\ \yluego \\
+        %
+        \tab ($long$(e.construcciones)\ =\ e.turno)^{6}\ \yluego \\ 
+        %
+        \tab (\&e\ \notin\ $Unidos$)^{7}\yluego\ \\
         \tab (\forall\ p:\ $puntero(estr)$)(p\ \in\ $Unidos$\ \impluego\\
-        \tab \tab e.turno\ \geq (*p).turno \\
-        \tab )^{8}\ \land \\       
+        \tab \tab e.antiguedad\ \geq\ (*p).antiguedad \\
+        \tab )^{8} \land \\      
         %
-        \tab (\forall\ p:\ $Pos$)(p\ \in\ $claves(e.casas)$\ \impluego \\
-        %4, 5, 6
-        \tab \tab \neg $def$(p,\ e.comercios)^{9}\ \land\ \neg $esRio$(p,\ $Mapas$)^{10}\ \land\ ($obtener$(p,\ $e.casas$)\ <\ e.turno)^{11}\ \\
-        \tab )\ \land \\
+        \tab (e.popularidad\ =\ \#($Unidos$))^{9} \land\ \\
         %
-        \tab (\forall\ p:\ pos)(p\ \in\ $claves(e.comercios)$ \impluego\ \\
-        %7, 8, 9
-        \tab \tab \neg $def$(p,\ e.casas)^{12}\ \land\ \neg $esRio$(p,\ $Mapas$)^{13}\ \land\ ($obtener$(p,\ $e.comercios$)\ <\ e.turno)^{14}\ \\
-        \tab )\ \yluego\ \\
-        %10
-        %\tab (\forall\  n:\ Nat)(0\ \leq n\ <\ e.turno\ \impluego\ \\
-        %\tab \tab (\exists\ p:\ pos)(def?(p,\ Casas)\ \yluego\ obtener(p,\ Casas)\ =\ n)\ \vee\ \\ 
-        %\tab \tab (\exists\ p:\ pos)(def?(p,\ Comercios)\ \yluego\ obtener(p,\ Comercios)\ =\ n) \\  
-        %\tab )^{10}\ \land\ \\ 
-        \tab $unionesValidas$(e,\ e.uniones)^{15} \\
+        \tab (\forall\ p:\ $Pos$)(p\ \in\ $Casas$\ \impluego \\
+        \tab \tab \neg $esRio$(p,\ $Mapas$)\ \land\ ($nivel$(e,\ p)\ \leq\ e.antiguedad)\ \\
+        \tab )^{10}\ \land \\
+        %
+        \tab (\forall\ p:\ $Pos$)(p\ \in\ $Comercios$\ \impluego \\
+        \tab \tab \neg $esRio$(p,\ $Mapas$)\ \land\ ($nivel$(e,\ p)\ \leq\ e.antiguedad)\ \\
+        \tab )^{11}\ \land \\
+        %
+        \tab (\nexists\ p:\ $Pos$)((p\ \in\ Comercios\ \vee p \in Casas)\ \yluego nivel(e,\ p)\ =\ e.antiguedad)^{12}\ \land\\ 
+        \tab $unionesValidas$(e,\ e.uniones)^{13} \\
         )$}
     \vspace{2mm}
     donde 
     \tadAlinearAxiomas{\tab Comercios}
     \tadAxioma{\tab Unidos}{unirPunteros$(e.uniones)$}
-    %\tadAxioma{\tab Casas}{unirCasas(Ag(\&$e$,\ Unidos))}
-    %\tadAxioma{\tab Comercios}{unirComercios(Ag(\&$e$,\ Unidos))}
-    \tadAxioma{\tab Mapas}{$e.mapa$ + unirMapas(Unidos)}
+    \tadAxioma{\tab Casas}{unirCasas(Ag(\&$e$,\ Unidos))}
+    \tadAxioma{\tab Comercios}{unirComercios(Ag(\&$e$,\ Unidos))}
+    \tadAxioma{\tab Mapas}{unirMapas(Ag(\&$e$,\ Unidos))}
     \tadNoAlinearAxiomas
 
-    
-
-\pie{
-    \vfill
-    \item Se asume el traspaso de toda estructura de representación a su equivalente abstracto 
-    (se aplica el sombrerito).
-    \item Cada hijo apunta a un Simcity válido.
-    \item El puntero de cada hijo no aparece en ningún otro SimCity de la unión.
-    \item El turno es mayor o igual a la cantidad de turnos que pasaron desde la unión.
-    \item Las uniones están ordenadas de más antiguas a más recientes.
-    \item La estructura no loopea consigo misma.
-    \item La popularidad es igual a la cantidad de uniones.
-    \item El turno actual es mayor o igual al turno de cualquier simCity hijo.
-}
-%\newpage
+~
 
 % abstracción
     \AbsFc[estr]{SimCity}{
@@ -116,7 +104,7 @@ La ubicación de las casas se representan sobre un diccionario lineal con clave 
 \Titulo{Definiciones Auxiliares}
 \vspace{3mm}
 
-Los siguientes reemplazos sintácticos están contenidos al contexto del invariante de representación y la función de abstracción del SimCity. En éste sentido, se considera restricción implícita, para cada uno, ser evaluado en un estado que satisfaga parcialmente la representación,-en términos de lógica ternaria-, al momento de 'llamada' dentro de la misma.  
+Los siguientes reemplazos sintácticos están confinados al contexto del invariante de representación y la función de abstracción del SimCity. En éste sentido, se considera restricción implícita, para cada uno, ser evaluado en un estado que satisfaga parcialmente la representación,-en términos de lógica ternaria-, al momento de 'llamada' dentro de la misma.  
 
 ~
 
@@ -156,31 +144,36 @@ $}
     \LFI
 $}
 
+\pie{
+    \vfill
+    %\setcounter{enumi}{8}
+    \item Se asume el traspaso de toda estructura de representación a su equivalente abstracto 
+    (se aplica el sombrerito).
+    \item Cada hijo apunta a un Simcity válido.
+    \item El turno es mayor o igual al turno de cualquier unión inmediata.
+    \item Las uniones están ordenadas de más antiguas a más recientes.
+    \item Las construcciones en éste nivel no se solapan.
+    \item Se agregó al menos un conjunto de construcciones por cada turno interno.
+    \item La estructura no loopea consigo misma.
+    \item La antiguedad es mayor o igual a la antiguedad de cualquier simCity hijo.
+    \item La popularidad es igual a la cantidad de uniones total.
+    \item Ninguna casa está sobre un río perteneciente a cualquier mapa en la unión y su nivel es menor o igual a la antiguedad de la partida.
+    \item Ninguna construcción está sobre un río perteneciente a cualquier mapa en la unión y su nivel es menor o igual a la antiguedad de la partida.
+    \item Existe almenos una casa o comercio cuyo nivel es máximo, en el sentido que corresponde a la antiguedad de la partida.
+    \item No se solapan posiciones máximas entre esta estructura hasta el hijo 'x', y ese hijo, para todo hijo. Notar que no importan los turnos posteriores al momento de union, porque cualquier construcción agregada posteriormente no podrá ser máxima o modificar los máximos al momento de la unión. Dadas las condiciones ya establecidas hasta este momento.
+}
+
 \vspace{4mm}
 \tadOperacion
-{unirCasas}{conj(puntero(estr)) /ps}{dicc(Pos $\times$ Nivel)}{eq. unirMapas}            
+{unirCasas}{conj(puntero(estr)) /ps}{dicc(Pos $\times$ Nat)}{eq. unirMapas}          
 \tadAxioma
 {unirCasas(ps)}{$
     \LIF\ $vacio?$(ps)\ \LTHEN\ \\ 
     \tab $vacio$\ \\
     \LELSE\ \\
-    \tab (*p).casas\ \cup_{dicc}\ $unirCasas(sinUno$(ps))\ \\
+    \tab it((*(dameUno(ps))).construcciones,\ "casa")\ \cup_{dicc}\ $unirCasas(sinUno$(ps))\ \\
     \LFI
 $}
-
-\pie{
-    \vfill
-    \setcounter{enumi}{8}
-    \item Ninguna casa está en la posición de uno de los comercios de este simCity particular.
-    \item Ninguna casa está sobre un río perteneciente a cualquier mapa en la unión.
-    \item El turno es mas grande que el nivel de cualquier casa.
-    \item Ningún comercio está en la posición de una de las casas de este simCity particular.
-    \item Ningún comercio en la unión está sobre un río perteneciente a cualquier mapa en la unión.
-    \item El turno es mas grande que el nivel base de cualquier comercio.
-    % \item se agregó al menos una consrucción en cada turno hasta el actual, en almenos un simCity en la unión.
-   
-    \item No se solapan posiciones máximas entre esta estructura hasta el hijo 'x', descontando construcciones agregadas después de la unión, y ese hijo, para todo hijo.
-}
 
 \vspace{4mm}
 \tadOperacion
@@ -190,28 +183,69 @@ $}
     \LIF\ $vacio?$(ps)\ \LTHEN\ \\
     \tab $vacio$\ \\
     \LELSE\ \\
-    \tab (*p).comercios\ \cup_{dicc}\ $unirComercios(sinUno$(ps))\ \\
+    \tab it((*(dameUno(ps))).construcciones,\ "comercio")\ \cup_{dicc}\ $unirComercios(sinUno$(ps))\ \\
     \LFI
 $}
-
-
-  
 
 \vspace{4mm}
-\tadOperacionInline
-{remover}{secu($\alpha$) /s, $\alpha$ /a}{secu($\alpha$)}{} \textcolor{gray}{\tab // remueve la primer aparición, si hay}                      
+\tadOperacion
+{it}{secu(puntero(dicc(Pos, Construccion))) /s, Construccion /c}{dicc(Pos\ $\times$ Nat)}{}
+\textcolor{gray}{// el significado representa el turno en que se agregó la construcción.}  
 \tadAxioma
-{remover($s$,\ $a$)}{$
-    \LIF\ $vacia?$(s)\ \LTHEN\ \\
-    \tab <> \\ 
-    \LELSE\ \LIF\ 
-        a\ =\ $prim$(s)\ 
-    \LTHEN\ \\
-    \tab $fin$(s)\ \\
-    \LELSE\ \\
-    \tab  $prim$(s)\ \bullet\ $remover(fin$(s),\ a)\ \\
-    \LFI
-$}
+{it($s$, $c$)}{
+    $\_$it($s$, $c$, 0)
+}
+
+\vspace{4mm}
+\tadOperacion
+{\_it}{secu(puntero(dicc(Pos, Construccion))) /s, Construccion /c, Nat /n}{dicc(Pos\ $\times$ Nat)}{}
+\tadAxioma
+{\_it($s$, $c$, $n$)}{
+    $\LIF$ vacia?($s$) $\LTHEN$ 
+        vacio 
+    $\LELSE$ 
+        filtrar(*(prim($s$)), $c$, $n$) $\cup_{dicc}$ it(fin($s$), $c$, $n$ + 1) 
+    $\LFI$
+}
+
+\vspace{4mm}
+\tadOperacion
+{filtrar}{dicc(Pos, Construccion), Construccion, Nat }{dicc(Pos\ $\times$ Nat)}{}
+\tadAxioma
+{filtrar($d$, $c$, $n$)}{
+    $\LIF$ vacio?($d$) $\LTHEN$ \\ 
+    \tab vacio \\
+    $\LELSE$ $\LIF$ obtener(clave, $d$) = $c$ $\LTHEN$ \\ 
+    \tab definir(clave, $n$, filtrar(borrar(clave, $d$), $c$, $n$)) \\
+    $\LELSE$ \\
+    \tab filtrar(borrar(clave, $d$), $c$, $n$) \\
+    $\LFI$
+}
+donde 
+\tadAxioma{clave}{dameUno(claves($d$))}
+
+%\vspace{4mm}
+%\tadOperacionInline
+%{remover}{secu($\alpha$) /s, $\alpha$ /a}{secu($\alpha$)}{} \textcolor{gray}{\tab // remueve la primer aparición, si hay}                      
+%\tadAxioma
+%{remover($s$,\ $a$)}{$
+%    \LIF\ $vacia?$(s)\ \LTHEN\ \\
+%    \tab <> \\ 
+%    \LELSE\ \LIF\ 
+%        a\ =\ $prim$(s)\ 
+%    \LTHEN\ \\
+%    \tab $fin$(s)\ \\
+%    \LELSE\ \\
+%    \tab  $prim$(s)\ \bullet\ $remover(fin$(s),\ a)\ \\
+%    \LFI
+%$}
+\vspace{4mm}
+\tadOperacion
+{pos}{secu($\alpha$) /s,\ $\alpha$ /a}{Nat}{esta?($a$, $s$)}
+\tadAxioma
+{pos($s$, $a$)}{
+    $\LIF$ prim($s$) = $a$ $\LTHEN$ 0 $\LELSE$ 1 + pos(fin($s$), $a$) $\LFI$ 
+}
 
 \vspace{4mm}
 \tadOperacion
@@ -225,8 +259,8 @@ donde
 \tadAlinearAxiomas{\tab comercom}
 \tadAxioma{\tab com}{unirPunteros(com$(s))$}
 \tadAxioma{\tab ult}{ult($s)\ \bullet\ <>$}
-\tadAxioma{\tab casascom}{unirCasas(com)\ $\cup_{dicc}$\ filtrar($e.casas$,\ ult($s).turnosDesdeUnion)^{1}$}
-\tadAxioma{\tab comercom}{unirComercios(com)\ $\cup_{dicc}$\ filtrar($e.comercios$,\ ult($s).turnosDesdeUnion)^{1}$}
+\tadAxioma{\tab casascom}{unirCasas(com)} %$\ \cup_{dicc}$\ filtrar($e.casas$,\ ult($s).turnosDesdeUnion)^{1}$}
+\tadAxioma{\tab comercom}{unirComercios(com)}%\ $\cup_{dicc}$\ filtrar($e.comercios$,\ ult($s).turnosDesdeUnion)^{1}$}
 \tadAxioma{\tab casasult}{unirCasas(ult)}
 \tadAxioma{\tab comerult}{unirComercios(ult)}
 \tadAxioma{\tab izq}{claves(casascom)\ $\cup$\ claves(comercom)}
@@ -234,23 +268,23 @@ donde
 \tadNoAlinearAxiomas
 
 
-\vspace{4mm}
-\tadOperacion
-{filtrar}{dicc(Pos, Nat) /d, Nat /n}{dicc(Pos $\times$ Nat)}{}            
-\tadAxioma
-{filtrar($d$,\ $n$)}{$
-    \LIF\ $vacio?$(d)\ \LTHEN\\ 
-    \tab $vacio$\\
-    \LELSE\ \LIF\ $sig$\ \leq\ n\ \LTHEN\\
-    \tab $filtrar(borrar(clave$,\ d),\ n) \\
-    \LELSE \\
-    \tab $definir(clave,\ obtener(clave,\ $d$),\ filtrar(borrar(clave,$\ d),\ n)) \\
-    \LFI
-$}
-donde
-\tadAlinearAxiomas{\tab clave}
-\tadAxioma{\tab clave}{dameUno(claves($d))$}
-\tadNoAlinearAxiomas
+%\vspace{4mm}
+%\tadOperacion
+%{filtrar}{dicc(Pos, Nat) /d, Nat /n}{dicc(Pos $\times$ Nat)}{}            
+%\tadAxioma
+%{filtrar($d$,\ $n$)}{$
+%    \LIF\ $vacio?$(d)\ \LTHEN\\ 
+%    \tab $vacio$\\
+%    \LELSE\ \LIF\ $sig$\ \leq\ n\ \LTHEN\\
+%    \tab $filtrar(borrar(clave$,\ d),\ n) \\
+%    \LELSE \\
+%    \tab $definir(clave,\ obtener(clave,\ $d$),\ filtrar(borrar(clave,$\ d),\ n)) \\
+%    \LFI
+%$}
+%donde
+%\tadAlinearAxiomas{\tab clave}
+%\tadAxioma{\tab clave}{dameUno(claves($d))$}
+%\tadNoAlinearAxiomas
 
 \vspace{4mm}
 \tadOperacion
@@ -259,6 +293,8 @@ donde
 {maxcons($e$,\ $c$)}{$
     $\_maxcons$(e,\ c,\ \emptyset,\ 0)
 $}
+
+\newpage
 
 \vspace{4mm}
 \tadOperacion
@@ -276,11 +312,10 @@ $}
     \LFI  
 $}
 
-
-\pie{
-    \vfill{}
-    \item las casas o comercios de éste simCity particular con nivel o nivel base $\leq$ turnosDesdeUnion son aquellas que se agregaron después de la unión.
-}
+%\pie{
+%    \vfill{}
+%    \item las casas o comercios de éste simCity particular con nivel o nivel base $\leq$ turnosDesdeUnion son aquellas que se agregaron después de la unión.
+%}
 
 donde
 \tadAlinearAxiomas{\tab nivel$_i$}
@@ -294,12 +329,11 @@ donde
 \tadAxioma
 {nivel($e$,\ $pos$)}{$
     \LIF\ $def?$(pos,\ $Casas$)\ \LTHEN\ \\
-    \tab $obtener$(pos,\ $Casas$)\ +\ 
-        $nivelesPorUnion$(e,\ pos) \\
+    \tab $nivelesPorUnion$(e,\ pos) \\
     \LELSE \\ 
-    \tab $max(obtener($pos,\ $Comercios$)\ +\ $nivelesPorUnion$(e,\ pos),\ $nManhattan$)\\\
-    \LFI
-$}
+    \tab $max(nivelesPorUnion$(e,\ pos),\ $nManhattan)\\\
+    $\LFI$
+}
 donde:
 \tadAlinearAxiomas{\tab nManhattan}
 \tadAxioma{\tab Unidos}{unirPunteros($e.uniones)$}
@@ -313,13 +347,14 @@ donde:
 {nivelesPorUnion}{estr /e, Pos /pos}{Nat}{eq. nivel}            
 \tadAxioma
 {nivelesPorUnion($e$,\ $pos$)}{$
-    \LIF\ $def?$(pos,\ e.casas)\ \vee\ $def?$(pos,\ e.comercios)\ \LTHEN\ \\
-    \tab 0 \\
+    \LIF\ $def?$(pos,\ $Construcciones$)\ \LTHEN\ \\
+    \tab e.turno\ -\ $obtener($pos$, Construcciones)$\\
     \LELSE\ \\
-    \tab $hijoCorrecto$.turnosDesdeUnion\ +\ $nivelesPorUnion(hijoCorrecto$.sc,\ pos) \\
+    \tab e.turno\ -\ $hijoCorrecto$.turnoUnion\ +\ $nivelesPorUnion(hijoCorrecto$.sc,\ pos) \\
     \LFI 
 $}
 donde:
+\tadAxioma{\tab Construcciones}{it($e.construcciones$, $"casa"$)\ $\cup_{dicc}$\ it($e.construcciones$, $"comercio"$)\ }
 \tadAxioma{\tab hijoCorrecto}{llegar($e.uniones,\ pos)$}
     
 \vspace{4mm}
@@ -342,22 +377,23 @@ donde
 \tadAxioma
 {manhattan($e$, $p$, $d$)}{
     $\LIF$\ vacio?(claves($d$)) $\LTHEN$ \\
-        \tab 1 \\
+        \tab 0 \\
     $\LELSE$ $\LIF$ distManhattan($p$, proximo) $\leq$ 3 $\land$ $p$ $\neq$ proximo $\LTHEN$ \\
-        \tab max(obtener(proximo, $d$) + nivelesPorUnion($e$, proximo),\\
-        \tab\tab \ manhattan($p$, borrar(proximo, $d$))) \\
+        \tab max(nivel($e$, proximo)), manhattan($p$, borrar(proximo, $d$)) \\
     $\LELSE$ \\
         \tab manhattan($e$, $p$, borrar(proximo, $d$)) \\
     $\LFI$  
-    \\ donde proximo $\equiv$ dameUno(claves($d$)) 
 }
+donde 
+\tadAxioma
+{\tab proximo}{dameUno(claves($d$))}  
 
 \vspace{4mm}
 \tadOperacion
 {posiciones}{estr /e}{dicc(Pos $\times$ Nat)}{($\forall h:$\ hijo)($h\ \in\ e.uniones\ \impluego\ h.sc\ \neq\ $NULL$\ \yluego\ $rep($*(h.sc)))$}
 \tadAxioma
 {posiciones(e)}{
-    claves(e.casas $\cup_{dicc}$ unirCasas(unirPunteros($e.uniones$))) $\cup$ $\\$ claves(e.comercios $\cup_{dicc}$ unirComercios(unirPunteros($e.uniones$)))
+    claves(unirCasas(Ag($\&e$, unirPunteros($e.uniones$)))) $\cup$ $\\$ claves(unirComercios(Ag($\&e$, unirPunteros($e.uniones$))))
 }
 \vspace{4mm}
 \tadOperacion
