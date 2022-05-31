@@ -53,7 +53,7 @@ bbb{listDeTipo}(in SimCity s, in Construccion tipo) ➝ res : dicc(Pos, Nivel)
 7:          if(c == tipo) :
 8:              definir(res, p, s.turno - (i+1))
 9:          avanzar(itCs) 
-Complejidad: O(⅀(i = 0; long(s.construcciones))(#claves(*s.construcciones[i])))
+Complejidad: O(⅀_{i = 0}^{long(s.construcciones)}(#claves(*s.construcciones[i])))
 -------------------------------------------
 
 -----------------------------------------
@@ -70,17 +70,18 @@ bbb{casas}(in SimCity s) ➝ res : dicc(Pos, Nivel)
 10:         avanzar(itCs)
 11:     comerciosTotales ← comerciosTotales ⋃ listDeTipo(*s.uniones[i].sc, "comercio")
 12: return res
-Complejidad: O([sumConstrucciones]² + nodos)
+Complejidad: O(sumConstrucciones² + nodos)
 -------------------------------------------
 
 -------------------------------------------
 bbb{comercios}(in SimCity s) ➝ res : dicc(Pos, Nivel)
 1:  dicc(Pos, Nivel) casasTotales ← casas(s)
-2:  return manhatizar(comerciosAux(s, casasTotales), casasTotales)
+2:  dicc(Pos, Nivel) comerciosTotales ← comerciosAux(s, casasTotales)
+2:  return manhatizar(comerciosTotales, casasTotales)
 Complejidad: O(manhatizar(comerciosAux(s, casasTotales), casasTotales) + casas(s))
 
 bbb{comerciosAux}(in SimCity s, in casasTotales) ➝ res : dicc(Pos, Nivel)
-1:  dicc(pos, nivel) res ← copiar(listDeTipo(s, "casa"))
+1:  dicc(pos, nivel) res ← copiar(listDeTipo(s, "comercio"))
 3:  for(nat i ← 0; i < long(s.uniones); i ← i + 1) : 
 4:      itDicc(Pos, Nivel) itCs ← crearIt(bbb{comerciosAux}(*s.uniones[i].sc), casasTotales)
 5:      while(haySiguiente(itCs)) :
@@ -90,17 +91,16 @@ bbb{comerciosAux}(in SimCity s, in casasTotales) ➝ res : dicc(Pos, Nivel)
 9:              definir(res, p, s.turno - s.uniones[i].turnoUnido + n)
 10:         avanzar(itCs)
 11: return res
-Complejidad: O([sumConstrucciones]² + nodos)
+Complejidad: O(sumConstrucciones² + nodos)
 
-bbb{manhatizar}(inout dicc(Pos, Nivel) comercios, in dicc(Pos, Nivel) casasTotales) {
+bbb{manhatizar}(inout dicc(Pos, Nivel) comercios, in dicc(Pos, Nivel) casasTotales) 
 1:  itDicc(Pos, Nivel) itCs ← crearIt(comercios)
 2:  while(haySiguiente(itCs)) :
-3:      Pos p ← siguienteClave(itCs)
-4:      Nivel n ← siguienteSignificado(itCs)
+3:      Pos p ← copia(siguienteClave(itCs))
+4:      Nivel n ← copia(siguienteSignificado(itCs))
 5:      eliminarSiguiente(itCs)
 6:      definirRapido(comercios, p, max(n, nivelCom(p, casasTotales)))
 7:      avanzar(itCs)
-}
 Complejidad: O(#claves(comercios) * #claves(casasTotales))
 -------------------------------------------
 
@@ -124,20 +124,8 @@ Complejidad: O(#claves(cs))
 -------------------------------------------
 
 -------------------------------------------
-bbb{agCasa}(inout dicc(Pos, Nivel) casas, in Pos p, in Nivel n) :
-1:  definirRapido(casas, p, n)
-Complejidad: O(1)
--------------------------------------------
-
--------------------------------------------
-bbb{agComercio}(inout dicc(Pos, Nivel) comercios, in Pos p, in Nivel n) :
-1:  definirRapido(comercio, p, n)
-Complejidad: O(1)
--------------------------------------------
-
--------------------------------------------
 bbb{turnos}(in SimCity s) ➝ res : Nat
-1:  return s.turno
+1:  return s.antiguedad
 Complejidad: O(1)
 -------------------------------------------
 
