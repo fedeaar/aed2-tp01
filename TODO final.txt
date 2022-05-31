@@ -1,13 +1,14 @@
 
 tad sc:
     explicar:
-        - como sacarRepes explicita el metodo de resolver colisiones, en particular que quedan solo las claves de cs' que no estan en cs 
-        - por qué no hace falta que turnos sea un observador
-        - la parte de nivel maximo en UnirValido
+      OK  - como sacarRepes explicita el metodo de resolver colisiones, en particular que quedan solo las claves de cs' que no estan en cs 
+     OK?? - por qué no hace falta que turnos sea un observador 
+          (Creo que no hace falta porque turnos venia en el TP y no era observador)
+      OK  - la parte de nivel maximo en UnirValido
 
     rever:
       OK  - avanzarTurno no actualiza el nivel de todas las casas y comercios ya definidas en el tad, creo 
-        - la union de dicc deberia priorizar los elem de la izq
+      OK  - la union de dicc deberia priorizar los elem de la izq
 
 tad server:
     boludeces:
