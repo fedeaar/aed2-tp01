@@ -6,7 +6,7 @@ tad sc:
         - la parte de nivel maximo en UnirValido
 
     rever:
-        - avanzarTurno no actualiza el nivel de todas las casas y comercios ya definidas en el tad, creo 
+      OK  - avanzarTurno no actualiza el nivel de todas las casas y comercios ya definidas en el tad, creo 
         - la union de dicc deberia priorizar los elem de la izq
 
 tad server:

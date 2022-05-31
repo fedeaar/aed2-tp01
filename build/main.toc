@@ -1,0 +1,19 @@
+\babel@toc {spanish}{}\relax 
+\contentsline {section}{\numberline {1}Especificaci^^c3^^b3n}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Aliases}{2}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Mapa}{2}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}SimCity}{3}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4}Servidor}{7}{subsection.1.4}%
+\contentsline {section}{\numberline {2}Dise^^c3^^b1o}{9}{section.2}%
+\contentsline {subsection}{\numberline {2.1}M^^c3^^b3dulo Mapa}{9}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.1}Interfaz}{9}{subsubsection.2.1.1}%
+\contentsline {subsubsection}{\numberline {2.1.2}Representaci^^c3^^b3n}{9}{subsubsection.2.1.2}%
+\contentsline {subsubsection}{\numberline {2.1.3}Implementaci^^c3^^b3n}{10}{subsubsection.2.1.3}%
+\contentsline {subsection}{\numberline {2.2}M^^c3^^b3dulo SimCity}{11}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.1}Interfaz}{11}{subsubsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.2.2}Representaci^^c3^^b3n}{13}{subsubsection.2.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.3}Implementaci^^c3^^b3n}{18}{subsubsection.2.2.3}%
+\contentsline {subsection}{\numberline {2.3}M^^c3^^b3dulo Servidor}{21}{subsection.2.3}%
+\contentsline {subsubsection}{\numberline {2.3.1}Interfaz}{21}{subsubsection.2.3.1}%
+\contentsline {subsubsection}{\numberline {2.3.2}Representaci^^c3^^b3n}{23}{subsubsection.2.3.2}%
+\contentsline {subsubsection}{\numberline {2.3.3}Implementaci^^c3^^b3n}{24}{subsubsection.2.3.3}%

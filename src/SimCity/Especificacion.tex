@@ -66,6 +66,7 @@
      %Devuelve el segundo diccionario sin las claves que tambien aparecian en el primero
     \tadAlinearFunciones{construcciones}{dicc(Pos, Construcción),dicc(Pos, Construcción)}
     \tadOperacion{sacarRepes}{dicc(Pos, Construcción),dicc(Pos, Construcción)}{dicc(Pos $\times$ Construcción)}{}
+    \tadOperacion{avanzarNivel}{dicc(Pos, Nivel)}{dicc(Pos, Nivel)}{}
    
     \vspace{2mm}
     \tadAxiomas[
@@ -86,7 +87,7 @@
     \vspace{2mm}
     \tadAlinearAxiomas{casas(avanzarTurno($s,\ cs$))}
     \tadAxioma{casas(iniciar($m$))}{vacio}
-    \tadAxioma{casas(avanzarTurno($s,\ cs$))}{agCasas(casas($s$),\ $cs$)}
+    \tadAxioma{casas(avanzarTurno($s,\ cs$))}{agCasas(avanzarNivel(casas($s$)),\ $cs$)}
     \tadAxioma{casas(unir($s,\ s'$))}{
         agCasas(casas($s$), sacarRepes(construcciones($s$), construcciones($s'$)))
     }
@@ -99,7 +100,7 @@
     \vspace{2mm}
     \tadAlinearAxiomas{popularidad(avanzarTurno($s,\ cs$))}
     \tadAxioma{comercios(iniciar($m$))}{vacio}
-    \tadAxioma{comercios(avanzarTurno($s,\ cs$))}{agComercios($s$, comercios($s$), $cs$)}
+    \tadAxioma{comercios(avanzarTurno($s,\ cs$))}{agComercios($s$, avanzarNivel(comercios($s$)), $cs$)}
     \tadAxioma{comercios(unir($s,\ s'$))}{
         agComercios($s$, comercios($s$), \\
         \tab\tab\tab sacarRepes(construcciones($s$), construcciones($s'$)))
@@ -251,42 +252,17 @@
     \tadAxioma{$d$ $\cup_{dicc}$ $d'$}{
         $\LIF$ vacio?(claves($d'$)) $\LTHEN$ \\
             \tab $d$ \\
+        $\LELSE$ $\LIF$ $\lnot$ def?(proximo, $d$) $\LTHEN$ \\
+            \tab definir(proximo, obtener(proximo, $d'$), $d$) $\cup_{dicc}$ borrar(proximo, $d'$) \\
         $\LELSE$ \\
-            \tab definir(proximo, obtener(proximo, $d'$), $d\ \cup_{dicc}$ borrar(proximo, $d'$)) \\
+            \tab $d$ $\cup_{dicc}$ borrar(proximo, $d'$) \\
         $\LFI$
         \\ donde proximo $\equiv$ dameUno(claves($d'$)) 
     }
-    
-    %\tadAlinearAxiomas{sacarRepes($cs, cs'$)}
-   
-    %Tal vez pueda hacerse sin nivelMaximo
-    %\tadAxioma{masNivel($s$)}{masNivelAux(construcc($s$), nivelMaximo(construcc($s$)))}
-    %\tadAxioma{masNivelAux($cs, n$)}{
-    %    $\LIF$ $vacio?$($cs$) $\LTHEN$ $\emptyset$ $\LELSE$ \\
-    %        $\LIF$ obtener(dameUno(claves($cs$)), $cs$) $\igobs$ n $\LTHEN$ \\
-    %            ag(dameUno(claves($cs$)), \\masNivelAux(borrar(dameUno(claves($cs$)), $cs$), n)) \\
-    %        $\LELSE$ \\
-    %            masNivelAux(borrar(dameUno(claves($cs$)), $cs$), n) \\
-    %        $\LFI\ \LFI$   
-    %}
-    %\tadAxioma{nivelMaximo($cs$)}{
-    %    $\LIF$ $vacio?$($cs$) $\LTHEN$ 0 $\LELSE$ \\
-    %    $max$(obtener(dameUno(claves($cs$)), $cs$), \\nivelMaximo(borrar(dameUno(claves($cs$)), $cs$)))
-    %}
-    
+
     %Quiero eliminar las claves que aparecen en ambos dicc en cs'
     %\vspace{2mm}
     \tadAxioma{sacarRepes($cs,\ cs'$)}{
-    %    $\LIF$ $vacio?$(claves($cs$)) $\LTHEN$ \\
-    %        \tab $cs'$ \\
-    %    $\LELSE$ \\
-    %        \tab $\LIF$ def?(dameUno(claves($cs$)), $cs'$) $\LTHEN$ \\ %Hay repetido
-    %            \tab\tab sacarRepes(borrar(dameUno(claves($cs$)), $cs$), \\
-    %            \tab\tab\tab\tab borrar(dameUno(claves($cs$)), $cs'$)) \\
-    %        \tab $\LELSE$ \\
-    %            \tab\tab sacarRepes(borrar(dameUno(claves($cs$)), $cs$),  $cs'$) \\
-    %        \tab $\LFI$ \\
-    %    $\LFI$
         $\LIF$ vacio?(claves($cs$)) $\LTHEN$ \\
             \tab $cs'$ \\
         $\LELSE$ $\LIF$ def?(proximo, $cs'$) $\LTHEN$ \\ %Hay repetido
@@ -295,6 +271,16 @@
             \tab sacarRepes(borrar(proximo, $cs$),  $cs'$) \\
         $\LFI$
         \\ donde proximo $\equiv$ dameUno(claves($cs$))
+    }
+
+    \tadAxioma{avanzarNivel(cs)}{
+        $\LIF$ vacio?(claves($cs$)) $\LTHEN$ \\
+            \tab $cs$ \\
+        $\LELSE$ \\
+            \tab definir(dameUno(claves($cs$)), \\
+            \tab\tab obtener(dameUno(claves($cs$)), $cs$) + 1, \\
+            \tab\tab avanzarNivel(borrar(dameUno(claves($cs$))), $cs$)) \\
+        $\LFI$
     }
     \vspace{1mm}
 \end{tad}  
