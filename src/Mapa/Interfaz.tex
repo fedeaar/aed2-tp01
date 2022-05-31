@@ -11,13 +11,13 @@
     \Titulo{Operaciones básicas de Mapa}
   
     \InterfazFuncion{crear}{\In{hs}{conj(Nat)}, \In{vs}{conj(Nat)}}{Mapa}%
-    {$\hat{res}$ $\igobs$ mapa($\hat{hs}$, $\hat{vs}$)}%
+    {$\hat{res}$ $\igobs$ crear($\hat{hs}$, $\hat{vs}$)}%
     [$\bold{O}$(copy($hs$) + copy($vs$))] 
     [Crea un mapa.]
 
     \InterfazFuncion{esRio}{\In{m}{Mapa}, \In{p}{Pos}}{Bool}%
     {$\hat{res}$ $\igobs$ esRio($\hat{p}$, $\hat{m}$)}%
-    [$\bold{O}($\# horizontales($m$) \ + \ $ \#$verticales$(m))$]
+    [$\bold{O}($\#horizontales($m$) \ + \  \#verticales$(m))$]
     [Verifica si en determinada pos hay un río.] 
 
     \InterfazFuncion{suma}{\In{m1}{Mapa}, \In{m2}{Mapa}}{Mapa}%

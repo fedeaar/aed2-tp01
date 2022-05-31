@@ -20,7 +20,7 @@ interfaz mapa:
         - si agregar las consideraciones de alias. 
 
     corregir:
-        - post de crear tiene que tener crear no mapa
+      OK  - post de crear tiene que tener crear no mapa
 
     boludeces:
         - en es rio uno de los cardinales esta separado
