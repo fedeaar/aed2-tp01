@@ -6,9 +6,11 @@ SimCity se representa con estr
                         popularidad : Nat,
                         mapa : Mapa,
                         construcciones : listaLineal(tupla<turnoAgregado: Nat, 
-                                                           construs: puntero(diccLineal(pos, Construccion))>),
-                        uniones : lista(hijo) )
+                                                           cs: puntero(diccLineal(pos, Construccion))>),
+                        uniones : lista(hijo))
 
+
+Maybe no hace falta turno agregado
     donde hijo es tupla(sc : puntero(estr) ,
                         turnoUnido : Nat )
                         

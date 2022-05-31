@@ -18,13 +18,13 @@
     [Crea un servidor.]
     [No tiene.]
 
-    \InterfazFuncion{partidas}{\In{s}{server}}{diccTrie(Nombre, SimCity)}
+    \InterfazFuncion{partidas}{\In{s}{server}}{dicc(Nombre, SimCity)}
     {$\hat{res}\ \igobs\ $partidas$(\hat{s})$}
     [$\bold{O}(\sum_{i = 0}^{N}{copy(nom_i) + copy(sc_i)}$)]
     [Devuelve un diccionario con todas las partidas del servidor.]
     [Por copia.] %(Esto habria que verlo, ya que no tenemos este dicc(nombre, simcity) por asi decirlo. Maybe hacemos uno de cero? Y tambien habria que ver si lo devolvemos con los SimCity en las hojas o son punteros?)]
 
-    \InterfazFuncion{congeladas}{\In{s}{server}}{conjLineal(Nombre)}
+    \InterfazFuncion{congeladas}{\In{s}{server}}{conj(Nombre)}
     {$\hat{res}\ \igobs\ $congeladas$(\hat{s})$}
     [$\bold{O}(\sum_{i = 0}^{N}{copy(nom_i)})$]
     [Devuelve el conjunto con los nombres de las partidas no modificables.]
@@ -44,28 +44,26 @@
     [Agrega el SimCity $s2$ asociado a $p2$, al SimCity $s1$, asociado a $p1$. $s2$ pasa a ser no modificable.]
     [Se guarda una referencia a $s2$ en $s1$. Cualquier cambio sobre $s2$ modificará la representación de $s1$. Se garantiza que $s1$ no modificará a $s2$.]
 
-    \InterfazFuncion{avanzarTurnoPartida}{\Inout{s}{server}, \In{p}{Nombre}}{}
-    [avanzarValido$^{1}$($hat{s},\ \hat{p})\ \land\ \hat{s}\ =\ s_0$]
-    {$\hat{s}\ \igobs\ $ avanzarTurnoPartida($s_0,\ \hat{p})$}
-    [$\bold{O}(|nombreMasLargo|)\ +\ \bold{O}($avanzarTurnoPartida($sc$, $construcciones$)), \\
-        \tab donde $sc$ es el SimCity asociado a $p$ y $construcciones$ es el diccionario de pendientes asociados a $p$.
-    ]
-    [Avanza el turno de una partida y agrega las construcciones definidas en el diccionario de pendientes y lo libera.]
-    [No tiene.]
+    \InterfazFuncion{avanzarTurnoPartida}{\Inout{s}{server}, \In{p}{Nombre}, \In{cs}{dicc(Pos $\times$ Construcción)}}{}
+    [avanzarValido$^{1}$($hat{s},\ \hat{p},\ \hat{cs})\ \land\ \hat{s}\ =\ s_0$]
+    {$\hat{s}\ \igobs\ $ avanzarTurnoPartida($s_0,\ \hat{p},\ \hat{cs})$}
+    [$\bold{O}(|nombreMasLargo|)$]
+    [Avanza el turno de una partida y agrega las construcciones definidas en el diccionario de construcciones.]
+    [Se guarda un puntero al diccionario en el SimCity. Cualquier cambio en este modificará a la partida.]
 
    
     \InterfazFuncion{agregarCasa}{\Inout{s}{server}, \In{p}{Nombre}, \In{pos}{Pos}}{}
     [$\hat{s}\ =\ s_0\ \wedge\ $agregarValido$^{1}(\hat{s},\ \hat{p},\ \hat{pos})$]
     {$\hat{s}\ \igobs $agregarCasa$(s_0,\ \hat{p},\ \hat{pos})$}
     [$\bold{O}(|nombreMasLargo|)$]
-    [Agrega una nueva casa al diccionario de pendientes de la partida.]
+    [Agrega una nueva casa.]
     [No tiene.]
  
     \InterfazFuncion{agregarComercio}{\Inout{s}{server}, \In{p1}{Nombre}, \In{p2}{Nombre}}{}
     [$\hat{s}\ =\ s_0\ \wedge\ $agregarValido$^{1}(\hat{s},\ \hat{p},\ \hat{pos})$]
     {$\hat{s}\ \igobs $agregarComercio$(s_0,\ \hat{p},\ \hat{pos})$}
     [$\bold{O}(|nombreMasLargo|)$]
-    [Agrega un nuevo comercio al diccionario de pendientes de la partida.]
+    [Agrega un nuevo comercio.]
     [No tiene.]
     
     \InterfazFuncion{verPopularidad}{\In{s}{server}, \In{p}{Nombre}}{Nat}
