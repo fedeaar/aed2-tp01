@@ -12,7 +12,7 @@ tad sc:
 
 tad server:
     boludeces:
-        - que el dicc vacio sea vacio en vez de vacio(), o corregir donde aparece asi para mantener el formato a lo largo del pdf
+      OK  - que el dicc vacio sea vacio en vez de vacio(), o corregir donde aparece asi para mantener el formato a lo largo del pdf
     
 interfaz mapa:
     terminar de def (perdon si lo habiamos hablado, me olvide):
