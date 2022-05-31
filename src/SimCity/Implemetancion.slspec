@@ -1,122 +1,116 @@
-//hline----------------------------------------
+-------------------------------------------
 bbb{iniciar}(in m: Mapa) ⟶ res : estr
 1:  estr.turno ← 0
-2:  estr.popularidad ← 0
-3:  estr.mapa ← m
-4:  estr.casas ← vacio()
-5:  estr.comercios ← vacio()
+2:  estr.antiguedad ← 0
+3:  estr.popularidad ← 0
+4:  estr.mapa ← m
+5:  estr.construcciones ← vacio()
 6:  estr.uniones ← vacia()
 7:  return estr
 Complejidad: O(1)
-//hline----------------------------------------
+-------------------------------------------
 
-//hline----------------------------------------
+-------------------------------------------
 bbb{avanzarTurno}(inout SimCity s,  in dicc(Pos, Construccion) cs)
-    // actualizo turno de las uniones 
-1:  for(nat i ← 0; i < long(s.uniones); i ← i + 1) : 
-2:      turnoDesdeUnion ← turnoDesdeUnion + 1;
-    
-    // subo 1 al nivel de cada una de las casas del simcity s 
-3:  itDicc(Pos, Nivel) itCasas ← crearIt(s.casas);
-4:  while(haySiguiente(itCasas)) :
-5:      siguienteSignificado(itCasas) ← siguienteSignificado(itCasas) + 1
-6:      avanzar(itCasas)
-    
-    // subo 1 al nivel de cada una de los comercios del simcity s 
-7:  itDicc(Pos, Nivel) itComercios ← crearIt(s.comercios);
-8:  while(haySiguiente(itComercios)) :
-9:      siguienteSignificado(itComercios) ← siguienteSignificado(itComercios) + 1
-10:     avanzar(itComercios)
-   
-    // agrego con nivel 1 cada una de las casas o comercios agregados en el turno
-11: itDicc(Pos, Nivel) itCs ← crearIt(cs);
-12: while(haySiguiente(itCs)) :
-13:     if(siguienteSignificado(itCs) =obs "casa") :
-14:         agCasa(s.casas, siguienteClave(itCs), 1)
-15:     else if(siguienteSignificado(itCs) =obs "comercio") :
-16:         agComercio(s.comercio, siguienteClave(itCs), 1)
-17:     avanzar(itCs)
-18: estr.turno ⟵ estr.turno + 1 
-Complejidad: O(long(s.uniones) + #claves(s.casas) + #claves(s.comercios) + #claves(cs))
-//hline----------------------------------------
+1:  s.turno ← s.turno + 1 
+2:  s.construcciones.agregarAtras(direccion(cs))
+Complejidad: O(1)
+-------------------------------------------
 
-//hline----------------------------------------
+----------------------------------------
 bbb{unir}(inout SimCity s1,  inout Simcity s2)
 1:  s1.popularidad ← s1.popularidad + s2.popularidad + 1
-2:  turno ← max(s1.turno, s2.turno)
-3:  hijo nuevoHijo ← <direccion(s2), 0>
+2:  s1.antiguedad ← max(s1.antiguedad, s2.antiguedad)
+3:  hijo nuevoHijo ← <direccion(s2), s1.turno>
 4:  agregarAtras(s1.uniones, nuevoHijo)
 Complejidad: O(1)
-//hline----------------------------------------
+----------------------------------------
 
 Asumo que existe un conjunto U ≡ {u₁, u₂, ... , uₙ}
 tal que cada uno de esos uᵢ son los simcities que componen al simcity original
 llamamos nodos : #U
-llamamos sumCasas : ⅀_{i=1, nodos}^{copiar(uᵢ.casas)}
-llamamos sumComercios : ⅀_{i=1, nodos}^{copiar(uᵢ.comercios)}
-llamamos sumMapas : ⅀_{i=1, nodos}^{uᵢ.mapa}
-//hline----------------------------------------
+llamamos sumConstrucciones : ⅀_{i=1}^{nodos}(copiar(uᵢ.construcciones))
+llamamos sumMapas : ⅀_{i=1}^{nodos}(uᵢ.mapa)
+
+---------------------------------------------
 bbb{mapa}(in SimCity s) ➝ res : Mapa 
 1:  Mapa res ← s.mapa
 2:  for(nat i ← 0; i < long(s.uniones); i ← i + 1) : 
-3:      res ← res + bbb{mapa}(s.uniones[i].sc*)
+3:      res ← res + bbb{mapa}(*s.uniones[i].sc)
 4:  return res
 Complejidad: O(sumMapas) 
 cabe aclarar que la suma de los mapas esta definida
-//hline----------------------------------------
+---------------------------------------------
 
-//hline--------------------------------------
+-----------------------------------------
+bbb{listDeTipo}(in SimCity s, in Construccion tipo) ➝ res : dicc(Pos, Nivel)
+1:  dicc(pos, nivel) res ← vacio()
+2:  for(nat i ← 0; i < long(s.construcciones); i ← i + 1) : 
+3:      itDicc(Pos, Construccion) itCs ← crearIt(*s.construcciones[i]);
+4:      while(haySiguiente(itCs)) :
+5:          Pos p ← siguienteClave(itCs)
+6:          construccion c ← siguienteSignificado(itCs)
+7:          if(c == tipo) :
+8:              definir(res, p, s.turno - (i+1))
+9:          avanzar(itCs) 
+Complejidad: O(⅀(i = 0; long(s.construcciones))(#claves(*s.construcciones[i])))
+-------------------------------------------
+
+-----------------------------------------
 bbb{casas}(in SimCity s) ➝ res : dicc(Pos, Nivel)
-1:  dicc res ← copiar(s.casas)
-2:  dicc comerciosTotales ← copiar(s.comercios)
+1:  dicc(pos, nivel) res ← copiar(listDeTipo(s, "casa"))
+2:  dicc(pos, nivel) comerciosTotales ← copiar(listDeTipo(s, "comercio"))
 3:  for(nat i ← 0; i < long(s.uniones); i ← i + 1) : 
-4:      itDicc(Pos, Nivel) itCs ← crearIt(bbb{casas}(s.uniones[i].sc*));
+4:      itDicc(Pos, Nivel) itCs ← crearIt(bbb{casas}(*s.uniones[i].sc))
 5:      while(haySiguiente(itCs)) :
 6:          Pos p ← siguienteClave(itCs)
 7:          Nivel n ← siguienteSignificado(itCs)
 8:          if(¬def?(res, p) ∧ ¬def?(comerciosTotales, p)) :
-9:              definir(res, p, n + s.uniones[i].turnosDesdeUnion)
+9:              definir(res, p, s.turno - s.uniones[i].turnoUnido + n)
 10:         avanzar(itCs)
-11:     comerciosTotales ← comerciosTotales ⋃ s.uniones[i].sc->comercios
+11:     comerciosTotales ← comerciosTotales ⋃ listDeTipo(*s.uniones[i].sc, "comercio")
 12: return res
-Complejidad: O([sumComercios + sumCasas]² + nodos)
-//hline----------------------------------------
-//O(sumComercios² + sumCasas² + sumComercios * sumCasas + nodos)
+Complejidad: O([sumConstrucciones]² + nodos)
+-------------------------------------------
 
-//hline----------------------------------------
+-------------------------------------------
 bbb{comercios}(in SimCity s) ➝ res : dicc(Pos, Nivel)
-1:  return comerciosAux(s, casas(s), 0)
-Complejidad: O(casas(s))
+1:  dicc(Pos, Nivel) casasTotales ← casas(s)
+2:  return manhatizar(comerciosAux(s, casasTotales), casasTotales)
+Complejidad: O(manhatizar(comerciosAux(s, casasTotales), casasTotales) + casas(s))
 
-bbb{comerciosAux}(in SimCity s, in casasTotales dicc(Pos, Nivel), in Nat tdu) ➝ res : dicc(Pos, Nivel)
-1:  dicc res ← vacio()
-2:  itDicc(Pos, Nivel) itCs ← crearIt(s.comercios);
-3:  while(haySiguiente(itCs)) :
-4:      Pos p ← siguienteClave(itCs)
-5:      Nivel n ← siguienteSignificado(itCs)
-6:      Nivel m ← max(n + tdu, nivelCom(p, casasTotales))
-7:      definir(res, p, m)
-8:      avanzar(itCs)
-9:  for(nat i ← 0; i < long(s.uniones); i ← i + 1) : 
-10:     tdu ← s.uniones[i].turnosDesdeUnion
-11:     itDicc(Pos, Nivel) itCs ← crearIt(bbb{comerciosAux}(s.uniones[i].sc*, casasTotales, tdu));
-12:     while(haySiguiente(itCs)) :
-13:         Pos p ← siguienteClave(itCs)
-14:         Nivel n ← siguienteSignificado(itCs)
-15:         if(¬def?(res, p) ∧ ¬def?(casasTotales, p)) :
-16:             definir(res, p, n)
-17:         avanzar(itCs)
-18: return res
-Complejidad: O(sumComercios*sumCasas + sumComercios² + nodos)
-//hline----------------------------------------
+bbb{comerciosAux}(in SimCity s, in casasTotales) ➝ res : dicc(Pos, Nivel)
+1:  dicc(pos, nivel) res ← copiar(listDeTipo(s, "casa"))
+3:  for(nat i ← 0; i < long(s.uniones); i ← i + 1) : 
+4:      itDicc(Pos, Nivel) itCs ← crearIt(bbb{comerciosAux}(*s.uniones[i].sc), casasTotales)
+5:      while(haySiguiente(itCs)) :
+6:          Pos p ← siguienteClave(itCs)
+7:          Nivel n ← siguienteSignificado(itCs)
+8:          if(¬def?(res, p) ∧ ¬def?(casasTotales, p)) :
+9:              definir(res, p, s.turno - s.uniones[i].turnoUnido + n)
+10:         avanzar(itCs)
+11: return res
+Complejidad: O([sumConstrucciones]² + nodos)
 
-//hline----------------------------------------
+bbb{manhatizar}(inout dicc(Pos, Nivel) comercios, in dicc(Pos, Nivel) casasTotales) {
+1:  itDicc(Pos, Nivel) itCs ← crearIt(comercios)
+2:  while(haySiguiente(itCs)) :
+3:      Pos p ← siguienteClave(itCs)
+4:      Nivel n ← siguienteSignificado(itCs)
+5:      eliminarSiguiente(itCs)
+6:      definirRapido(comercios, p, max(n, nivelCom(p, casasTotales)))
+7:      avanzar(itCs)
+}
+Complejidad: O(#claves(comercios) * #claves(casasTotales))
+-------------------------------------------
+
+-------------------------------------------
 bbb{popularidad}(in SimCity s) ➝ res : Nat
 1:  return s.popularidad
 Complejidad: O(1)
-//hline----------------------------------------
+-------------------------------------------
 
-//hline----------------------------------------
+-------------------------------------------
 bbb{nivelCom}(in Pos p, in dicc(pos, Nivel) cs) ➝ Nat
 1:  nat maxLvl ← 1
 2:  for(int i = -3; i <= 3; ++i) :
@@ -127,27 +121,27 @@ bbb{nivelCom}(in Pos p, in dicc(pos, Nivel) cs) ➝ Nat
 7:                  maxLvl = max(maxLvl, obtener(cs, p2))
 8:  return maxLvl
 Complejidad: O(#claves(cs))
-//hline----------------------------------------
+-------------------------------------------
 
-//hline----------------------------------------
+-------------------------------------------
 bbb{agCasa}(inout dicc(Pos, Nivel) casas, in Pos p, in Nivel n) :
 1:  definirRapido(casas, p, n)
 Complejidad: O(1)
-//hline----------------------------------------
+-------------------------------------------
 
-//hline----------------------------------------
+-------------------------------------------
 bbb{agComercio}(inout dicc(Pos, Nivel) comercios, in Pos p, in Nivel n) :
 1:  definirRapido(comercio, p, n)
 Complejidad: O(1)
-//hline----------------------------------------
+-------------------------------------------
 
-//hline----------------------------------------
+-------------------------------------------
 bbb{turnos}(in SimCity s) ➝ res : Nat
 1:  return s.turno
 Complejidad: O(1)
-//hline----------------------------------------
+-------------------------------------------
 
-//hline----------------------------------------
+-------------------------------------------
 • ⋃ •(in dicc(α, β) d1, in dicc(α, β) d2) ➝ res : dicc(α, β)
 1:  dicc(α, β) res = copiar(d1)
 2:  itDicc(α, β) itCs ← crearIt(d2);
@@ -159,13 +153,10 @@ Complejidad: O(1)
 8:      avanzar(itCs)
 9:  return res
 Complejidad: O(copy(d1) + #claves(d2))
-//hline----------------------------------------
+-------------------------------------------
 
-//hline----------------------------------------
+-------------------------------------------
 bbb{construcc}(in SimCity s) ➝ res : Nat
 1:  return bbb{casas}(s) ⋃ bbb{comercios}(s)
 Complejidad: O(bbb{casas}(d1) + bbb{comercios}(d2))
-//hline----------------------------------------
-
-
-
+-------------------------------------------
