@@ -10,10 +10,23 @@
   
     \Titulo{Operaciones básicas de Mapa}
   
+    \InterfazFuncion{horizontales}{\In{m}{Mapa}}{Conj(Nat)}%
+    {$\hat{res}$ $\igobs$ horizontales($\hat{m}$)}%
+    [$\bold{O}$(\#horizontales($\hat{m}$))] 
+    [Devuelve el conjunto de ríos horizontales.]
+    [Por copia.]
+
+    \InterfazFuncion{verticales}{\In{m}{Mapa}}{Conj(Nat)}%
+    {$\hat{res}$ $\igobs$ verticales($\hat{m}$)}%
+    [$\bold{O}$(\#verticales($\hat{m}$))] 
+    [Devuelve el conjunto de ríos verticales.]
+    [Por copia.]
+
     \InterfazFuncion{crear}{\In{hs}{conj(Nat)}, \In{vs}{conj(Nat)}}{Mapa}%
     {$\hat{res}$ $\igobs$ crear($\hat{hs}$, $\hat{vs}$)}%
     [$\bold{O}$(copy($hs$) + copy($vs$))] 
     [Crea un mapa.]
+    [Por copia.]
 
     \InterfazFuncion{esRio}{\In{m}{Mapa}, \In{p}{Pos}}{Bool}%
     {$\hat{res}$ $\igobs$ esRio($\hat{p}$, $\hat{m}$)}%
@@ -22,8 +35,9 @@
 
     \InterfazFuncion{suma}{\In{m1}{Mapa}, \In{m2}{Mapa}}{Mapa}%
     {$\hat{res}$ $\igobs$ $\hat{m1}$ + $\hat{m2}$}%
-    [$\bold{O}$(crear($m1$) + crear($m2$))]
+    [$\bold{O}$(copy($m1$) + copy($m2$))]
     [Une dos Mapas.] 
+    [Por copia.]
 
     %\\
   \end{Interfaz}

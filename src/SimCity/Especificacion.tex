@@ -69,7 +69,7 @@
     \tadOperacion{avanzarNivel}{dicc(Pos, Nivel)}{dicc(Pos, Nivel)}{}
    
     \vspace{2mm}
-    \newpage
+    %\newpage
     \tadAxiomas[
         \paratodo{simcity}{s,\ s'}, 
         \paratodo{Mapa}{m},
@@ -119,17 +119,6 @@
     \tadAxioma{turnos(avanzarTurno($s,\ cs$))}{turnos($s$) + 1}
     \tadAxioma{turnos(unir($s,\ s'$))}{
         $\LIF$ turnos($s$) <$\ $turnos($s'$) $\LTHEN$ turnos($s'$) $\LELSE$ turnos($s$) $\LFI$
-    }
-
-    \pie{
-        \vfill{}
-        \item definido en el apartado Definiciones Auxiliares de SimCity.
-        \item las funciones $\mathbf{agCasas}$ y $\mathbf{agComercios}$ agregan respectivamente al diccionario de casas/comercios las construcciones 
-        de entrada sin importar si esas posiciones ya se encontraban ocupadas o no. Esto no genera un problema en avanzar turno, por sus 
-        restricciones, pero si al unir SimCitys (ya que podrian haber colisiones). Para solucionar esto, sacarRepes quita del diccionario
-        de entrada las posiciones ocupadas por construcciones ya establecidas. Es decir, como resolución al conflicto de
-        colisiones, las construcciones que permanecen son las del SimCity original.
-        
     }
 
     \vspace{2mm}
@@ -200,6 +189,7 @@
         \\ donde proximo $\equiv$ dameUno(claves($d'$)) 
     }
 
+    
     %Quiero eliminar las claves que aparecen en ambos dicc en cs'
     %\vspace{2mm}
     \tadAxioma{sacarRepes($cs,\ cs'$)}{
@@ -211,6 +201,17 @@
             \tab sacarRepes(borrar(proximo, $cs$),  $cs'$) \\
         $\LFI$
         \\ donde proximo $\equiv$ dameUno(claves($cs$))
+    }
+
+    \pie{
+        \vfill{}
+        \item definido en el apartado Definiciones Auxiliares de SimCity.
+        \item las funciones $\mathbf{agCasas}$ y $\mathbf{agComercios}$ agregan respectivamente al diccionario de casas/comercios las construcciones 
+        de entrada sin importar si esas posiciones ya se encontraban ocupadas o no. Esto no genera un problema en avanzar turno, por sus 
+        restricciones, pero si al unir SimCitys (ya que podrian haber colisiones). Para solucionar esto, sacarRepes quita del diccionario
+        de entrada las posiciones ocupadas por construcciones ya establecidas. Es decir, como resolución al conflicto de
+        colisiones, las construcciones que permanecen son las del SimCity original.
+        
     }
 
     \tadAxioma{avanzarNivel(cs)}{
@@ -225,7 +226,7 @@
     \vspace{1mm}
 \end{tad}  
 
-\newpage
+%\newpage
 \Titulo{Definiciones Auxiliares de SimCity}
 \vspace{3mm}
 

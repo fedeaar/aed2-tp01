@@ -45,7 +45,7 @@
     [Se guarda una referencia a $s2$ en $s1$. Cualquier cambio sobre $s2$ modificará la representación de $s1$. Se garantiza que $s1$ no modificará a $s2$.]
 
     \InterfazFuncion{avanzarTurnoPartida}{\Inout{s}{server}, \In{p}{Nombre}, \In{cs}{dicc(Pos $\times$ Construcción)}}{}
-    [avanzarValido$^{1}$($hat{s},\ \hat{p},\ \hat{cs})\ \land\ \hat{s}\ =\ s_0$]
+    [avanzarValido$^{1}$($\hat{s},\ \hat{p},\ \hat{cs})\ \land\ \hat{s}\ =\ s_0$]
     {$\hat{s}\ \igobs\ $ avanzarTurnoPartida($s_0,\ \hat{p},\ \hat{cs})$}
     [$\bold{O}(|nombreMasLargo|)$]
     [Avanza el turno de una partida y agrega las construcciones definidas en el diccionario de construcciones.]
