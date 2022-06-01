@@ -1,3 +1,12 @@
+Interpretamos que el inout se refiere a que determinado parametro esta siendo modificado
+y se toma por contexto si pasa por referencia.
+
+Sea U ≡ {u₁, u₂, ... , uₙ}
+tal que cada uno de esos uᵢ son los simcities que componen al simcity original
+llamamos nodos : #U
+llamamos sumConstrucciones : ⅀_{i=1}^{nodos}(copiar(uᵢ.construcciones))
+llamamos sumMapas : ⅀_{i=1}^{nodos}(uᵢ.mapa)
+
 -------------------------------------------
 bbb{iniciar}(in m: Mapa) ⟶ res : res
 1:  res.turno ← 0
@@ -7,11 +16,11 @@ bbb{iniciar}(in m: Mapa) ⟶ res : res
 5:  res.construcciones ← vacio()
 6:  res.uniones ← vacia()
 7:  return res
-Complejidad: O(1)
+Complejidad: O(copy(m))
 -------------------------------------------
 
 -------------------------------------------
-bbb{avanzarTurno}(inout SimCity s,  inout dicc(Pos, Construccion) cs)
+bbb{avanzarTurno}(inout SimCity s, in dicc(Pos, Construccion) cs)
 1:  s.turno ← s.turno + 1 
 2:  s.antiguedad ← s.antiguedad + 1 
 3:  s.construcciones.agregarAtras(direccion(cs))
@@ -19,19 +28,13 @@ Complejidad: O(1)
 -------------------------------------------
 
 ----------------------------------------
-bbb{unir}(inout SimCity s1,  inout Simcity s2)
+bbb{unir}(inout SimCity s1, in Simcity s2)
 1:  s1.popularidad ← s1.popularidad + s2.popularidad + 1
 2:  s1.antiguedad ← max(s1.antiguedad, s2.antiguedad)
 3:  hijo nuevoHijo ← <direccion(s2), s1.turno>
 4:  agregarAtras(s1.uniones, nuevoHijo)
 Complejidad: O(1)
 ----------------------------------------
-
-Asumo que existe un conjunto U ≡ {u₁, u₂, ... , uₙ}
-tal que cada uno de esos uᵢ son los simcities que componen al simcity original
-llamamos nodos : #U
-llamamos sumConstrucciones : ⅀_{i=1}^{nodos}(copiar(uᵢ.construcciones))
-llamamos sumMapas : ⅀_{i=1}^{nodos}(uᵢ.mapa)
 
 ---------------------------------------------
 bbb{mapa}(in SimCity s) ➝ res : Mapa 
@@ -40,7 +43,7 @@ bbb{mapa}(in SimCity s) ➝ res : Mapa
 3:      res ← res + bbb{mapa}(*s.uniones[i].sc)
 4:  return res
 Complejidad: O(sumMapas) 
-cabe aclarar que la suma de los mapas esta definida
+Cabe aclarar que la suma de los mapas esta definida.
 ---------------------------------------------
 
 -----------------------------------------
@@ -55,6 +58,9 @@ bbb{listDeTipo}(in SimCity s, in construccion tipo) ➝ res : dicc(Pos, Nivel)
 8:              definirRapido(res, p, s.turno - (i+1))
 9:          avanzar(itCs) 
 Complejidad: O(⅀_{i = 0}^{long(s.construcciones)}(#claves(*s.construcciones[i])))
+Justificación: (2) recorre cada uno de los diccionarios definidos en s.construcciones y
+para cada uno recorre todas las definiciones del mismo, (4). Por lo tanto la complejidad del
+algoritmo es la suma de todas las construcciones definidas en ese SimCity.
 -------------------------------------------
 
 -----------------------------------------
@@ -71,7 +77,36 @@ bbb{casas}(in SimCity s) ➝ res : dicc(Pos, Nivel)
 10:         avanzar(itCs)
 11:     comerciosTotales ← comerciosTotales ⋃ listDeTipo(*s.uniones[i].sc, "comercio")
 12: return res
-Complejidad: O(sumConstrucciones² + nodos)
+Complejidad: O(sumConstrucciones² * nodos + nodos)
+
+Justificación: 
+Sabemos que este algoritmo va a recorrer por cada SimCity que pertenece al SimCity inicial 1 vez. 
+Ya que el paso recursivo (4) llama a un simcity como hijo de otro simcity y cada simcity como
+maximo es hijo de 1 solo otro simcity
+--> nodos
+
+En cada una de estas recursiones, primero (1) y (2) van a generar un diccionario con las casas
+y los comercios de ese simcity particular.
+Si repetimos este procedimiento para cada uno de los Simcities que pertenecen al simcity original 
+vamos a estar recorriendo 1 vez las construcciones de cada simcity por lo tanto la suma de recorrer
+las construcciones de cada uno es igual a sumConstrucciones.
+--> sumConstrucciones
+
+(3) = #(hijos de simCity particular)
+(5) = #(casas totales de un hijo particular)
+(8) = #(comerciosTotales) + #(casasTotales) = sumConstrucciones
+(3) * (5) * (8) = (casasTotales) * sumConstrucciones <= sumConstrucciones²
+por lo tanto si hace en el peor caso sumConstrucciones² para cada Simcity particular 
+--> sumConstrucciones² * nodos
+
+luego en (11) hace la union de los comercios que ya analizo con los comercios del simcity que acaba
+de analizar pero esta accion la hace 1 sola vez por simcity. Pero como la union es por copia y no por 
+referencia esto es sumConstrucciones² para cada simcity particular.
+--> sumConstrucciones² * nodos
+
+finalmente: nodos + sumConstrucciones + sumConstrucciones² * nodos + sumConstrucciones² * nodos
+--> sumConstrucciones² * nodos + nodos
+no se puede eliminar el "+ nodos" ya que podria darse que sumConstrucciones² = 0 uniendo muchos simcities vacios
 -------------------------------------------
 
 -------------------------------------------
@@ -92,7 +127,9 @@ bbb{comerciosAux}(inout SimCity s, inout casasTotales) ➝ res : dicc(Pos, Nivel
 9:              definirRapido(res, p, s.turno - s.uniones[i].turnoUnido + n)
 10:         avanzar(itCs)
 11: return res
-Complejidad: O(sumConstrucciones² + nodos)
+Complejidad: O(sumConstrucciones² * nodos + nodos)
+Justificacion : El algoritmo es muy similar al de casas por lo tanto su
+justificacion es muy similar
 
 bbb{manhatizar}(inout dicc(Pos, Nivel) comercios, inout dicc(Pos, Nivel) casasTotales) 
 1:  itDicc(Pos, Nivel) itCs ← crearIt(comercios)
@@ -102,6 +139,8 @@ bbb{manhatizar}(inout dicc(Pos, Nivel) comercios, inout dicc(Pos, Nivel) casasTo
 5:      eliminarSiguiente(itCs)
 6:      definirRapido(comercios, p, max(n, nivelCom(p, casasTotales)))
 Complejidad: O(#claves(comercios) * #claves(casasTotales))
+Justificación: en (2) recorremos todas las claves de los comercios y de manera anidada en (6) 
+en nivelCom recorremos 1 vez las #casasTotales por lo tanto #claves(comercios) * #claves(casasTotales)
 -------------------------------------------
 
 -------------------------------------------
