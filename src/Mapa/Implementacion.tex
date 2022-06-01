@@ -1,12 +1,12 @@
-\noindent \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\noindent \makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
 \textbf{crear}(\textbf{in \ }hs \ : \ conj(Nat), \ \textbf{in \ }vs \ : \ conj(Nat)) \ $\longrightarrow$ \ res \ : \ estr\\
 1: \ estr.horizontales \ $\leftarrow$ \ hs\\
 2: \ estr.verticales \ $\leftarrow$ \ vs \ \\
 3: \ \textbf{return} \ estr\\
 \textbf{Complejidad}: \ O(copy(hs) \ + \ copy(vs))\\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
 \\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
 \textbf{Suma}(\textbf{in \ }m1: \ mapa, \ \textbf{in \ }m2: \ mapa) \ $\longrightarrow$ \ res \ : \ mapa\\
 1:\indent mapa \ res \ $\leftarrow$ \ copiar(m1)\\
 \\
@@ -21,10 +21,22 @@
 9:\indent \indent avanzar(itV)\\
 10:\indent \textbf{return} \ res\\
 \textbf{Complejidad}: \ O(copiar(m1) \ + \ copiar(m2))\\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
 \\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
-\textbf{esRio}(\textbf{in \ }m1: \ mapa, \ \textbf{in \ }p: \ Pos) \ $\longrightarrow$ \ res \ : \ Bool\\
-1: \  \ \textbf{return} \ p.x \ $\in$ \ verticales(m1) \ $\vee$ \ p.y \ $\in$ \ horizontales(m1)\\
-\textbf{Complejidad}: \ O($ \# $horizontales(m1) \ + \ $ \# $verticales(m1))\\
-\noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\textbf{esRio}(\textbf{in \ }m: \ mapa, \ \textbf{in \ }p: \ Pos) \ $\longrightarrow$ \ res \ : \ Bool\\
+1: \  \ \textbf{return} \ p.x \ $\in$ \ verticales(m) \ $\vee$ \ p.y \ $\in$ \ horizontales(m)\\
+\textbf{Complejidad}: \ O($ \# $horizontales(m) \ + \ $ \# $verticales(m))\\
+\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\
+\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\textbf{verticales}(\textbf{in \ }m: \ mapa) \ $\longrightarrow$ \ res \ : \ Conj(Nat)\\
+1: \  \ \textbf{return} \ m.verticales\\
+\textbf{Complejidad}: \ O(copy(m.verticales))\\
+\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\\
+\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
+\textbf{horizontales}(\textbf{in \ }m: \ mapa) \ $\longrightarrow$ \ res \ : \ Conj(Nat)\\
+1: \  \ \textbf{return} \ m.horizontales\\
+\textbf{Complejidad}: \ O(copy(m.horizontales))\\
+\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}

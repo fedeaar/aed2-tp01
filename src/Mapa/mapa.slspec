@@ -75,7 +75,19 @@ Complejidad: O(copiar(m1) + copiar(m2))
 //hline --------------------------------------
 
 //hline --------------------------------------
-bbb{esRio}(in m1: mapa, in p: Pos) ⟶ res : Bool
-1:  return p.x ∈ verticales(m1) ∨ p.y ∈ horizontales(m1)
-Complejidad: O(#horizontales(m1) + #verticales(m1))
+bbb{esRio}(in m: mapa, in p: Pos) ⟶ res : Bool
+1:  return p.x ∈ verticales(m) ∨ p.y ∈ horizontales(m)
+Complejidad: O(#horizontales(m) + #verticales(m))
+//hline --------------------------------------
+
+//hline --------------------------------------
+bbb{verticales}(in m: mapa) ⟶ res : Conj(Nat)
+1:  return m.verticales
+Complejidad: O(copy(m.verticales))
+//hline --------------------------------------
+
+//hline --------------------------------------
+bbb{horizontales}(in m: mapa) ⟶ res : Conj(Nat)
+1:  return m.horizontales
+Complejidad: O(copy(m.horizontales))
 //hline --------------------------------------
