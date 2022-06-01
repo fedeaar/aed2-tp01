@@ -40,7 +40,7 @@
     \InterfazFuncion{unirPartidas}{\Inout{s}{server}, \In{p1}{Nombre}, \In{p2}{Nombre}}{}
     [unionValida$^{1}(\hat{s},\ \hat{p1},\ \hat{p2})\ \land\ \hat{s} = s_0$]
     {$\hat{s}\ \igobs\ $unirPartidas$(s_0,\ \hat{p1},\ \hat{p2})$}
-    [$O(|nombreMasLargo|)$]
+    [$\bold{O}(|nombreMasLargo|)$]
     [Agrega el SimCity $s2$ asociado a $p2$, al SimCity $s1$, asociado a $p1$. $s2$ pasa a ser no modificable.]
     [Se guarda una referencia a $s2$ en $s1$. Cualquier cambio sobre $s2$ modificará la representación de $s1$. Se garantiza que $s1$ no modificará a $s2$.]
 
