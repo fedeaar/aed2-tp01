@@ -18,7 +18,7 @@
     [Crea un servidor.]
     [No tiene.]
 
-    \InterfazFuncion{partidas}{\In{s}{server}}{dicc(Nombre, SimCity)}
+    \InterfazFuncion{partidas}{\In{s}{server}}{diccTrie(Nombre, SimCity)}
     {$\hat{res}\ \igobs\ $partidas$(\hat{s})$}
     [$\bold{O}(\sum_{i = 0}^{N}{copy(nom_i) + copy(sc_i)}$)]
     [Devuelve un diccionario con todas las partidas del servidor.]
@@ -40,7 +40,7 @@
     \InterfazFuncion{unirPartidas}{\Inout{s}{server}, \In{p1}{Nombre}, \In{p2}{Nombre}}{}
     [unionValida$^{1}(\hat{s},\ \hat{p1},\ \hat{p2})\ \land\ \hat{s} = s_0$]
     {$\hat{s}\ \igobs\ $unirPartidas$(s_0,\ \hat{p1},\ \hat{p2})$}
-    [$O(|nombreMasLargo|)$]
+    [$\bold{O}(|nombreMasLargo|)$]
     [Agrega el SimCity $s2$ asociado a $p2$, al SimCity $s1$, asociado a $p1$. $s2$ pasa a ser no modificable.]
     [Se guarda una referencia a $s2$ en $s1$. Cualquier cambio sobre $s2$ modificará la representación de $s1$. Se garantiza que $s1$ no modificará a $s2$.]
 
@@ -83,21 +83,21 @@
     \InterfazFuncion{verMapa}{\In{s}{server}, \In{p}{Nombre}}{Mapa}
     [def?($\hat{p}$,\ partidas($\hat{s}$))]
     {$\hat{res}\ \igobs\ $verMapa$(\hat{s},\ \hat{p})$}
-    [$\bold{O}(|nombreMasLargo|)\ +\ \bold{O}($mapa($sc$)), donde $sc$ es el SimCity asocidad a $p$]
+    [$\bold{O}(|nombreMasLargo|)\ +\ \bold{O}($mapa($sc$)), donde $sc$ es el SimCity asocidado a $p$]
     [Devuelve el mapa de la partida.]
     [Devuelve una copia.]
 
     \InterfazFuncion{verCasas}{\In{s}{server}, \In{p}{Nombre}}{dicc(Pos, Nat)}
     [def?($\hat{p}$,\ partidas($\hat{s}$))]
     {$\hat{res}\ \igobs\ $verCasas$(\hat{s},\ \hat{p})$}
-    [$\bold{O}(|nombreMasLargo|)\ +\ \bold{O}($casas($sc$)), donde $sc$ es el SimCity asocidad a $p$]
+    [$\bold{O}(|nombreMasLargo|)\ +\ \bold{O}($casas($sc$)), donde $sc$ es el SimCity asocidado a $p$]
     [Devuelve un diccionario con las posiciones y niveles de las casas de la partida.]
     [Devuelve una copia.]
 
     \InterfazFuncion{verComercios}{\In{s}{server}, \In{p}{Nombre}}{dicc(Pos, Nat)}
     [def?($\hat{p}$,\ partidas($\hat{s}$))]
     {$\hat{res}\ \igobs\ $verComercios$(\hat{s},\ \hat{p})$}
-    [$\bold{O}(|nombreMasLargo|)\ +\ \bold{O}($comercios($sc$)), donde $sc$ es el SimCity asocidad a $p$]
+    [$\bold{O}(|nombreMasLargo|)\ +\ \bold{O}($comercios($sc$)), donde $sc$ es el SimCity asocidado a $p$]
     [Devuelve un diccionario con las posiciones y niveles de los comercios de la partida]
     [Devuelve una copia.]
 
