@@ -9,6 +9,8 @@ La ubicación de las casas y comercios se representará sobre una secuencia de p
 
 La $popularidad$ se representará a través de un Natural. El mapa será de tipo $Mapa$ y las uniones se representarán a través de una $lista$ de $Hijos$ que contiene punteros a los $SimCities$ unidos e información relevante para calcular el nivel de sus construcciones. Ya que, una vez unido a otro, un $SimCity$ debe permanecer sin modificar. 
 
+Cabe recordar que para la resolución de colisiones en las uniones, tiene prioridad el nodo izquierdo. 
+
 % estructura
     \begin{Estructura}{SimCity}[estr]
         \begin{Tupla}[estr]
@@ -122,6 +124,7 @@ Los siguientes reemplazos sintácticos están confinados al contexto del invaria
 
 \tadOperacion
 {unirPunteros}{secu(hijo) /s}{conj(puntero(estr))}{$(\forall h:$ hijo)($h\ \in s\ \impluego\ h.sc\ \neq\ $NULL)}
+\textcolor{gray}{// crea un conjunto de punteros a todos los simcities en la unión.}
 \tadAxioma
 {unirPunteros($s$)}{ 
     \_unirPunteros($s$,\ $\emptyset$)
@@ -179,18 +182,21 @@ $}
 \vspace{4mm}
 \tadOperacion
 {unirCasas}{conj(puntero(estr)) /ps}{dicc(Pos $\times$ Nat)}{eq. unirMapas}          
+\textcolor{gray}{// crea el diccionario de casas en la unión cuyo significado es igual al turno individual en \\ \tab que se agregó la casa a uno de los simCities en particular.}
 \tadAxioma
 {unirCasas(ps)}{$
     \LIF\ $vacio?$(ps)\ \LTHEN\ \\ 
     \tab $vacio$\ \\
     \LELSE\ \\
     \tab it((*(dameUno(ps))).construcciones,\ "casa")\ \cup_{dicc}\ $unirCasas(sinUno$(ps))\ \\
+    \tab $\textcolor{gray}{// notar que $\cup_{dicc}$ prioriza el argumento izquierdo.}$ \\
     \LFI
 $}
 
 \vspace{4mm}
 \tadOperacion
 {unirComercios}{conj(puntero(estr)) /ps}{dicc(Pos $\times$ Nat)}{eq. unirMapas} 
+\textcolor{gray}{// crea el diccionario de comercio en la unión cuyo significado es igual al turno individual \\ \tab en que se agregó la casa a uno de los simCities en particular.}
 \tadAxioma
 {unirComercios($ps$)}{$
     \LIF\ $vacio?$(ps)\ \LTHEN\ \\
@@ -299,7 +305,7 @@ donde
 %\tadAxioma{\tab clave}{dameUno(claves($d))$}
 %\tadNoAlinearAxiomas
 
-\newpage
+%\newpage
 
 \vspace{4mm}
 \tadOperacion
@@ -340,6 +346,7 @@ donde
 \vspace{4mm}
 \tadOperacion
 {nivel}{estr /e, Pos /pos}{Nat}{$p\ \in\ $ posiciones($e)$}%{pos $\in$ Casas $\vee$ pos $\in$ Comercios}
+\textcolor{gray}{// calcula el nivel propiamente de una construcción.}
 \tadAxioma
 {nivel($e$,\ $pos$)}{$
     \LIF\ $def?$(pos,\ $Casas$)\ \LTHEN\ \\
@@ -374,6 +381,7 @@ donde:
 \vspace{4mm}
 \tadOperacion
 {llegar}{secu(hijo) /s, Pos /p}{hijo}{($\forall$ $h:$\ hijo)(esta?($h,\ s)\ \impluego\ h.sc\ \neq\ $NULL$\ \yluego\ $rep($*(h.sc)))\ \yluego\ $\\$ (\exists h:$\ hijo)(esta?($h$, $s)\ \yluego\ p\ \in\ posiciones(h.sc))$} 
+\textcolor{gray}{// busca el SimCity inmediato en el cual está definida una posición.}
 \tadAxioma
 {llegar($s$,\ $p$)}{$
     \LIF\ $def?$(pos,\ $unirCasas$(hijo_i))\ \vee\ $def?$(pos,\ $unirComercios$(hijo_i))\ \LTHEN\ \\ 
@@ -384,6 +392,8 @@ donde:
 $}
 donde
 \tadAxioma{\tab hijo$_i$}{Ag(prim($s$).$sc$,\ $\emptyset)$}
+
+\newpage
 
 \vspace{4mm}
 \tadOperacion
