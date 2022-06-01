@@ -3,15 +3,21 @@
 % descripcion
 Un $SimCity$ se compone por la $ubicacion$ y $nivel$ de una serie de $construcciones$, de tipo $Casa$ o $Comercio$, sobre un $Mapa$, y de una $Popularidad$ respecto a la cantidad de uniones que lo modificaron. \\
 
-\textcolor{orange}{reescribir} La ubicación de las casas se representan sobre un diccionario lineal con clave $Pos$ y significado $Nivel$. La ubicación de los comercios se representan similarmente, pero su significado responde a un $NivelBase$ de tipo $Nat$ a partir del cual se calcula propiamente su $Nivel$. El mapa es de tipo $Mapa$ y las uniones se representan a través de una $lista$ de $Hijos$ que contiene punteros a los $SimCities$ unidos e información relevante para calcular el nivel de sus construcciones. Ya que, una vez unido a otro, un $SimCity$ debe permanecer sin modificar. 
+La $antiguedad$ o $turno$ de la partida se representará a través de un Natural. A su vez, se guardará un $turno$ interno, representativo de la antiguedad 'original' del simCity, si este no perteneciera a ninguna unión. 
+
+La ubicación de las casas y comercios se representará sobre una secuencia de punteros a diccionarios lineales con clave $Pos$ y significado $Construccion$. Bajo esta representación, el $nivel$ de cada casa es el $turno$ interno actual del SimCity menos la posición del diccionario donde se encuentra definida en la secuencia. Esto se debe a que en cada turno se agrega un diccionario nuevo. Similarmente, el $nivel$ de los comercios se representará igual, pero en este caso también se deberá calcular a partir del $nivel$ de las casas a distancia  manhattan $\leq$ 3. 
+
+La $popularidad$ se representará a través de un Natural. El mapa será de tipo $Mapa$ y las uniones se representarán a través de una $lista$ de $Hijos$ que contiene punteros a los $SimCities$ unidos e información relevante para calcular el nivel de sus construcciones. Ya que, una vez unido a otro, un $SimCity$ debe permanecer sin modificar. 
+
+Cabe recordar que para la resolución de colisiones en las uniones, tiene prioridad el nodo izquierdo. 
 
 % estructura
     \begin{Estructura}{SimCity}[estr]
         \begin{Tupla}[estr]
             \tupItem{antiguedad}{Nat}
-            \tupItem{\\turno\ }{Nat}%
-            \tupItem{\\popularidad\ }{Nat}%
-            \tupItem{\\mapa\ }{Mapa}%
+            \tupItem{turno\ }{Nat}%
+            \tupItem{popularidad\ }{Nat}%
+            \tupItem{mapa\ }{Mapa}%
             \tupItem{\\construcciones\ }{lista(puntero(diccLineal(Pos, Construcción)))}
             \tupItem{\\uniones\ }{lista(hijo)}
         \end{Tupla}
@@ -30,6 +36,7 @@ Un $SimCity$ se compone por la $ubicacion$ y $nivel$ de una serie de $construcci
 
     \end{Estructura}
 
+    %\newpage
 % representacion
     \Rep[estr$^{1}$]{$( \\
         %
@@ -42,6 +49,7 @@ Un $SimCity$ se compone por la $ubicacion$ y $nivel$ de una serie de $construcci
         \tab )\ \yluego\ \\
         %
         \tab (\forall\ p:\ $puntero(dicc(Pos,\ Construccion))$)($esta?$(p,\ e.construcciones)\ \impluego \\
+        \tab \tab \neg vacio?(*p)\ \land\ \\
         \tab \tab (\nexists\ p':\ $puntero(dicc(Pos,\ Construccion))$)($esta?$(p',\ e.construcciones)\ \yluego\\ 
         \tab \tab \tab $pos$(p,\ e.construcciones)\ \neq\ $pos$(p'\, e.construcciones)\ \yluego \\
         \tab \tab \tab $claves$(*(p))\ \cap\ $claves$(*(p'))\ \neq\ \emptyset \\
@@ -58,17 +66,20 @@ Un $SimCity$ se compone por la $ubicacion$ y $nivel$ de una serie de $construcci
         \tab (e.popularidad\ =\ \#($Unidos$))^{9} \land\ \\
         %
         \tab (\forall\ p:\ $Pos$)(p\ \in\ $Casas$\ \impluego \\
-        \tab \tab \neg $esRio$(p,\ $Mapas$)\ \land\ ($nivel$(e,\ p)\ \leq\ e.antiguedad)\ \\
+        \tab \tab \neg $esRio$(p,\ $Mapas$)\\ %\land\ ($nivel$(e,\ p)\ \leq\ e.antiguedad)\ \\
         \tab )^{10}\ \land \\
         %
         \tab (\forall\ p:\ $Pos$)(p\ \in\ $Comercios$\ \impluego \\
-        \tab \tab \neg $esRio$(p,\ $Mapas$)\ \land\ ($nivel$(e,\ p)\ \leq\ e.antiguedad)\ \\
+        \tab \tab \neg $esRio$(p,\ $Mapas$)\\ %\land\ ($nivel$(e,\ p)\ \leq\ e.antiguedad)\ \\
         \tab )^{11}\ \land \\
         %
-        \tab (\nexists\ p:\ $Pos$)((p\ \in\ Comercios\ \vee p \in Casas)\ \yluego nivel(e,\ p)\ =\ e.antiguedad)^{12}\ \land\\ 
+        %\tab (\nexists\ p:\ $Pos$)((p\ \in\ Comercios\ \vee p \in Casas)\ \yluego nivel(e,\ p)\ =\ e.antiguedad)^{12}\ \land\\ 
         \tab $unionesValidas$(e,\ e.uniones)^{13} \\
         )$}
     \vspace{2mm}
+
+    \newpage
+
     donde 
     \tadAlinearAxiomas{\tab Comercios}
     \tadAxioma{\tab Unidos}{unirPunteros$(e.uniones)$}
@@ -77,7 +88,7 @@ Un $SimCity$ se compone por la $ubicacion$ y $nivel$ de una serie de $construcci
     \tadAxioma{\tab Mapas}{unirMapas(Ag(\&$e$,\ Unidos))}
     \tadNoAlinearAxiomas
 
-~
+    ~
 
 % abstracción
     \AbsFc[estr]{SimCity}{
@@ -99,6 +110,9 @@ Un $SimCity$ se compone por la $ubicacion$ y $nivel$ de una serie de $construcci
 
 \end{Representacion}
 
+
+
+
 % auxiliares
 \vspace{5mm}
 \Titulo{Definiciones Auxiliares}
@@ -110,6 +124,7 @@ Los siguientes reemplazos sintácticos están confinados al contexto del invaria
 
 \tadOperacion
 {unirPunteros}{secu(hijo) /s}{conj(puntero(estr))}{$(\forall h:$ hijo)($h\ \in s\ \impluego\ h.sc\ \neq\ $NULL)}
+\textcolor{gray}{// crea un conjunto de punteros a todos los simcities en la unión.}
 \tadAxioma
 {unirPunteros($s$)}{ 
     \_unirPunteros($s$,\ $\emptyset$)
@@ -132,18 +147,6 @@ Los siguientes reemplazos sintácticos están confinados al contexto del invaria
     \LFI
 $}
 
-\vspace{4mm}
-\tadOperacion
-{unirMapas}{conj(puntero(estr)) /ps}{Mapa}{$(\forall p:$ puntero(estr))($p\ \in ps\ \impluego\ (p\ \neq\ $NULL $\yluego$ rep(*p)))}            
-\tadAxioma
-{unirMapas($ps$)}{$
-    \LIF\ $vacio?$(ps)\ \LTHEN\\ 
-    \tab $crear$(\emptyset,\ \emptyset)\ \\
-    \LELSE\ \\ 
-    \tab (*($dameUno$(ps))).mapa\ +\ $UnirMapas(sinUno$(ps))\ \\ 
-    \LFI
-$}
-
 \pie{
     \vfill
     %\setcounter{enumi}{8}
@@ -157,27 +160,43 @@ $}
     \item La estructura no loopea consigo misma.
     \item La antiguedad es mayor o igual a la antiguedad de cualquier simCity hijo.
     \item La popularidad es igual a la cantidad de uniones total.
-    \item Ninguna casa está sobre un río perteneciente a cualquier mapa en la unión y su nivel es menor o igual a la antiguedad de la partida.
-    \item Ninguna construcción está sobre un río perteneciente a cualquier mapa en la unión y su nivel es menor o igual a la antiguedad de la partida.
-    \item Existe almenos una casa o comercio cuyo nivel es máximo, en el sentido que corresponde a la antiguedad de la partida.
+    \item Ninguna casa está sobre un río perteneciente a cualquier mapa en la unión.
+    \item Ninguna construcción está sobre un río perteneciente a cualquier mapa en la unión .
+    %\item Existe almenos una casa o comercio cuyo nivel es máximo, en el sentido que corresponde a la antiguedad de la partida.
     \item No se solapan posiciones máximas entre esta estructura hasta el hijo 'x', y ese hijo, para todo hijo. Notar que no importan los turnos posteriores al momento de union, porque cualquier construcción agregada posteriormente no podrá ser máxima o modificar los máximos al momento de la unión. Dadas las condiciones ya establecidas hasta este momento.
 }
 
 \vspace{4mm}
 \tadOperacion
+{unirMapas}{conj(puntero(estr)) /ps}{Mapa}{$(\forall p:$ puntero(estr))($p\ \in ps\ \impluego\ (p\ \neq\ $NULL $\yluego$ rep(*p)))}            
+\tadAxioma
+{unirMapas($ps$)}{$
+    \LIF\ $vacio?$(ps)\ \LTHEN\\ 
+    \tab $crear$(\emptyset,\ \emptyset)\ \\
+    \LELSE\ \\ 
+    \tab (*($dameUno$(ps))).mapa\ +\ $UnirMapas(sinUno$(ps))\ \\ 
+    \LFI
+$}
+
+
+\vspace{4mm}
+\tadOperacion
 {unirCasas}{conj(puntero(estr)) /ps}{dicc(Pos $\times$ Nat)}{eq. unirMapas}          
+\textcolor{gray}{// crea el diccionario de casas en la unión cuyo significado es igual al turno individual en \\ \tab que se agregó la casa a uno de los simCities en particular.}
 \tadAxioma
 {unirCasas(ps)}{$
     \LIF\ $vacio?$(ps)\ \LTHEN\ \\ 
     \tab $vacio$\ \\
     \LELSE\ \\
     \tab it((*(dameUno(ps))).construcciones,\ "casa")\ \cup_{dicc}\ $unirCasas(sinUno$(ps))\ \\
+    \tab $\textcolor{gray}{// notar que $\cup_{dicc}$ prioriza el argumento izquierdo.}$ \\
     \LFI
 $}
 
 \vspace{4mm}
 \tadOperacion
 {unirComercios}{conj(puntero(estr)) /ps}{dicc(Pos $\times$ Nat)}{eq. unirMapas} 
+\textcolor{gray}{// crea el diccionario de comercio en la unión cuyo significado es igual al turno individual \\ \tab en que se agregó la casa a uno de los simCities en particular.}
 \tadAxioma
 {unirComercios($ps$)}{$
     \LIF\ $vacio?$(ps)\ \LTHEN\ \\
@@ -286,6 +305,8 @@ donde
 %\tadAxioma{\tab clave}{dameUno(claves($d))$}
 %\tadNoAlinearAxiomas
 
+%\newpage
+
 \vspace{4mm}
 \tadOperacion
 {maxcons}{estr /e, conj(Pos) /c}{conj(Pos)}{($\forall p:\ $Pos$)(p\ \in\ c\ \impluego$ $p\ \in\ $ posiciones($e))$}
@@ -294,7 +315,6 @@ donde
     $\_maxcons$(e,\ c,\ \emptyset,\ 0)
 $}
 
-\newpage
 
 \vspace{4mm}
 \tadOperacion
@@ -326,6 +346,7 @@ donde
 \vspace{4mm}
 \tadOperacion
 {nivel}{estr /e, Pos /pos}{Nat}{$p\ \in\ $ posiciones($e)$}%{pos $\in$ Casas $\vee$ pos $\in$ Comercios}
+\textcolor{gray}{// calcula el nivel propiamente de una construcción.}
 \tadAxioma
 {nivel($e$,\ $pos$)}{$
     \LIF\ $def?$(pos,\ $Casas$)\ \LTHEN\ \\
@@ -360,6 +381,7 @@ donde:
 \vspace{4mm}
 \tadOperacion
 {llegar}{secu(hijo) /s, Pos /p}{hijo}{($\forall$ $h:$\ hijo)(esta?($h,\ s)\ \impluego\ h.sc\ \neq\ $NULL$\ \yluego\ $rep($*(h.sc)))\ \yluego\ $\\$ (\exists h:$\ hijo)(esta?($h$, $s)\ \yluego\ p\ \in\ posiciones(h.sc))$} 
+\textcolor{gray}{// busca el SimCity inmediato en el cual está definida una posición.}
 \tadAxioma
 {llegar($s$,\ $p$)}{$
     \LIF\ $def?$(pos,\ $unirCasas$(hijo_i))\ \vee\ $def?$(pos,\ $unirComercios$(hijo_i))\ \LTHEN\ \\ 
@@ -370,6 +392,8 @@ donde:
 $}
 donde
 \tadAxioma{\tab hijo$_i$}{Ag(prim($s$).$sc$,\ $\emptyset)$}
+
+\newpage
 
 \vspace{4mm}
 \tadOperacion
