@@ -47,6 +47,7 @@ La $popularidad$ se representará a través de un Natural. El mapa será de tipo
         \tab )\ \yluego\ \\
         %
         \tab (\forall\ p:\ $puntero(dicc(Pos,\ Construccion))$)($esta?$(p,\ e.construcciones)\ \impluego \\
+        \tab \tab \neg vacio?(*p)\ \land\ \\
         \tab \tab (\nexists\ p':\ $puntero(dicc(Pos,\ Construccion))$)($esta?$(p',\ e.construcciones)\ \yluego\\ 
         \tab \tab \tab $pos$(p,\ e.construcciones)\ \neq\ $pos$(p'\, e.construcciones)\ \yluego \\
         \tab \tab \tab $claves$(*(p))\ \cap\ $claves$(*(p'))\ \neq\ \emptyset \\
@@ -63,14 +64,14 @@ La $popularidad$ se representará a través de un Natural. El mapa será de tipo
         \tab (e.popularidad\ =\ \#($Unidos$))^{9} \land\ \\
         %
         \tab (\forall\ p:\ $Pos$)(p\ \in\ $Casas$\ \impluego \\
-        \tab \tab \neg $esRio$(p,\ $Mapas$)\ \land\ ($nivel$(e,\ p)\ \leq\ e.antiguedad)\ \\
+        \tab \tab \neg $esRio$(p,\ $Mapas$)\\ %\land\ ($nivel$(e,\ p)\ \leq\ e.antiguedad)\ \\
         \tab )^{10}\ \land \\
         %
         \tab (\forall\ p:\ $Pos$)(p\ \in\ $Comercios$\ \impluego \\
-        \tab \tab \neg $esRio$(p,\ $Mapas$)\ \land\ ($nivel$(e,\ p)\ \leq\ e.antiguedad)\ \\
+        \tab \tab \neg $esRio$(p,\ $Mapas$)\\ %\land\ ($nivel$(e,\ p)\ \leq\ e.antiguedad)\ \\
         \tab )^{11}\ \land \\
         %
-        \tab (\nexists\ p:\ $Pos$)((p\ \in\ Comercios\ \vee p \in Casas)\ \yluego nivel(e,\ p)\ =\ e.antiguedad)^{12}\ \land\\ 
+        %\tab (\nexists\ p:\ $Pos$)((p\ \in\ Comercios\ \vee p \in Casas)\ \yluego nivel(e,\ p)\ =\ e.antiguedad)^{12}\ \land\\ 
         \tab $unionesValidas$(e,\ e.uniones)^{13} \\
         )$}
     \vspace{2mm}
@@ -86,7 +87,7 @@ La $popularidad$ se representará a través de un Natural. El mapa será de tipo
     \tadNoAlinearAxiomas
 
     ~
-    
+
 % abstracción
     \AbsFc[estr]{SimCity}{
         $sc:\ $SimCity$\ |\ \\
@@ -156,9 +157,9 @@ $}
     \item La estructura no loopea consigo misma.
     \item La antiguedad es mayor o igual a la antiguedad de cualquier simCity hijo.
     \item La popularidad es igual a la cantidad de uniones total.
-    \item Ninguna casa está sobre un río perteneciente a cualquier mapa en la unión y su nivel es menor o igual a la antiguedad de la partida.
-    \item Ninguna construcción está sobre un río perteneciente a cualquier mapa en la unión y su nivel es menor o igual a la antiguedad de la partida.
-    \item Existe almenos una casa o comercio cuyo nivel es máximo, en el sentido que corresponde a la antiguedad de la partida.
+    \item Ninguna casa está sobre un río perteneciente a cualquier mapa en la unión.
+    \item Ninguna construcción está sobre un río perteneciente a cualquier mapa en la unión .
+    %\item Existe almenos una casa o comercio cuyo nivel es máximo, en el sentido que corresponde a la antiguedad de la partida.
     \item No se solapan posiciones máximas entre esta estructura hasta el hijo 'x', y ese hijo, para todo hijo. Notar que no importan los turnos posteriores al momento de union, porque cualquier construcción agregada posteriormente no podrá ser máxima o modificar los máximos al momento de la unión. Dadas las condiciones ya establecidas hasta este momento.
 }
 
