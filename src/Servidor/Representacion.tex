@@ -6,11 +6,11 @@
     diccionario implementado en un trie, donde las claves son los nombres de las partidas
     y los significados un puntero al SimCity y su estado (si es modificable o no).\\
 
-    Elegimos esta estructura para cumplir con las restricciones dadas de complejidad. Un diccionario implementado en un trie cuenta con
-    las operaciones propias de un diccionario (definir, definido?, borrar, significado, iteradores), pero con complejidades acotadas por la 
-    clave más larga definida en el mismo. En particular, buscar una clave y obtener su significado en este diccionario implica recorrer
-    el trie, lo cual en el peor caso implica realizar $|nombreMasLargo|$ comparaciones. Con lo cual, todas las operaciones del servidor 
-    en relación a una partida específica serán por lo menos $\bold{O}(|nombreMasLargo|)$.
+    Elegimos esta estructura para cumplir con las restricciones dadas de complejidad. Para esto, requerimos una implementación de
+    diccTrie que cuente con las operaciones propias de un diccionario (definir, definido?, borrar, significado, iteradores), 
+    pero con complejidades acotadas por la clave más larga definida en el mismo. En particular, buscar una clave y obtener su significado 
+    en este diccionario implicaría recorrer el trie, lo cual en el peor caso sería realizar $|nombreMasLargo|$ comparaciones. 
+    Con lo cual, todas las operaciones del servidor en relación a una partida específica serán por lo menos $\bold{O}(|nombreMasLargo|)$.
 
     
 
