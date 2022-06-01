@@ -11,8 +11,8 @@
     \Titulo{Operaciones básicas de SimCity}
     
     Sea $S$: SimCity, $N$ = popularidad($S$), $\{u_0\ ...\ u_{N}\}\ =\ U:$ el conjunto de SimCities en union con $S$$^{1}$ y $S$, \\
-    $casas$ = $\sum_{i = 0}^{N}{}(\#(casas_i))$ y $comercios$ = $\sum_{i = 0}^{N}{}(\#(comercios_i))$, donde $casas_i$ y $comercios_i$
-    son respectivamente el conjunto de casas y comercios definidos en $u_i$ por medio de $AvanzarTurno$.$^{2}$ 
+    y $construcciones$ = $\sum_{i = 0}^{N}{}(\#(construcciones_i))$, donde $construcciones_i$
+    es el conjunto de casas y comercios definidos en $u_i$ por medio de $AvanzarTurno$.$^{2}$ 
 
     %\vspace{4mm}
     \InterfazFuncion
@@ -31,10 +31,11 @@
     %[$\bold{O}(\sum_{i = 0}^{N}{(hasta_i \times casas_i)})$, \textcolor{red}{enrealidad falta tmb sumarle el camino hasta u_i}  \\ \tab 
     %    donde $hasta_i$ y $casas_i$ son respectivamente la cantidad de casas definidas$^{3}$ en $\{u_0\ ...\ u_{i - 1}\}$ y $u_i$.$^{4}$ 
     %]
-    [$\bold{O}(casas^{2}\ +\ N)$ %$\supset$ $\Theta(\sum_{i = 0}^{N}{(hasta_i \times casas_i + camino_i)})$, 
+    [$\bold{O}(construcciones^{2})\ +\ \bold{O}(N)$ %$\supset$ $\Theta(\sum_{i = 0}^{N}{(hasta_i \times casas_i + camino_i)})$, 
         %\\ \tab donde $hasta_i$ y $casas_i$ son respectivamente la cantidad de casas definidas$^{3}$ en $\{u_0\ ...\ u_{i - 1}\}$ y $u_i$$^{4}%$, 
         %\\ \tab y $camino_i$ representa la cantidad de uniones para llegar de $S$ a $u_i$$^{5}$.$^{6}$
-        \\ \underline{justificación:} Una implementación de SimCity debe poder, en el peor caso, retornar una copia de todas sus casas en tiempo lineal sobre el conjunto que las representa. Pero, dado que es esperable que un SimCity, compuesto por un conjunto de uniones, sea representado como un árbol, podemos suponer que para resolver colisiones del tipo 'se queda el primero', cada nueva casa a copiar debe primero evaluar si no pertenece ya a los niveles superiores. Resultando en un peor caso, holgado, de O($casas^2$). Dado que un SimCity puede no tener casas, se debe considerar que el peor caso puede estar dado por la cantidad de nodos a recorrer en el árbol.
+        \\ \underline{justificación:} Una implementación de SimCity debe poder, en el peor caso, retornar una copia de todas sus casas en tiempo lineal sobre el conjunto que las representa. Pero, dado que es esperable que un SimCity, compuesto por un conjunto de uniones, sea representado como un árbol, podemos suponer que para resolver colisiones del tipo 'se queda el primero', cada nueva casa a copiar debe primero evaluar si no pertenece ya a los niveles superiores, incluyendo también a los comercios. Resultando en un peor caso, holgado, de O($construcciones^2$), donde no hay colisiones. Dado que un SimCity puede no tener construcciones si está recién iniciado, se debe considerar que el peor caso también puede estar dado por la cantidad de nodos a recorrer en el árbol. Es decir O($N$). Por ejemplo, 
+        si se anidan 100 SimCities recién iniciados. 
     ]
     [Retorna las posiciones y respectivos niveles de todas las casas en el juego actual.]
     [No. Genera una copia.]
@@ -43,8 +44,8 @@
     \InterfazFuncion
     {comercios}{\In{S}{SimCity}}{DiccLineal(Pos,\ Nivel)}
     {$\hat{res}\ \igobs\ $comercios$(\hat{S})$}
-    [$\bold{O}(comercios^{2} \times casas\ +\ N)$
-    \\ \underline{justificación}: similiar a $casas(s)$. En este caso también se debe calcular el nivel de cada comercio en relación a las casas en distancia manhattan $\leq$ 3.]%$ $\supset$ $\Theta(\sum_{i = 0}^{N}{(hasta_i \times comercios_i \times casas + camino_i)})$,\\ \tab
+    [$\bold{O}(construcciones^{2})\ +\ \bold{O}(N)$
+    \\ \underline{justificación}: similiar a $casas(s)$.] %En este caso también se debe calcular el nivel de cada comercio en relación a las casas en distancia manhattan $\leq$ 3. Pero, ]%$ $\supset$ $\Theta(\sum_{i = 0}^{N}{(hasta_i \times comercios_i \times casas + camino_i)})$,\\ \tab
         %donde $hasta_i$ y $comercios_i$ son respectivamente la cantidad de comercios definidos en $\{u_0\ ...\ u_{i - 1}\}$ y $u_i$, 
         %\\ \tab y $camino_i$ representa la cantidad de uniones para llegar de S a $u_i$.$^{7}$ 
     [Retorna las posiciones y respectivos niveles de todos los comercios en el juego actual.]
@@ -61,7 +62,7 @@
     \pie{
         \vfill{}
         \item Este conjunto incluye también a los SimCities provenientes de las uniones propias a cada SimCity en unión directa con S.
-        \item En particular, notar que $casas\ \geq\ \#($claves(casas($\hat{S}$))) y $comercios\ \geq\ \#($claves(comercios($\hat{S}$))), por posibles colisiones permitidas entre los $u_i$. Dado la necesidad de resolver la union en $\bold{O}(1)$, no se puede mantener un registro de construcciones sin repetidos. De éste modo, se contempla el total real de construcciones definidas al momento de calcular la complejidad que tendrán las operaciones.  
+        \item En particular, notar que $construcciones_i\ \geq\ \#($claves(construcciones($\hat{S}$))), por posibles colisiones permitidas entre los $u_i$. Dado la necesidad de resolver la union en $\bold{O}(1)$, no se puede mantener un registro de construcciones sin repetidos. De éste modo, se contempla el total real de construcciones definidas al momento de calcular la complejidad que tendrán las operaciones.  
         \item Es decir, aquel con el que se inició originalmente el simCity.
         %\item Donde se entiende por 'definida' como aquellas casas que provienen del propio simCity y no de alguna de sus uniones. 
         %\item Dado que consideramos la resolución de colisiones durante una unión válida como 'queda el primero', y se requiere una 
@@ -96,10 +97,8 @@
     {avanzarTurno}{\Inout{S}{SimCity},\ \In{cs}{diccLineal(Pos, Construccion)}}{}
     [avanzarValido$^{1}$($\hat{s},\ \hat{cs})\ \land\ \hat{S}\ =\ S_0$]
     {$\hat{S}\ \igobs\ $avanzarTurno$(S_0,\ \hat{cs})$}
-    [$\bold{O}(N\ + \ $ \#(claves(casas$_S$))\ +\ \#(claves(comercios$_S$))\ + \#(claves($cs$))), \\ \tab
-        donde $casas_{S}$ y $comercios_{S}$ son, respectivamente, el conjunto de casas y el conjunto de comercios \tab definidos en éste SimCity particular a través de $avanzarTurno$.
+    [$\bold{O}(1)$]
     %\\ \underline{justificación}: AvanzarTurno requiere actualizar todos los niveles en U, esto requiere $\bold{O}(N)$.   
-    ]
     [Avanza el turno de un SimCity.]
     [Genera una copia de las posiciones en el diccionario.]
 
