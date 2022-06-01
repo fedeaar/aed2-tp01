@@ -5,7 +5,7 @@
             \State $res\ \gets\ vacio()$
             \State \Return $res$
             \medskip
-            \Statex \underline{Complejidad:} $O(1)$
+            \Statex \underline{Complejidad:} $\bold{O}(1)$
         \end{algorithmic}
     \end{algorithm}
 
@@ -20,7 +20,7 @@
             \State \indent $avanzar(it)$ 
             \State \Return $res$
             \medskip
-            \Statex \underline{Complejidad:} $\bold{O}(\sum_{i = 0}^{N}{copy(nom_i) + copy(sc_i)}$)
+            \Statex \underline{Complejidad:} $\bold{O}(\sum_{i = 0}^{N}{(copy(nom_i) + copy(sc_i))}$)
         \end{algorithmic}
     \end{algorithm}
 
@@ -41,7 +41,7 @@
 
     \begin{algorithm}[H]{\textbf{nuevaPartida}(\Inout{e}{estr}, \In{p}{Nombre}, \In{m}{Mapa})}
         \begin{algorithmic}[1]
-            \State $definirRapido(e,\ p,\ \langle true,\ \&(iniciar(m)), vacio() \rangle )$ \Comment{Reservamos memoria para el nuevo SimCity}
+            \State $definirRapido(e,\ p,\ \langle true,\ \&(iniciar(m))\rangle )$ \Comment{Reservamos memoria para el nuevo SimCity}
             \medskip
             \Statex \underline{Complejidad:} $\bold{O}($copy$(p)\ +\ $copy$(m))$
         \end{algorithmic}
@@ -49,25 +49,28 @@
 
     \begin{algorithm}[H]{\textbf{unirPartidas}(\Inout{e}{estr}, \In{p1}{Nombre}, \In{p2}{Nombre})}
         \begin{algorithmic}[1]
-            \State $definir(e,\ p1, \langle true,\ \&(unir(*(significado(p1,\ e).sim),\ *(significado(p2,\ e).sim))), vacio()\rangle)$
-            \State $definir(e,\ p2, \langle false,\ significado(p2,\ e).sim,\ vacio() \rangle)$
+            \State $definir(e,\ p1, \langle true,\ \&(unir(*(significado(p1,\ e).sim),\ *(significado(p2,\ e).sim)))\rangle)$
+            \State $definir(e,\ p2, \langle false,\ significado(p2,\ e).sim\rangle)$
             \medskip
             \Statex \underline{Complejidad:} $\bold{O}(|nombreMasLargo|)$
-            \Statex \underline{Justificacion:} $unir \in O(1),\ definir \in O(|nombreMasLargo|) + O(1) = O(|nombreMasLargo|)$
+            \Statex \underline{Justificacion:} $unir \in \bold{O}(1) + buscar\ en\ diccTrie \in \bold{O}(|nombreMasLargo|)\ \rightarrow\ \bold{O}(|nombreMasLargo|)$
         \end{algorithmic}
     \end{algorithm}   
     
-    \begin{algorithm}[H]{\textbf{avanzarTurnoPartida}(\Inout{e}{estr}, \In{p}{Nombre})}
+    \begin{algorithm}[H]{\textbf{avanzarTurnoPartida}(\Inout{e}{estr}, \In{p}{Nombre}, \In{cs}{diccLineal(Pos $\times$ Construccion)})}
         \begin{algorithmic}[1]
-            \State $definir(e,\ p, \langle true,\ avanzarTurno(*(significado(p,\ e).sim),\ significado(p,\ e).pendientes),\ vacio()\rangle)$
+            \State $definir(e,\ p, \langle true,\ \& (avanzarTurno(*(significado(p,\ e).sim),\ cs))\rangle)$ \Comment{cs por referencia}
             \medskip
-            \Statex \underline{Complejidad:} $\bold{O}(|nombreMasLargo| + avanzarTurno)$
+            \Statex \underline{Complejidad:} $\bold{O}(|nombreMasLargo|)$
+            \Statex \underline{Justificacion:} $avanzarTurno \in \bold{O}(1) + buscar\ en\ diccTrie \in \bold{O}(|nombreMasLargo|)$
+            \Statex \tab\tab\tab $\rightarrow\ \bold{O}(|nombreMasLargo|)$
         \end{algorithmic}
     \end{algorithm}   
 
     \begin{algorithm}[H]{\textbf{agregarCasa}(\Inout{s}{estr}, \In{partida}{String}, \In{pos}{Pos})} %$\to$ $res$ : estr}
     \begin{algorithmic}[1]
-        \State $definirRapido(obtener(partida,\ s).pendientes,\ pos,\ "casa")$
+        \State $cs\ \gets\ definirRapido(vacio(),\ pos,\ "casa")$
+        \State $definir(e,\ p, \langle true,\ \& (avanzarTurno(*(significado(p,\ e).sim),\ cs))\rangle)$
         \medskip
         \Statex \underline{Complejidad:} $\bold{O}(|nombreMasLargo|)$
     \end{algorithmic}
@@ -75,7 +78,8 @@
     
     \begin{algorithm}[H]{\textbf{agregarComercio}(\Inout{s}{estr}, \In{partida}{String}, \In{pos}{Pos})} %$\to$ $res$ : estr}
     \begin{algorithmic}[1]
-        \State $definirRapido(obtener(partida,\ s).pendientes, pos,\ "comercio")$ 
+        \State $cs\ \gets\ definirRapido(vacio(),\ pos,\ "comercio")$
+        \State $definir(e,\ p, \langle true,\ \& (avanzarTurno(*(significado(p,\ e).sim),\ cs))\rangle)$
         \medskip
         \Statex \underline{Complejidad:} $\bold{O}(|nombreMasLargo|)$
     \end{algorithmic}
@@ -87,7 +91,7 @@
         \State $res\ \leftarrow\ mapa(*sc)$ 
         \State \Return $res$
         \medskip
-        \Statex \underline{Complejidad:} $\bold{O}(|nombreMasLargo|) + O(mapa(*sc))$
+        \Statex \underline{Complejidad:} $\bold{O}(|nombreMasLargo|) + \bold{O}(mapa(*sc))$
     \end{algorithmic}
     \end{algorithm}
       
@@ -97,7 +101,7 @@
         \State $res\ \leftarrow\ casas(*sc)$
         \State \Return $res$
         \medskip
-        \Statex \underline{Complejidad:} $\bold{O}(|nombreMasLargo|) + O(casas(*sc))$
+        \Statex \underline{Complejidad:} $\bold{O}(|nombreMasLargo|) + \bold{O}(casas(*sc))$
     \end{algorithmic}
     \end{algorithm}
 
@@ -107,7 +111,7 @@
         \State $res\ \leftarrow\ comercios(*sc)$
         \State \Return $res$
         \medskip
-        \Statex \underline{Complejidad:} $\bold{O}(|nombreMasLargo|) + O(comercios(*sc))$
+        \Statex \underline{Complejidad:} $\bold{O}(|nombreMasLargo|) + \bold{O}(comercios(*sc))$
     \end{algorithmic}
     \end{algorithm}
 

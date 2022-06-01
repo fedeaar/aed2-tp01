@@ -1,0 +1,56 @@
+
+tad sc:
+    explicar:
+      OK  - como sacarRepes explicita el metodo de resolver colisiones, en particular que quedan solo las claves de cs' que no estan en cs 
+     OK?? - por qué no hace falta que turnos sea un observador 
+          (Creo que no hace falta porque turnos venia en el TP y no era observador)
+      OK  - la parte de nivel maximo en UnirValido
+
+    rever:
+      OK  - avanzarTurno no actualiza el nivel de todas las casas y comercios ya definidas en el tad, creo 
+      OK  - la union de dicc deberia priorizar los elem de la izq
+
+tad server:
+    boludeces:
+      OK  - que el dicc vacio sea vacio en vez de vacio(), o corregir donde aparece asi para mantener el formato a lo largo del pdf
+    
+interfaz mapa:
+    terminar de def (perdon si lo habiamos hablado, me olvide):
+        - si poner o no los observadores como operaciones
+        - si agregar las consideraciones de alias. 
+
+    corregir:
+      OK  - post de crear tiene que tener crear no mapa
+
+    boludeces:
+      OK  - en es rio uno de los cardinales esta separado
+
+implementacion mapa:
+    boludeces:
+        - que diga Algoritmos al comienzo 
+
+    rever:
+        - en crear no se deberia crear el estr tmb?
+        - no definimos la copia de mapas, yo no lo haria xq paja pero bueno para tener en cuenta
+        - en esRio, no se si esa es la notacion para la pertenencia en un conjunto 
+    
+    terminar de def:
+        - yo no tiparía las variables al declararlas, sino: habria q hacerlo en server
+        - agregaria justificacion de complejidad a todos los algoritmos no triviales. 
+        - sobre que se representa el conj(Nat) ? si es un conj lineal, habria que aclararlo.
+
+interfaz sc:
+    rever:
+        - complejidades
+    
+rep sc:
+    rever:
+        - descripcion inicial
+        - agregar comentarios para it, unionesValidas, nivel.
+
+implem sc:
+    - estr se deberia crear en en iniciar antes de asignarle, creo.
+
+
+interfaz server:
+    - en partidas, tiene sentido devolver una copia a un simcity? dado el lio de punteros

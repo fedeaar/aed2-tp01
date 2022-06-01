@@ -3,7 +3,7 @@
     \tadGeneros{SimCity}
 
     \vspace{2mm}
-    \tadExporta{SimCity, observadores, generadores, turnos, nivelComercio, distManhattan, $\bullet\ \cup_{dicc}\ \bullet$}
+    \tadExporta{SimCity, observadores, generadores, turnos, $\bullet\ \cup_{dicc}\ \bullet$}
 
     \vspace{2mm}
     \tadUsa{Mapa, Nat, Pos, Construcción, Nivel, dicc($\alpha\ \times\ \beta$)}
@@ -66,8 +66,10 @@
      %Devuelve el segundo diccionario sin las claves que tambien aparecian en el primero
     \tadAlinearFunciones{construcciones}{dicc(Pos, Construcción),dicc(Pos, Construcción)}
     \tadOperacion{sacarRepes}{dicc(Pos, Construcción),dicc(Pos, Construcción)}{dicc(Pos $\times$ Construcción)}{}
+    \tadOperacion{avanzarNivel}{dicc(Pos, Nivel)}{dicc(Pos, Nivel)}{}
    
     \vspace{2mm}
+    %\newpage
     \tadAxiomas[
         \paratodo{simcity}{s,\ s'}, 
         \paratodo{Mapa}{m},
@@ -86,9 +88,9 @@
     \vspace{2mm}
     \tadAlinearAxiomas{casas(avanzarTurno($s,\ cs$))}
     \tadAxioma{casas(iniciar($m$))}{vacio}
-    \tadAxioma{casas(avanzarTurno($s,\ cs$))}{agCasas(casas($s$),\ $cs$)}
+    \tadAxioma{casas(avanzarTurno($s,\ cs$))}{agCasas(avanzarNivel(casas($s$)),\ $cs$)}
     \tadAxioma{casas(unir($s,\ s'$))}{
-        agCasas(casas($s$), sacarRepes(construcciones($s$), construcciones($s'$)))
+        agCasas(casas($s$), sacarRepes$^{2}$(construcciones($s$), construcciones($s'$)))
     }
     %Como no se indica qué significa Construccion, asumo que es un string
     %donde "casa" = casa, "comercio" = comercio
@@ -99,10 +101,10 @@
     \vspace{2mm}
     \tadAlinearAxiomas{popularidad(avanzarTurno($s,\ cs$))}
     \tadAxioma{comercios(iniciar($m$))}{vacio}
-    \tadAxioma{comercios(avanzarTurno($s,\ cs$))}{agComercios($s$, comercios($s$), $cs$)}
+    \tadAxioma{comercios(avanzarTurno($s,\ cs$))}{agComercios($s$, avanzarNivel(comercios($s$)), $cs$)}
     \tadAxioma{comercios(unir($s,\ s'$))}{
         agComercios($s$, comercios($s$), \\
-        \tab\tab\tab sacarRepes(construcciones($s$), construcciones($s'$)))
+        \tab\tab\tab sacarRepes$^{2}$(construcciones($s$), construcciones($s'$)))
     }
 
     \vspace{2mm}
@@ -111,12 +113,7 @@
     \tadAxioma{popularidad(avanzarTurno($s,\ cs$))}{popularidad($s$)}
     \tadAxioma{popularidad(unir($s,\ s'$))}{popularidad($s$) + 1 + popularidad($s'$)}
     
-    \pie{
-        \vfill{}
-        \item definido en el apartado Definiciones Auxiliares de SimCity.
-    }
-    \newpage
-    
+    \vspace{2mm}
     \tadAlinearAxiomas{turnos(avanzarTurno($s,\ cs$))}
     \tadAxioma{turnos(iniciar($m$))}{0}
     \tadAxioma{turnos(avanzarTurno($s,\ cs$))}{turnos($s$) + 1}
@@ -132,26 +129,8 @@
     \vspace{1mm}
     \tadAlinearAxiomas{agComercios($s,\ cn,\ cs$)}
 
-    
-    %%\vspace{2mm}
-    %\tadTitulo{axiomas privados}
-    %\vspace{2mm}
-    \tadAlinearAxiomas{agComercios($s,\ cn,\ cs$)}
     \tadAxioma{construcciones($s$)}{casas($s$) $\cup_{dicc}$ comercios($s$)}
     
-    %\tadAxioma{agCasas($cn, cs$)}{
-    %    $\LIF$ $vacio?$(claves($cs$)) $\LTHEN$ \\ 
-    %        \tab $cn$ \\
-    %    $\LELSE$ \\
-    %        \tab $\LIF$ obtener(dameUno(claves($cs$)), $cs$) $\igobs$ $"casa"$ $\LTHEN$ \\
-    %            \tab\tab agCasas(definir(dameUno(claves($cs$)), 1, $cn$), \\
-    %            \tab\tab\tab borrar(dameUno(claves($cs$)), $cs$)) \\
-    %        \tab $\LELSE$ \\
-    %            \tab\tab agCasas($cn$, borrar(dameUno(claves($cs$)), $cs$)) \\
-    %        \tab $\LFI$\\
-    %    $\LFI$
-    %}
-    %\vspace{2mm}
     \tadAxioma{agCasas($cn,\ cs$)}{
         $\LIF$ vacio?(claves($cs$)) $\LTHEN$ \\ 
             \tab $cn$ \\
@@ -162,27 +141,7 @@
         $\LFI$
         \\ donde proximo $\equiv$ dameUno(claves($cs$)) 
     }
-    
-    %\pagebreak
 
-    %Similar a agCasas, pero aparte chequea distancia Manhattan para el nivel.
-    %Terminaria quedando un dicc con los comercios viejos + 
-    %comercios nuevos (no se definen las casas de haber)
-    %\tadAlinearAxiomas{agComercios($s, cn, cs$)}
-    %\tadAxioma{agComercios($s, cn, cs$)}{
-    %    $\LIF$ $vacio?$(claves($cs$)) $\LTHEN$ \\
-    %    \tab $cn$ \\
-    %    $\LELSE$ \\
-    %        \tab $\LIF$ obtener(dameUno(claves($cs$)), $cs$) $\igobs$ $"comercio"$ $\LTHEN$ \\
-    %            \tab\tab agComercios(definir(dameUno(claves($cs$)), \\
-    %            \tab\tab\tab\tab nivelComercio(dameUno(claves($cs$)), casas($s$)), $cn$), \\
-    %            \tab\tab\tab\tab borrar(dameUno(claves($cs$)), $cs$)) \\
-    %        \tab $\LELSE$ \\
-    %            \tab\tab agComercios($cn$, borrar(dameUno(claves($cs$)), $cs$)) \\
-    %        \tab $\LFI$ \\
-    %    $\LFI$
-    %}
-    %\vspace{2mm}
     \tadAxioma{agComercios($s,\ cn,\ cs$)}{
         $\LIF$ vacio?(claves($cs$)) $\LTHEN$ \\
         \tab $cn$ \\
@@ -195,25 +154,7 @@
         \\ donde proximo $\equiv$ dameUno(claves($cs$)) 
     }
 
-    
     \tadAxioma{nivelComercio($p,\ cn$)}{
-        %    $\LIF$ $\lnot vacio?$(manhattan($p$, casas($s$))) $\LTHEN$\\
-        %        nivelMaximo(manhattan($p$), casas($s$)) \\
-        %    $\LELSE$
-        %        1
-        %    $\LFI$
-        
-        %$\LIF\ vacio?$(claves($cn$)) $\LTHEN$ \\
-        %    \tab 1 \\
-        %$\LELSE$ \\
-        %    \tab $\LIF$ distManhatt($p$, dameUno(claves($cn$))) $\leq$ 3 $\LTHEN$ \\
-        %        \tab\tab max(obtener(dameUno(claves($cn$)), $cn$), \\
-        %        \tab\tab\tab nivelComercio($p$, borrar(dameUno(claves($cn$)), $cn$))) \\
-        %    \tab $\LELSE$ \\
-        %        \tab\tab nivelComercio($p$, borrar(dameUno(claves($cn$)), $cn$)) \\
-        %    \tab $\LFI$ \\ 
-        %$\LFI$
-
         $\LIF$\ vacio?(claves($cn$)) $\LTHEN$ \\
             \tab 1 \\
         $\LELSE$ $\LIF$ distManhattan($p$, proximo) $\leq$ 3 $\LTHEN$ \\
@@ -223,18 +164,7 @@
         $\LFI$  
         \\ donde proximo $\equiv$ dameUno(claves($cn$)) 
     }
-   % \tadAxioma{conjManhatt($p, cs$)}{
-   %     $\LIF vacio?$($cs$) $\LTHEN$ 
-   %         $\emptyset$ 
-   %     $\LELSE$ \\
-   %         $\LIF$ distManhattan($p$, dameUno(claves($cs$))) $\leq$ 3 $\LTHEN$ \\
-   %             definir(dameUno(claves($cs$)), 
-   %                     obtener(dameUno(claves($cs$)), $cs$), \\
-   %                     conjManhatt($p$, borrar(dameUno(claves($cs$)), $cs$))) \\
-   %         $\LELSE$ \\
-   %             conjManhatt($p$, borrar(dameUno(claves($cs$)), $cs$)) \\
-   %     $\LFI$
-   % }
+
     %la distancia manhattan entre dos puntos p y q es
     %d(p,q) = |p0 - q0| + |p1 - q1|
     %\vspace{2mm}
@@ -251,42 +181,18 @@
     \tadAxioma{$d$ $\cup_{dicc}$ $d'$}{
         $\LIF$ vacio?(claves($d'$)) $\LTHEN$ \\
             \tab $d$ \\
+        $\LELSE$ $\LIF$ $\lnot$ def?(proximo, $d$) $\LTHEN$ \\
+            \tab definir(proximo, obtener(proximo, $d'$), $d$) $\cup_{dicc}$ borrar(proximo, $d'$) \\
         $\LELSE$ \\
-            \tab definir(proximo, obtener(proximo, $d'$), $d\ \cup_{dicc}$ borrar(proximo, $d'$)) \\
+            \tab $d$ $\cup_{dicc}$ borrar(proximo, $d'$) \\
         $\LFI$
         \\ donde proximo $\equiv$ dameUno(claves($d'$)) 
     }
-    
-    %\tadAlinearAxiomas{sacarRepes($cs, cs'$)}
-   
-    %Tal vez pueda hacerse sin nivelMaximo
-    %\tadAxioma{masNivel($s$)}{masNivelAux(construcc($s$), nivelMaximo(construcc($s$)))}
-    %\tadAxioma{masNivelAux($cs, n$)}{
-    %    $\LIF$ $vacio?$($cs$) $\LTHEN$ $\emptyset$ $\LELSE$ \\
-    %        $\LIF$ obtener(dameUno(claves($cs$)), $cs$) $\igobs$ n $\LTHEN$ \\
-    %            ag(dameUno(claves($cs$)), \\masNivelAux(borrar(dameUno(claves($cs$)), $cs$), n)) \\
-    %        $\LELSE$ \\
-    %            masNivelAux(borrar(dameUno(claves($cs$)), $cs$), n) \\
-    %        $\LFI\ \LFI$   
-    %}
-    %\tadAxioma{nivelMaximo($cs$)}{
-    %    $\LIF$ $vacio?$($cs$) $\LTHEN$ 0 $\LELSE$ \\
-    %    $max$(obtener(dameUno(claves($cs$)), $cs$), \\nivelMaximo(borrar(dameUno(claves($cs$)), $cs$)))
-    %}
+
     
     %Quiero eliminar las claves que aparecen en ambos dicc en cs'
     %\vspace{2mm}
     \tadAxioma{sacarRepes($cs,\ cs'$)}{
-    %    $\LIF$ $vacio?$(claves($cs$)) $\LTHEN$ \\
-    %        \tab $cs'$ \\
-    %    $\LELSE$ \\
-    %        \tab $\LIF$ def?(dameUno(claves($cs$)), $cs'$) $\LTHEN$ \\ %Hay repetido
-    %            \tab\tab sacarRepes(borrar(dameUno(claves($cs$)), $cs$), \\
-    %            \tab\tab\tab\tab borrar(dameUno(claves($cs$)), $cs'$)) \\
-    %        \tab $\LELSE$ \\
-    %            \tab\tab sacarRepes(borrar(dameUno(claves($cs$)), $cs$),  $cs'$) \\
-    %        \tab $\LFI$ \\
-    %    $\LFI$
         $\LIF$ vacio?(claves($cs$)) $\LTHEN$ \\
             \tab $cs'$ \\
         $\LELSE$ $\LIF$ def?(proximo, $cs'$) $\LTHEN$ \\ %Hay repetido
@@ -296,10 +202,31 @@
         $\LFI$
         \\ donde proximo $\equiv$ dameUno(claves($cs$))
     }
+
+    \pie{
+        \vfill{}
+        \item definido en el apartado Definiciones Auxiliares de SimCity.
+        \item las funciones $\mathbf{agCasas}$ y $\mathbf{agComercios}$ agregan respectivamente al diccionario de casas/comercios las construcciones 
+        de entrada sin importar si esas posiciones ya se encontraban ocupadas o no. Esto no genera un problema en avanzar turno, por sus 
+        restricciones, pero si al unir SimCitys (ya que podrian haber colisiones). Para solucionar esto, sacarRepes quita del diccionario
+        de entrada las posiciones ocupadas por construcciones ya establecidas. Es decir, como resolución al conflicto de
+        colisiones, las construcciones que permanecen son las del SimCity original.
+        
+    }
+
+    \tadAxioma{avanzarNivel(cs)}{
+        $\LIF$ vacio?(claves($cs$)) $\LTHEN$ \\
+            \tab $cs$ \\
+        $\LELSE$ \\
+            \tab definir(dameUno(claves($cs$)), \\
+            \tab\tab obtener(dameUno(claves($cs$)), $cs$) + 1, \\
+            \tab\tab avanzarNivel(borrar(dameUno(claves($cs$))), $cs$)) \\
+        $\LFI$
+    }
     \vspace{1mm}
 \end{tad}  
 
-\newpage
+%\newpage
 \Titulo{Definiciones Auxiliares de SimCity}
 \vspace{3mm}
 
@@ -319,15 +246,19 @@
 \tadAxioma{unirValido($a,\ b$)}{
     ($\forall$ $p$ : Pos)(def?($p$, construcciones($a$)) $\impluego$ $\\$
         \tab $\lnot$ esRio($p$,\ mapa($b$)) $\wedge$ $\\$        %$\tab$ (p \in masNivel(a) \implies \lnot p \in construcc(b))) $\\$
-        \tab ($\nexists$\ $otra$ : Pos)(def?($otra$, construcciones($a$))\ $\yluego$ $\\$
+        \tab ($\nexists$\ $otra$ : Pos)$^{1}$(def?($otra$, construcciones($a$))\ $\yluego$ $\\$
         \tab\tab obtener($otra$, construcciones($a$))\ >\ obtener($p$, construcciones($a$))\ $\\$ 
         \tab ) $\impluego$ $\lnot$\ def?($p$, construcciones($b$)) $\\$
     )\ $\wedge$ $\\$
     ($\forall$ $p$ : Pos)(def?($p$, construcciones($b$)) $\impluego$ $\\$
         \tab $\lnot$ esRio($p$,\ mapa($a$)) $\wedge$ $\\$        %$\tab$ (p \in masNivel(a) \implies \lnot p \in construcc(b))) $\\$
-        \tab ($\nexists$\ $otra$ : Pos)(def?($otra$, construcciones($b$))\ $\yluego$ $\\$
+        \tab ($\nexists$\ $otra$ : Pos)$^{1}$(def?($otra$, construcciones($b$))\ $\yluego$ $\\$
         \tab\tab obtener($otra$, construcciones($b$))\ >\ obtener($p$, construcciones($b$))\ $\\$
         \tab ) $\impluego$ $\lnot$\ def?($p$, construcciones($a$)) $\\$
     )
 }
 
+\pie{
+    \vfill{}
+    \item Si en la posición hay una construcción de nivel máximo, no puede colisionar con una construcción del otro SimCity.
+}

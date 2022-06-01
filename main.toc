@@ -5,15 +5,16 @@
 \contentsline {subsection}{\numberline {1.3}SimCity}{3}{subsection.1.3}%
 \contentsline {subsection}{\numberline {1.4}Servidor}{6}{subsection.1.4}%
 \contentsline {section}{\numberline {2}Diseño}{8}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Módulo Mapa}{8}{subsection.2.1}%
-\contentsline {subsubsection}{\numberline {2.1.1}Interfaz}{8}{subsubsection.2.1.1}%
-\contentsline {subsubsection}{\numberline {2.1.2}Representación}{8}{subsubsection.2.1.2}%
-\contentsline {subsubsection}{\numberline {2.1.3}Implementación}{9}{subsubsection.2.1.3}%
-\contentsline {subsection}{\numberline {2.2}Módulo SimCity}{10}{subsection.2.2}%
-\contentsline {subsubsection}{\numberline {2.2.1}Interfaz}{10}{subsubsection.2.2.1}%
-\contentsline {subsubsection}{\numberline {2.2.2}Representación}{12}{subsubsection.2.2.2}%
-\contentsline {subsubsection}{\numberline {2.2.3}Implementación}{16}{subsubsection.2.2.3}%
-\contentsline {subsection}{\numberline {2.3}Módulo Servidor}{19}{subsection.2.3}%
-\contentsline {subsubsection}{\numberline {2.3.1}Interfaz}{19}{subsubsection.2.3.1}%
-\contentsline {subsubsection}{\numberline {2.3.2}Representación}{21}{subsubsection.2.3.2}%
-\contentsline {subsubsection}{\numberline {2.3.3}Implementación}{22}{subsubsection.2.3.3}%
+\contentsline {subsection}{\numberline {2.1}Aliases}{8}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Módulo Mapa}{8}{subsection.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.1}Interfaz}{8}{subsubsection.2.2.1}%
+\contentsline {subsubsection}{\numberline {2.2.2}Representación}{9}{subsubsection.2.2.2}%
+\contentsline {subsubsection}{\numberline {2.2.3}Implementación}{10}{subsubsection.2.2.3}%
+\contentsline {subsection}{\numberline {2.3}Módulo SimCity}{11}{subsection.2.3}%
+\contentsline {subsubsection}{\numberline {2.3.1}Interfaz}{11}{subsubsection.2.3.1}%
+\contentsline {subsubsection}{\numberline {2.3.2}Representación}{13}{subsubsection.2.3.2}%
+\contentsline {subsubsection}{\numberline {2.3.3}Implementación}{18}{subsubsection.2.3.3}%
+\contentsline {subsection}{\numberline {2.4}Módulo Servidor}{21}{subsection.2.4}%
+\contentsline {subsubsection}{\numberline {2.4.1}Interfaz}{21}{subsubsection.2.4.1}%
+\contentsline {subsubsection}{\numberline {2.4.2}Representación}{23}{subsubsection.2.4.2}%
+\contentsline {subsubsection}{\numberline {2.4.3}Implementación}{24}{subsubsection.2.4.3}%

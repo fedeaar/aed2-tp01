@@ -4,7 +4,7 @@
     \tadGeneros{Server}
     \vspace{2mm}
     
-    \tadExporta{Server, observadores,\ generadores,\ verMapa,\ verCasas,\ verComercios,\ verPopularidad y\\ verTurno}
+    \tadExporta{Server, observadores,\ generadores,\ verMapa,\ verCasas,\ verComercios,\ verPopularidad, \\ agregarCasa,\ agregarComercio\ y verTurno}
     \vspace{2mm}
     
     \tadUsa{SimCity,\ Mapa,\ Nombre,\ Pos,\ Construcción,\ Nivel,\ Nat,\ Bool,\ dicc($\alpha$ $\times$ $\beta$),\ conj($\alpha$)}
@@ -12,17 +12,14 @@
     
     \tadIgualdadObservacional{s}{s'}{Server}{
         partidas($s$) $\igobs$ partidas($s'$) \yluego \\
-        congeladas($s$) $\igobs$ congeladas($s'$) $\land$ \\
-        ($\forall$ $p$: Nombre)(def?($p$, partidas($s$)) \impluego \\
-        \tab pendientes($s,\ p$) $\igobs$ pendientes($s',\ p$))
+        congeladas($s$) $\igobs$ congeladas($s'$)
     }
     \vspace{2mm}
 
     \tadObservadores
     \tadAlinearFunciones{pendientes}{Server/s, Nombre/p}
     \tadOperacion{partidas}{Server}{dicc(Nombre $\times$ SimCity)}{}
-    \tadOperacion{congeladas}{Server}{conj(Nombre)}{}
-    \tadOperacion{pendientes}{Server/s, Nombre/p}{dicc(Pos $\times$ Construcción)}{def?($p$, partidas($s$))}        
+    \tadOperacion{congeladas}{Server}{conj(Nombre)}{}  
     \vspace{2mm}
 
     \tadGeneradores
@@ -30,10 +27,8 @@
     \tadOperacion{nuevoServer}{}{Server}{}
     \tadOperacion{nuevaPartida}{Server /s, Nombre /p, Mapa}{Server}{$\neg$ def?($p$, partidas($s$))}
     \tadOperacion{unirPartidas}{Server /s, Nombre /p1, Nombre /p2}{Server}{unionValida($s$, $p1$, $p2$)$^{1}$}
-    \tadOperacion{agregarCasa}{Server /s, Nombre  /p, Pos /pos}{Server}{agregarValido($s$, $p$, $pos$)$^{1}$}
-    \tadOperacion{agregarComercio}{Server /s, Nombre /p, Pos /pos}{Server}{agregarValido($s$, $p$, $pos$)$^{1}$}
-    \tadAlinearFunciones{avanzarTurnoPartida}{Server /s, Nombre /p1, Nombi}
-    \tadOperacion{avanzarTurnoPartida}{Server /s, Nombre /p}{Server}{avanzarValido($s$, $p$)$^{1}$} 
+    \tadAlinearFunciones{avanzarTurnoPartida}{Server /s, Nombre /p, dicc(Pos $\times$ Construcción)/ cs}
+    \tadOperacion{avanzarTurnoPartida}{Server /s, Nombre /p, dicc(Pos $\times$ Construcción) /cs}{Server}{avanzarValido($s$, $p$)$^{1}$} 
     \vspace{2mm}
     
     \tadOtrasOperaciones
@@ -43,6 +38,9 @@
     \tadOperacion{verComercios}{Server /s, Nombre /p}{dicc(Pos $\times$ Nivel)}{def?($p$, partidas($s$))}
     \tadOperacion{verPopularidad}{Server /s, Nombre /p}{Nat}{def?($p$, partidas($s$))}
     \tadOperacion{verTurno}{Server /s, Nombre /p}{Nat}{def?($p$, partidas($s$))}
+    \tadAlinearFunciones{agregarComercio}{Server /s, Nombre /p1, Nombre /p2}
+    \tadOperacion{agregarCasa}{Server /s, Nombre  /p, Pos /pos}{Server}{agregarValido($s$, $p$, $pos$)$^{1}$}
+    \tadOperacion{agregarComercio}{Server /s, Nombre /p, Pos /pos}{Server}{agregarValido($s$, $p$, $pos$)$^{1}$}
     \vspace{2mm}
 
     \tadAxiomas
@@ -60,19 +58,15 @@
         definir($p$,\ iniciar($m$),\ partidas($s$))
     }
     \tadAxioma{partidas(unirPartidas($s$,\ $p$,\ $p'$))}{
-        definir($p1$,\ $\\$ 
-        \tab unir(obtener($p1$,\ partidas($s$)),\ obtener($p2$,\ partidas($s$))), %$\\$ 
+        definir($p$,\ \\ 
+        \tab unir(obtener($p$, partidas($s$)), \\
+        \tab\tab obtener($p'$, partidas($s$))), \\
         \tab partidas($s$))
     }
-    \tadAxioma{partidas(agregarCasa($s$,\ $p$,\ $pos$))}{
-        partidas($s$)
-    }
-    \tadAxioma{partidas(agregarComercio($s$,\ $p$,\ $pos$))}{
-        partidas($s$)
-    }
-    \tadAxioma{partidas(avanzarTurnoPartida($s$,\ $p$))}{
-        definir($p$,\ $\\$
-        \tab avanzarTurno(obtener($p$,\ partidas($s$)),\ pendientes($s$,\ $p$)), %$\\$
+    \tadAlinearAxiomas{partidas(avanzarTurnoPartida($s$, $p$, $cs$))}
+    \tadAxioma{partidas(avanzarTurnoPartida($s$, $p$, $cs$))}{
+        definir($p$, \\
+        \tab avanzarTurno(obtener($p$,\ partidas($s$)),\ $cs$), \\
         \tab partidas($s$))
     }
     \vspace{2mm}
@@ -81,8 +75,6 @@
     \tadAxioma{congeladas(nuevoServer)}{$\emptyset$}         
     \tadAxioma{congeladas(nuevaPartida($s$,\ $p$,\ $m$))}{congeladas($s$)}
     \tadAxioma{congeladas(unirPartidas($s$,\ $p$,\ $p'$))}{Ag($p'$,\ congeladas($s$))}
-    \tadAxioma{congeladas(agregarCasa($s$,\ $p$,\ $pos$))}{congeladas($s$)}
-    \tadAxioma{congeladas(agregarComercio($s$,\ $p$,\ $pos$))}{congeladas($s$)}
     \tadAxioma{congeladas(avanzarTurnoPartida($s$,\ $p$))}{congeladas($s$)}
     \vspace{2mm}
 
@@ -91,34 +83,9 @@
     \item definido en el apartado Definiciones Auxiliares de Servidor.
 }
 \newpage
-
-    \tadAlinearAxiomas{pendientes(agregarComercio(s,\ p,\ pos), p')}
-    \tadAxioma{pendientes(nuevaPartida($s$,\ $p$,\ $m$),\ $p'$)}{
-        $\LIF$\ $p$ = $p'$\ $\LTHEN$\ vacio\ $\LELSE$\ pendientes($s$,\ $p'$)\ $\LFI$
-    }
-    \tadAxioma{pendientes(unirPartidas($s$,\ $p$,\ $p'$),\ $p''$)}{
-        pendientes($s$,\ $p''$) 
-    }
-    \tadAxioma{pendientes(agregarCasa($s$,\ $p$,\ $pos$),\ $p'$)}{
-        $\LIF$\ $p$ = $p'$\ $\LTHEN$\ $\\$
-        \tab definir($pos$,\ $"casa"$,\ pendientes($s$,\ $p$)) $\\$
-        $\LELSE$\ $\\$
-        \tab pendientes($s$,\ $p'$)\ $\\$
-        $\LFI$
-    }
-    \tadAxioma{pendientes(agregarComercio($s$,\ $p$,\ $pos$), $p'$)}{
-        $\LIF$\ $p$ = $p'$\ $\LTHEN$\ $\\$
-        \tab definir($pos$,\ $"comercio"$,\ pendientes($s$,\ $p$)) $\\$
-        $\LELSE$\ $\\$
-        \tab pendientes($s$,\ $p'$)\ $\\$
-        $\LFI$
-    }     
-    \tadAxioma{pendientes(avanzarTurnoPartida($s$,\ $p$),\ $p'$)}{
-        $\LIF$\ $p$ = $p'$\ $\LTHEN$\ vacio\ $\LELSE$\ pendientes($s$,\ $p'$)\ $\LFI$
-    } 
-        
+     
     \vspace{2mm}
-    \tadEncabezado{otros ax.}{\paratodo{Server}{s},\ \paratodo{Nombre}{p}}
+    \tadEncabezado{otros ax.}{\paratodo{Server}{s},\ \paratodo{Nombre}{p}, \paratodo{Pos}{pos}}
     \vspace{1mm}
 
     \tadAlinearAxiomas{verPopularidad($s$,\ $p$)}
@@ -137,6 +104,13 @@
     \tadAxioma{verTurno($s$,\ $p$)}{
         turnos(obtener($p$,\ partidas($s$)))
     }
+    \tadAlinearAxiomas{agregarComercio($s$, $p$, $pos$)}
+    \tadAxioma{agregarCasa($s$, $p$, $pos$)}{
+        avanzarTurnoPartida($s$, $p$, definir($pos$, $"casa"$, vacio))
+    }
+    \tadAxioma{agregarComercio($s$, $p$, $pos$)}{
+        avanzarTurnoPartida($s$, $p$, definir($pos$, $"comercio"$, vacio))
+    }
     \vspace{1mm}
         
 \end{tad}
@@ -148,24 +122,28 @@
 \tadOperacion{unionValida}{Server /s, Nombre /p, Nombre /p'}{boolean}{}
 \tadAxioma{unionValida($s$,\ $p$,\ $p'$)}{
         def?($p$,\ partidas($s$))\ $\land$\ def?($p'$,\ partidas($s$))\ $\land$\ $p$\ $\notin$\ congeladas($s$)\ $\yluego$\ $\\$
-        %\land\ p'\ \notin\ congeladas(s)\ 
-        vacio?(claves(pendientes($s$,\ $p$)))\ $\land$\ vacio?(claves(pendientes($s$,\ $p'$)))\ $\land$\ $\\$
         unirValido(obtener($p$,\ partidas($s$)), obtener($p'$,\ partidas($s$)))$^{1}$           
 }
 \vspace{2mm}
 
-\tadOperacion{avanzarValido}{Server /s, Nombre /p}{boolean}{}
-\tadAxioma{avanzarValido($s$,\ $p$)}{
-        def?($p$,\ partidas($s$))\ $\land$\ $p$\ $\notin$\ congeladas($s$)\ $\yluego$\ $\\$
-        $\neg$ vacio?(claves(pendientes(obtener($p$, partidas($s$)))))\ 
+\tadOperacion{avanzarValido}{Server /s, Nombre /p, dicc(Pos $\times$ Construcción) /cs}{boolean}{}
+\tadAxioma{avanzarValido($s$,\ $p$, $cs$)}{
+        def?($p$, partidas($s$))\ $\land$ \\
+        $p$\ $\notin$\ congeladas($s$)\ $\land$\ \\
+        $\neg$ vacia?(claves($cs$))\ $\yluego$\ \\
+        ($\forall$ $pos$: Pos)($pos \in\ $claves($cs$) $\impluego$ \\
+            \tab obtener($pos,\ cs$)\ $\in$\ $\{"casa",\ "comercio"\}\ \land\ $ \\
+            \tab $\neg$ esRio($pos$,\ verMapa($s,\ p$))\ $\land$\ \\
+            \tab $\neg$ def?($pos$,\ verCasas($s,\ p$))\ $\land$\ \\
+            \tab $\neg$ def?($pos$,\ verComercios($s,\ p$)) \\
+        )
 }
 \vspace{2mm}
 
 \tadOperacion{agregarValido}{Server /s, Nombre /p, Pos /pos}{boolean}{}
 \tadAxioma{agregarValido($s$, $p$, $pos$)}{
-        def?($p$, partidas($s$))\ $\land$\ $p$ $\notin$ congeladas($s$)\ $\yluego$\  
-        $\lnot$ def?($pos$,\ pendientes($s$,\ $p$))\ $\land$ $\\$
-        $\lnot$ def?($pos$, verCasas($s$, $p$))\ $\wedge$\ $\lnot$ def?($pos$, verComercios($s$, $p$))\ $\wedge$\ $\\$
+        def?($p$, partidas($s$))\ $\land$\ $p$ $\notin$ congeladas($s$)\ $\yluego$\ \\ 
+        $\lnot$ def?($pos$, verCasas($s$, $p$))\ $\wedge$\ $\lnot$ def?($pos$, verComercios($s$, $p$))\ $\wedge$\ \\
         $\lnot$ esRio($pos$,\ verMapa($s$,\ $p$))
 }
 
