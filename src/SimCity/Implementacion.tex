@@ -1,12 +1,10 @@
 \begin{Algoritmos} \\
-    \noindent Interpretamos \ que \ el \ \textbf{inout} \ se \ refiere \ a \ que \ determinado \ parametro \ esta \ siendo \ modificado\\
-    y \ se \ toma \ por \ contexto \ si \ pasa \ por \ referencia.\\
-    \\
-    Sea \ U \ $\equiv$ \ \{u$_1$, \ u$_2$, \ ... \ , \ u$_n$\}\\
-    tal \ que \ cada \ uno \ de \ esos \ u$_i$ \ son \ los \ simcities \ que \ componen \ al \ simcity \ original\\
-    llamamos \ nodos \ : \ $ \# $U\\
-    llamamos \ sumConstrucciones \ : \ $\sum_{i=1}^{nodos}$(copiar(u$_i$.construcciones))\\
-    llamamos \ sumMapas \ : \ $\sum_{i=1}^{nodos}$(u$_i$.mapa)\\
+    \noindent Observación: Interpretamos que el \textbf{inout} se refiere a la mutabilidad de un parametro. Se toma por contexto si pasa por copia o referencia.\\
+    Sea U $\equiv$ \{u$_1$, u$_2$, ... , u$_n$\}, 
+    tal que cada uno de esos u$_i$ representa un SimCity anidado al simcity original.\\
+    Llamamos nodos : $ \# $U.\\
+    Llamamos sumConstrucciones : $\sum_{i=1}^{nodos}$(copiar(u$_i$.construcciones)).\\
+    Llamamos sumMapas : $\sum_{i=1}^{nodos}$(u$_i$.mapa).\\
     \\
     \makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
     \textbf{iniciar}(\textbf{in \ }m: \ Mapa) \ $\longrightarrow$ \ res \ : \ res\\
@@ -60,9 +58,9 @@
     8:\indent \indent \indent  \  \ definirRapido(res, \ p, \ s.turno \ - \ (i+1))\\
     9:\indent \indent  \  \ avanzar(itCs) \ \\
     \textbf{Complejidad}: \ O($\sum_{i=1}^{long(s.construcciones)}$($ \# $claves(*s.construcciones[i])))\\
-    Justificaci\'on: \ (2) \ recorre \ cada \ uno \ de \ los \ diccionarios \ definidos \ en \ s.construcciones \ y\\
-    para \ cada \ uno \ recorre \ todas \ las \ definiciones \ del \ mismo, \ (4). \ Por \ lo \ tanto \ la \ \textbf{complejidad} \ del\\
-    algoritmo \ es \ la \ suma \ de \ todas \ las \ construcciones \ definidas \ en \ ese \ SimCity.\\
+    \textbf{Justificaci\'on:} \ (2) recorre cada uno de los diccionarios definidos en s.construcciones y,\\
+    para cada uno, recorre todas las definiciones del mismo: (4). Por lo tanto, la \textbf{complejidad} del\\
+    algoritmo es la suma de todas las construcciones definidas en ese SimCity.\\
     \makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
     \\
     \makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
@@ -81,41 +79,42 @@
     12: \ \textbf{return} \ res\\
     \textbf{Complejidad}: \ O(sumConstrucciones$^2$ \ * \ nodos \ + \ nodos)\\
     \textbf{Justificaci\'on}: \ \\
-    Sabemos \ que \ este \ algoritmo \ va \ a \ recorrer \ por \ cada \ SimCity \ que \ pertenece \ al \ SimCity \ inicial \ 1 \ vez. \ \\
-    Ya \ que \ el \ paso \ recursivo \ (4) \ llama \ a \ un \ simcity \ como \ hijo \ de \ otro \ simcity \ y \ cada \ simcity \ como \
-    maximo \ es \ hijo \ de \ 1 \ solo \ otro \ simcity\\
-    --$>$ \ nodos\\
+    Sabemos que este algoritmo va a recorrer, por cada SimCity que pertenece al SimCity inicial, una sola vez. \\
+    Ya que el paso recursivo (4) llama a un SimCity, como hijo de otro SimCity, y cada SimCity como \
+    máximo es hijo de un solo otro SimCity.\\
+    Entonces: nodos\\
     \\
-    En \ cada \ una \ de \ estas \ recursiones, \ primero \ (1) \ y \ (2) \ van \ a \ generar \ un \ diccionario \ con \ las \ casas \
-    y \ los \ comercios \ de \ ese \ simcity \ particular.\\
-    Si \ repetimos \ este \ procedimiento \ para \ cada \ uno \ de \ los \ Simcities \ que \ pertenecen \ al \ simcity \ original \ 
-    vamos \ a \ estar \ recorriendo \ 1 \ vez \ las \ construcciones \ de \ cada \ simcity \ por \ lo \ tanto \ la \ suma \ de \ recorrer \ 
-    las \ construcciones \ de \ cada \ uno \ es \ igual \ a \ sumConstrucciones.\\
-    --$>$ \ sumConstrucciones\\
+    En cada una de estas recursiones, primero (1) y (2) van a generar un diccionario con las casas \
+    y los comercios de ese SimCity particular.\\
+    Si repetimos este procedimiento para cada uno de los Simcities que pertenecen al SimCity original, 
+    vamos a estar recorriendo una vez las construcciones de cada SimCity. Por lo tanto, la suma de recorrer 
+    las construcciones de cada uno es igual a sumConstrucciones.\\
+    Entonces: sumConstrucciones\\
     \\
-    (3) \ = \ $ \# $(hijos \ de \ simCity \ particular)\\
-    (5) \ = \ $ \# $(casas \ totales \ de \ un \ hijo \ particular)\\
-    (8) \ = \ $ \# $(comerciosTotales) \ + \ $ \# $(casasTotales) \ = \ sumConstrucciones\\
-    (3) \ * \ (5) \ * \ (8) \ = \ (casasTotales) \ * \ sumConstrucciones \ $\leq$ \ sumConstrucciones$^2$\\
-    por \ lo \ tanto \ si \ hace \ en \ el \ peor \ caso \ sumConstrucciones$^2$ \ para \ cada \ Simcity \ particular \ \\
-    --$>$ \ sumConstrucciones$^2$ \ * \ nodos\\
+    (3) = $ \# $(hijos de SimCity particular)\\
+    (5) = $ \# $(casas totales de un hijo particular)\\
+    (8) = $ \# $(comerciosTotales) + $ \# $(casasTotales) = sumConstrucciones\\
+    (3) * (5) * (8) = (casasTotales) * sumConstrucciones $\leq$ sumConstrucciones$^2$\\
+    Por lo tanto, se hace en el peor caso sumConstrucciones$^2$ para cada SimCity particular. \\
+    Entonces: sumConstrucciones$^2$ * nodos\\
     \\
-    luego \ en \ (11) \ hace \ la \ union \ de \ los \ comercios \ que \ ya \ analizo \ con \ los \ comercios \ del \ simcity \ que \ acaba \
-    de \ analizar \ pero \ esta \ accion \ la \ hace \ 1 \ sola \ vez \ por \ simcity. \ Pero \ como \ la \ union \ es \ por \ copia \ y \ no \ por \
-    referencia \ esto \ es \ sumConstrucciones$^2$ \ para \ cada \ simcity \ particular.\\
-    --$>$ \ sumConstrucciones$^2$ \ * \ nodos\\
+    Luego, en (11), hace la unión de los comercios que ya analizó con los comercios del SimCity que acaba \
+    de analizar, pero esta acción la hace una sola vez por SimCity. Pero, como la unión es por copia, y no por \
+    referencia, esto es sumConstrucciones$^2$ para cada SimCity particular.\\
+    Entonces: sumConstrucciones$^2$ * nodos\\
     \\
-    finalmente: \ nodos \ + \ sumConstrucciones \ + \ sumConstrucciones$^2$ \ * \ nodos \ + \ sumConstrucciones$^2$ \ * \ nodos\\
-    --$>$ \ sumConstrucciones$^2$ \ * \ nodos \ + \ nodos\\
+    Finalmente: nodos + sumConstrucciones + sumConstrucciones$^2$ * nodos + sumConstrucciones$^2$ * nodos\ $\implies$ sumConstrucciones$^2$ * nodos + nodos\\
     \makebox[\linewidth]{\rule{\textwidth}{0.4pt}} 
-
+    \newpage
     \noindent\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
     \textbf{comercios}(\textbf{in \ }SimCity \ s) \ $\rightarrow $ \ res \ : \ dicc(Pos, \ Nivel)\\
     1: \  \ dicc(Pos, \ Nivel) \ casasTotales \ $\leftarrow$ \ casas(s)\\
     2: \  \ dicc(Pos, \ Nivel) \ comerciosTotales \ $\leftarrow$ \ comerciosAux(s, \ casasTotales)\\
     2: \  \ \textbf{return} \ manhatizar(comerciosTotales, \ casasTotales)\\
     \textbf{Complejidad}: \ O(manhatizar(comerciosAux(s, \ casasTotales), \ casasTotales) \ + \ casas(s))\\
+    \makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
     \\
+    \makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
     \textbf{comerciosAux}(\textbf{inout} \ SimCity \ s, \ \textbf{inout} \ casasTotales) \ $\rightarrow $ \ res \ : \ dicc(Pos, \ Nivel)\\
     1: \  \ dicc(pos, \ nivel) \ res \ $\leftarrow$ \ copiar(listDeTipo(s, \ ``comercio''))\\
     3: \  \ \textbf{for}(nat \ i \ $\leftarrow$ \ 0; \ i \ $<$ \ long(s.uniones); \ i \ $\leftarrow$ \ i \ + \ 1) \ : \ \\
@@ -128,9 +127,11 @@
     10:\indent \indent  \ avanzar(itCs)\\
     11: \ \textbf{return} \ res\\
     \textbf{Complejidad}: \ O(sumConstrucciones$^2$ \ * \ nodos \ + \ nodos)\\
-    \textbf{Justificaci\'on}: \ El \ algoritmo \ es \ muy \ similar \ al \ de \ casas \ por \ lo \ tanto \ su \
-    justificacion \ es \ muy \ similar\\
+    \textbf{Justificaci\'on}: El algoritmo es muy similar al de casas por lo tanto su \
+    justificacion es muy similar.\\
+    \makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
     \\
+    \makebox[\linewidth]{\rule{\textwidth}{0.4pt}}
     \textbf{manhatizar}(\textbf{inout} \ dicc(Pos, \ Nivel) \ comercios, \ \textbf{in \ }dicc(Pos, \ Nivel) \ casasTotales) \ \\
     1: \  \ itDicc(Pos, \ Nivel) \ itCs \ $\leftarrow$ \ crearIt(comercios)\\
     2: \  \ \textbf{while}(haySiguiente(itCs)) \ :\\

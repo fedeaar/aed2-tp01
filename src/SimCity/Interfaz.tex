@@ -31,7 +31,7 @@
     %[$\bold{O}(\sum_{i = 0}^{N}{(hasta_i \times casas_i)})$, \textcolor{red}{enrealidad falta tmb sumarle el camino hasta u_i}  \\ \tab 
     %    donde $hasta_i$ y $casas_i$ son respectivamente la cantidad de casas definidas$^{3}$ en $\{u_0\ ...\ u_{i - 1}\}$ y $u_i$.$^{4}$ 
     %]
-    [$\bold{O}(construcciones^{2})\ +\ \bold{O}(N)$ %$\supset$ $\Theta(\sum_{i = 0}^{N}{(hasta_i \times casas_i + camino_i)})$, 
+    [$\bold{O}(N\ \times\ construcciones^{2})\ +\ \bold{O}(N)$ %$\supset$ $\Theta(\sum_{i = 0}^{N}{(hasta_i \times casas_i + camino_i)})$, 
         %\\ \tab donde $hasta_i$ y $casas_i$ son respectivamente la cantidad de casas definidas$^{3}$ en $\{u_0\ ...\ u_{i - 1}\}$ y $u_i$$^{4}%$, 
         %\\ \tab y $camino_i$ representa la cantidad de uniones para llegar de $S$ a $u_i$$^{5}$.$^{6}$
         \\ \underline{justificación:} Una implementación de SimCity debe poder, en el peor caso, retornar una copia de todas sus casas en tiempo lineal sobre el conjunto que las representa. Pero, dado que es esperable que un SimCity, compuesto por un conjunto de uniones, sea representado como un árbol, podemos suponer que para resolver colisiones del tipo 'se queda el primero', cada nueva casa a copiar debe primero evaluar si no pertenece ya a los niveles superiores, incluyendo también a los comercios. Resultando en un peor caso, holgado, de O($construcciones^2$), donde no hay colisiones. Dado que un SimCity puede no tener construcciones si está recién iniciado, se debe considerar que el peor caso también puede estar dado por la cantidad de nodos a recorrer en el árbol. Es decir O($N$). Por ejemplo, 
@@ -44,7 +44,7 @@
     \InterfazFuncion
     {comercios}{\In{S}{SimCity}}{DiccLineal(Pos,\ Nivel)}
     {$\hat{res}\ \igobs\ $comercios$(\hat{S})$}
-    [$\bold{O}(construcciones^{2})\ +\ \bold{O}(N)$
+    [$\bold{O}(N\ \times\ construcciones^{2})\ +\ \bold{O}(N)$
     \\ \underline{justificación}: similiar a $casas(s)$.] %En este caso también se debe calcular el nivel de cada comercio en relación a las casas en distancia manhattan $\leq$ 3. Pero, ]%$ $\supset$ $\Theta(\sum_{i = 0}^{N}{(hasta_i \times comercios_i \times casas + camino_i)})$,\\ \tab
         %donde $hasta_i$ y $comercios_i$ son respectivamente la cantidad de comercios definidos en $\{u_0\ ...\ u_{i - 1}\}$ y $u_i$, 
         %\\ \tab y $camino_i$ representa la cantidad de uniones para llegar de S a $u_i$.$^{7}$ 
