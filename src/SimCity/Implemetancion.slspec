@@ -131,20 +131,18 @@ Complejidad: O(sumConstrucciones² * nodos + nodos)
 Justificacion : El algoritmo es muy similar al de casas por lo tanto su
 justificacion es muy similar
 
-bbb{manhatizar}(inout dicc(Pos, Nivel) comercios, inout dicc(Pos, Nivel) casasTotales) 
+bbb{manhatizar}(inout dicc(Pos, Nivel) comercios, in dicc(Pos, Nivel) casasTotales) 
 1:  itDicc(Pos, Nivel) itCs ← crearIt(comercios)
 2:  while(haySiguiente(itCs)) :
-3:      Pos p ← copia(siguienteClave(itCs))
-4:      Nivel n ← copia(siguienteSignificado(itCs))
-5:      eliminarSiguiente(itCs)
-6:      definirRapido(comercios, p, max(n, nivelCom(p, casasTotales)))
-Complejidad: O(#claves(comercios) * #claves(casasTotales))
-Justificación: en (2) recorremos todas las claves de los comercios y de manera anidada en (6) 
-en nivelCom recorremos 1 vez las #casasTotales por lo tanto #claves(comercios) * #claves(casasTotales)
+3:      Pos p ← siguienteClave(itCs)
+4:      Nivel n ← siguienteSignificado(itCs)
+5:      definir(comercios, p, max(n, nivelCom(p, casasTotales)))
+Complejidad: O(sumConstrucciones²)
+Justificación: 
 -------------------------------------------
 
 -------------------------------------------
-bbb{nivelCom}(in Pos p, inout dicc(pos, Nivel) cs) ➝ Nat
+bbb{nivelCom}(in Pos p, in dicc(pos, Nivel) cs) ➝ Nat
 1:  nat maxLvl ← 1
 2:  for(int i = -3; i <= 3; ++i) :
 3:      for(int j = |i|-3; j <= 3-|i|; ++j) :
@@ -157,19 +155,19 @@ Complejidad: O(#claves(cs))
 -------------------------------------------
 
 -------------------------------------------
-bbb{popularidad}(inout SimCity s) ➝ res : Nat
+bbb{popularidad}(in SimCity s) ➝ res : Nat
 1:  return s.popularidad
 Complejidad: O(1)
 -------------------------------------------
 
 -------------------------------------------
-bbb{turnos}(inout SimCity s) ➝ res : Nat
+bbb{turnos}(in SimCity s) ➝ res : Nat
 1:  return s.antiguedad
 Complejidad: O(1)
 -------------------------------------------
 
 -------------------------------------------
-• ⋃ •(inout dicc(α, β) d1, inout dicc(α, β) d2) ➝ res : dicc(α, β)
+• ⋃ •(in dicc(α, β) d1, in dicc(α, β) d2) ➝ res : dicc(α, β)
 1:  dicc(α, β) res = copiar(d1)
 2:  itDicc(α, β) itCs ← crearIt(d2);
 3:  while(haySiguiente(itCs)) :

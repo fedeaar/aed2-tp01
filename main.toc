@@ -14,7 +14,7 @@
 \contentsline {subsubsection}{\numberline {2.3.1}Interfaz}{11}{subsubsection.2.3.1}%
 \contentsline {subsubsection}{\numberline {2.3.2}Representación}{13}{subsubsection.2.3.2}%
 \contentsline {subsubsection}{\numberline {2.3.3}Implementación}{18}{subsubsection.2.3.3}%
-\contentsline {subsection}{\numberline {2.4}Módulo Servidor}{21}{subsection.2.4}%
-\contentsline {subsubsection}{\numberline {2.4.1}Interfaz}{21}{subsubsection.2.4.1}%
-\contentsline {subsubsection}{\numberline {2.4.2}Representación}{23}{subsubsection.2.4.2}%
-\contentsline {subsubsection}{\numberline {2.4.3}Implementación}{24}{subsubsection.2.4.3}%
+\contentsline {subsection}{\numberline {2.4}Módulo Servidor}{22}{subsection.2.4}%
+\contentsline {subsubsection}{\numberline {2.4.1}Interfaz}{22}{subsubsection.2.4.1}%
+\contentsline {subsubsection}{\numberline {2.4.2}Representación}{24}{subsubsection.2.4.2}%
+\contentsline {subsubsection}{\numberline {2.4.3}Implementación}{25}{subsubsection.2.4.3}%
