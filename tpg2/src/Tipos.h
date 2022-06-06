@@ -19,9 +19,20 @@ using Casilla = pair<int, int>;
 
 using Jugador = string;
 
+using Nombre = string;
+
 enum Direccion {
-    Horizontal, Vertical
+    Horizontal, Vertical // y, x
 };
 
+enum Construccion {
+    casa,
+    comercio
+};
+
+struct Pos {
+    Nat x{};
+    Nat y{};
+};
 #endif // TIPOS_H
 
