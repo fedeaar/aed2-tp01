@@ -21,11 +21,11 @@ public:
     void agregarCasa(Nombre n, const Pos& p);
     void agregarComercio(Nombre n, const Pos& p);
 
-    Mapa verMapa(Nombre n);
-    std::map<Casilla, Nat> verCasas(Nombre n);
-    std::map<Casilla, Nat> verComercios(Nombre n);
-    Nat verPopularidad(Nombre n);
-    Nat verTurnos(Nombre n);
+    Mapa verMapa(Nombre n) const;
+    std::map<Casilla, Nat> verCasas(Nombre n) const;
+    std::map<Casilla, Nat> verComercios(Nombre n) const;
+    Nat verPopularidad(Nombre n) const;
+    Nat verTurnos(Nombre n) const;
 
 private:
     struct Partida {

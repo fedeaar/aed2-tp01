@@ -29,18 +29,18 @@ void Servidor::agregarCasa(Nombre n, const Pos& p) {}
 void Servidor::agregarComercio(Nombre n, const Pos& p) {}
 
 
-Mapa Servidor::verMapa(Nombre n) {}
+Mapa Servidor::verMapa(Nombre n) const {}
 
 
-std::map<Casilla, Nat> Servidor::verCasas(Nombre n) {}
+std::map<Casilla, Nat> Servidor::verCasas(Nombre n) const {}
 
 
-std::map<Casilla, Nat> Servidor::verComercios(Nombre n) {}
+std::map<Casilla, Nat> Servidor::verComercios(Nombre n) const {}
 
 
-Nat Servidor::verPopularidad(Nombre n) {}
+Nat Servidor::verPopularidad(Nombre n) const {}
 
 
-Nat Servidor::verTurnos(Nombre n) {}
+Nat Servidor::verTurnos(Nombre n) const {}
 
 

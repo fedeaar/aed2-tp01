@@ -35,7 +35,8 @@ public:
     Nat antiguedad(Jugador j) const;
 
 private:
-    // Completar
+    Servidor _s;
+    DiccTrie<map<Pos, Construccion>> _pendientes;
 };
 
 #endif // AED2_SERVIDOR_H
