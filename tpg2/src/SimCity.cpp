@@ -4,22 +4,25 @@
 SimCity::SimCity(Mapa m) {}
 
 
+SimCity::SimCity(const SimCity& aCopiar) {}
+
+
 SimCity::~SimCity() {}
 
 
-Mapa SimCity::mapa() {}
+Mapa SimCity::mapa() const {}
 
 
-std::map<Casilla, Nat> SimCity::casas() {}
+std::map<Casilla, Nat> SimCity::casas() const {}
 
 
-std::map<Casilla, Nat> SimCity::comercios() {}
+std::map<Casilla, Nat> SimCity::comercios() const {}
 
 
-Nat SimCity::popularidad() {}
+Nat SimCity::popularidad() const {}
 
 
-Nat SimCity::turnos() {}
+Nat SimCity::turnos() const {}
 
 
 void SimCity::avanzarTurno(const std::map<Casilla, Construccion>& cs) {}

@@ -6,25 +6,19 @@ aed2_Servidor::aed2_Servidor() {}
 
 void aed2_Servidor::nuevaPartida(Jugador j, set<int> horizontales, set<int> verticales) {
     Mapa m(horizontales, verticales);
-    map<Pos, Construccion> cs;
+    map<Casilla, Construccion> cs;
     _s.nuevaPartida(j, m);
     _pendientes.insert(make_pair(j, cs));
 }
 
 
 void aed2_Servidor::agregarCasa(Jugador j, Casilla c) {
-    Pos p;
-    p.x = c.first;
-    p.y = c.second;
-    _pendientes.at(j).insert(p, casa);
+    _pendientes.at(j).insert(make_pair(c, casa));
 }
 
 
 void aed2_Servidor::agregarComercio(Jugador j, Casilla c) {
-    Pos p;
-    p.x = c.first;
-    p.y = c.second;
-    _pendientes.at(j).insert(p, comercio);
+    _pendientes.at(j).insert(make_pair(c, comercio));
 }
 
 

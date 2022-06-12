@@ -36,7 +36,7 @@ public:
 
 private:
     Servidor _s;
-    DiccTrie<map<Pos, Construccion>> _pendientes;
+    DiccTrie<map<Casilla, Construccion>> _pendientes;
 };
 
 #endif // AED2_SERVIDOR_H

@@ -1,46 +1,85 @@
 #include "Servidor.h"
 
 
-Servidor::Servidor() {}
+// CONSTRUCTOR
+Servidor::Servidor(): _partidas() {}
 
 
 Servidor::~Servidor() {}
 
 
-DiccTrie<SimCity> Servidor::partidas() {}
+// FUNCIONES
+DiccTrie<SimCity> Servidor::partidas() {
+    DiccTrie<SimCity> res{};
+    for (auto it = _partidas.begin(); it != _partidas.end(); ++it) {
+        res[it.clave()] = SimCity(*it.significado().sc);
+    }
+    return res;
+}
 
 
-std::set<Nombre> Servidor::congeladas() {}
+std::set<Nombre> Servidor::congeladas() {
+    std::set<Nombre> res{};
+    for (auto it = _partidas.begin(); it != _partidas.end(); ++it) {
+        if (!it.significado().modificable) {
+            res.insert(it.clave());
+        }
+    }
+    return res;
+}
 
 
-void Servidor::nuevaPartida(Nombre n, const Mapa& m) {}
+void Servidor::nuevaPartida(const Nombre& n, const Mapa& m) {
+    _partidas[n] = Partida(m);
+}
 
 
-void Servidor::unirPartidas(Nombre n, Nombre m) {}
+void Servidor::unirPartidas(const Nombre& n, const Nombre& m) {
+    _partidas[n].sc.unir(_partidas[m].sc);
+}
 
 
-
-void Servidor::avanzarTurnoPartida(Nombre n, const std::map<Pos, Construccion>& cs) {}
-
-
-void Servidor::agregarCasa(Nombre n, const Pos& p) {}
+void Servidor::avanzarTurnoPartida(const Nombre& n, const std::map<Casilla, Construccion>& cs) {
+    _partidas[n].sc.avanzarTurno(cs);
+}
 
 
-void Servidor::agregarComercio(Nombre n, const Pos& p) {}
+void Servidor::agregarCasa(const Nombre& n, const Casilla& p) {
+    std::map<Casilla, Construccion> cs {};
+    cs.insert(std::make_pair(p, casa));
+    _partidas[n].sc.avanzarTurno(cs);
+}
 
 
-Mapa Servidor::verMapa(Nombre n) const {}
+void Servidor::agregarComercio(const Nombre& n, const Casilla& p) {
+    std::map<Casilla, Construccion> cs {};
+    cs.insert(std::make_pair(p, comercio));
+    _partidas[n].sc.avanzarTurno(cs);
+}
 
 
-std::map<Casilla, Nat> Servidor::verCasas(Nombre n) const {}
+Mapa Servidor::verMapa(const Nombre& n) const {
+    return _partidas[n].sc.mapa();
+}
 
 
-std::map<Casilla, Nat> Servidor::verComercios(Nombre n) const {}
+std::map<Casilla, Nat> Servidor::verCasas(const Nombre& n) const {
+    return _partidas[n].sc.casas();
+}
 
 
-Nat Servidor::verPopularidad(Nombre n) const {}
+std::map<Casilla, Nat> Servidor::verComercios(const Nombre& n) const {
+    return _partidas[n].sc.comercios();
+}
 
 
-Nat Servidor::verTurnos(Nombre n) const {}
+Nat Servidor::verPopularidad(const Nombre& n) const {
+    return _partidas[n].sc.popularidad();
+}
+
+
+Nat Servidor::verTurnos(const Nombre& n) const {
+    return _partidas[n].sc.turnos();
+}
 
 

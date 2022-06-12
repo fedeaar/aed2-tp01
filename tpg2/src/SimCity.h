@@ -7,13 +7,14 @@
 class SimCity {
 public:
     SimCity(Mapa m);
+    SimCity(const SimCity& aCopiar);
     ~SimCity();
 
-    Mapa mapa();
-    std::map<Casilla, Nat> casas();
-    std::map<Casilla, Nat> comercios();
-    Nat popularidad();
-    Nat turnos();
+    Mapa mapa() const;
+    std::map<Casilla, Nat> casas() const;
+    std::map<Casilla, Nat> comercios() const;
+    Nat popularidad() const;
+    Nat turnos() const;
 
     void avanzarTurno(const std::map<Casilla, Construccion>& cs);
     void unir(const SimCity& otro);
@@ -28,7 +29,7 @@ private:
     Nat _turno;
     Nat _popularidad;
     Mapa _mapa;
-    std::list<std::map<Pos, Construccion>*> _construcciones;
+    std::list<std::map<Casilla, Construccion>*> _construcciones;
     std::list<Hijo> _uniones;
 };
 
