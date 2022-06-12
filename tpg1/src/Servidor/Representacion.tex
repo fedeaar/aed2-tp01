@@ -28,7 +28,21 @@
                 ((def?($partida_{1},\ e$) $\wedge$ def?($partida_{2},\ e$) $\wedge\ partida_{1} \neq partida_{2}$) \impluego \\
                 \tab obtener($partida_{1},\ e$).sim $\neq$ obtener($partida_{2},\ e$).sim \\
             )\ $\wedge$ \\
-            ($\forall\ partida$: Nombre)(def?($partida,\ e$) \impluego\ obtener($partida,\ e$).sim $\neq$ NULL)
+            ($\forall\ partida$: Nombre)(def?($partida,\ e$) \impluego\ obtener($partida,\ e$).sim $\neq$ NULL) \\
+            $\wedge$ \\
+            ($\forall\ partida$: Nombre)$^{1}$(def?($partida,\ e$) \impluego \\
+                \tab ($\neg$ obtener($partida,\ e$).modificable $\Leftrightarrow$ \\
+                \tab ($\exists\ otra$: Nombre)(def?($otra,\ e$) \yluego \\
+                    \tab\tab ($\exists\ hijo$: Hijo)(está?($hijo$, *(obtener($otra,\ e$).sim).uniones) $\wedge$ \\
+                        \tab\tab\tab $hijo$.sc $\igobs$ obtener($partida,\ e$).sim) \\
+                \tab )) \\
+            ) $\wedge$ \\
+            ($\forall\ partida$: Nombre)$^{2}$(def?($partida,\ e$) \impluego \\
+                \tab ($\forall\ hijo$: Hijo)(esta?($hijo$, *(obtener($partida,\ e$).sim).uniones) $\Rightarrow$ \\
+                    \tab\tab ($\exists\ otra$: Nombre)(def?($otra,\ e$) \yluego \\ 
+                        \tab\tab\tab obtener($otra,\ e$).sim $\igobs$ $hijo$.sc) \\
+                \tab) \\
+            ) 
       }
     \vspace{2mm}
 

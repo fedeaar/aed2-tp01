@@ -201,31 +201,6 @@
         \\ donde proximo $\equiv$ dameUno(claves($d'$)) 
     }
 
-    
-    %Quiero eliminar las claves que aparecen en ambos dicc en cs'
-    %\vspace{2mm}
-    \tadAxioma{sacarRepes($cs,\ cs'$)}{
-        $\LIF$ vacio?(claves($cs$)) $\LTHEN$ \\
-            \tab $cs'$ \\
-        $\LELSE$ $\LIF$ def?(proximo, $cs'$) $\LTHEN$ \\ %Hay repetido
-                \tab sacarRepes(borrar(proximo, $cs$), borrar(proximo, $cs'$)) \\
-        $\LELSE$ \\
-            \tab sacarRepes(borrar(proximo, $cs$),  $cs'$) \\
-        $\LFI$
-        \\ donde proximo $\equiv$ dameUno(claves($cs$))
-    }
-
-    \pie{
-        \vfill{}
-        \item definido en el apartado Definiciones Auxiliares de SimCity.
-        \item las funciones $\mathbf{agCasas}$ y $\mathbf{agComercios}$ agregan respectivamente al diccionario de casas/comercios las construcciones 
-        de entrada sin importar si esas posiciones ya se encontraban ocupadas o no. Esto no genera un problema en avanzar turno, por sus 
-        restricciones, pero si al unir SimCitys (ya que podrian haber colisiones). Para solucionar esto, sacarRepes quita del diccionario
-        de entrada las posiciones ocupadas por construcciones ya establecidas. Es decir, como resolución al conflicto de
-        colisiones, las construcciones que permanecen son las del SimCity original.
-        
-    }
-
     \tadAxioma{avanzarNivel(cs)}{
         $\LIF$ vacio?(claves($cs$)) $\LTHEN$ \\
             \tab $cs$ \\
@@ -235,6 +210,31 @@
             \tab\tab avanzarNivel(borrar(dameUno(claves($cs$))), $cs$)) \\
         $\LFI$
     }
+
+    %Quiero eliminar las claves que aparecen en ambos dicc en cs'
+    %\vspace{2mm}
+    %\tadAxioma{sacarRepes($cs,\ cs'$)}{
+    %    $\LIF$ vacio?(claves($cs$)) $\LTHEN$ \\
+    %        \tab $cs'$ \\
+    %    $\LELSE$ $\LIF$ def?(proximo, $cs'$) $\LTHEN$ \\ %Hay repetido
+    %            \tab sacarRepes(borrar(proximo, $cs$), borrar(proximo, $cs'$)) \\
+    %    $\LELSE$ \\
+    %        \tab sacarRepes(borrar(proximo, $cs$),  $cs'$) \\
+    %    $\LFI$
+    %    \\ donde proximo $\equiv$ dameUno(claves($cs$))
+    %}
+
+    \pie{
+        \vfill{}
+        \item definido en el apartado Definiciones Auxiliares de SimCity.
+        %\item las funciones $\mathbf{agCasas}$ y $\mathbf{agComercios}$ agregan respectivamente al diccionario de casas/comercios las construcciones 
+        %de entrada sin importar si esas posiciones ya se encontraban ocupadas o no. Esto no genera un problema en avanzar turno, por sus 
+        %restricciones, pero si al unir SimCitys (ya que podrian haber colisiones). Para solucionar esto, sacarRepes quita del diccionario
+        %de entrada las posiciones ocupadas por construcciones ya establecidas. Es decir, como resolución al conflicto de
+        %colisiones, las construcciones que permanecen son las del SimCity original.
+        
+    }
+
     \vspace{1mm}
 
     \tadAxioma{unirConst($cs,\ cn,\ cn'$)}{
