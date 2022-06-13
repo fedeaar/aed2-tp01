@@ -2,7 +2,7 @@
 #define STRING_MAP_H_
 
 #include <string>
-#include <map>
+#include <list>
 
 /**
  * DiccTrie implementa un diccionario de string sobre una estructura de trie.
@@ -96,15 +96,22 @@ private:
         Nodo* siguientes[C]{};
         Nodo* anterior = nullptr;
         T* definicion = nullptr;
+        typename std::list<std::tuple<std::string, Nodo*>>::iterator _clave;
     };
 
     Nodo* _raiz;
     std::size_t _size;
+    std::list<std::tuple<std::string, Nodo*>> _claves;
 
     /**
      * copia recursivamente el árbol C-ario.
      */
     Nodo* _copiar(Nodo* raiz);
+
+    /**
+     * copia las claves del árbol C-ario.
+     */
+    void _copiar_claves(const DiccTrie<T, C>& otro);
 
     /**
      * elimina recursivamente el árbol C-ario.
@@ -127,14 +134,14 @@ public:
 
     class iterator {
 
-    // ITERADOR
+        // ITERADOR
     public:
 
         /**
          CONSTRUCTOR INICIAL
          * crea un iterador apuntando a la primer clave.
          **/
-        explicit iterator(Nodo* raiz=nullptr);
+        explicit iterator(typename std::list<std::tuple<std::string, Nodo*>>::iterator actual);
 
         /**
          OPERADOR ==
@@ -175,13 +182,9 @@ public:
         T& significado();
         const T& significado() const;
 
-    // ESTRUCTURA Y AUX
+        // ESTRUCTURA Y AUX
     private:
-        std::string _clave;
-        Nodo* _actual;
-
-        std::tuple<Nodo*, std::string> _avanzar(Nodo* raiz, std::string& clave, std::size_t correr=0);
-        std::tuple<Nodo*, std::string> _proxima(Nodo* raiz, std::string& clave, bool skip=false, std::size_t correr=0);
+        typename std::list<std::tuple<std::string, Nodo*>>::iterator _it;
     };
 
     /**
@@ -195,6 +198,78 @@ public:
      * crea un iterador invalido que demarca el final de una iteración.
      **/
     iterator end();
+
+
+    class iterator_ordenado {
+
+    // ITERADOR
+    public:
+
+        /**
+         CONSTRUCTOR INICIAL
+         * crea un iterador apuntando a la primer clave.
+         **/
+        explicit iterator_ordenado(Nodo* raiz=nullptr);
+
+        /**
+         OPERADOR ==
+         * evalúa si dos iteradores son iguales
+         **/
+        bool operator==(const iterator_ordenado& otro);
+
+        /**
+         OPERADOR !=
+         * evalúa si dos iteradores son distintos
+         **/
+        bool operator!=(const iterator_ordenado& otro);
+
+        /**
+         OPERADOR ++
+         * avanza el iterador a la próxima clave.
+         **/
+        void operator++();
+
+        /**
+         NEXT
+         * avanza el iterador a la próxima clave.
+         **/
+        void next();
+
+        /**
+         CLAVE
+         * retorna la clave asociada al iterador.
+         **/
+        const std::string& clave();
+
+        /**
+         SIGNIFICADO
+         * retorna el significado asociado al iterador.
+         -- PRODUCE ALIASING --
+         * -- Versión modificable y no modificable
+         **/
+        T& significado();
+        const T& significado() const;
+
+    // ESTRUCTURA Y AUX
+    private:
+        std::string _clave;
+        Nodo* _actual;
+
+        std::tuple<Nodo*, std::string> _avanzar(Nodo* raiz, std::string& clave, std::size_t correr=0);
+        std::tuple<Nodo*, std::string> _proxima(Nodo* raiz, std::string& clave, bool skip=false, std::size_t correr=0);
+    };
+
+    /**
+     BEGIN ORDENADO
+     * crea un nuevo iterador a las claves del diccionario, ejecuta en orden.
+     **/
+    iterator_ordenado begin_ordenado();
+
+    /**
+     END ORDENADO
+     * crea un iterador ordenado invalido que demarca el final de una iteración.
+     **/
+    iterator_ordenado end_ordenado();
 };
 
 

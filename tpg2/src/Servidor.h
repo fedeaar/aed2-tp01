@@ -27,20 +27,20 @@ public:
      PARTIDAS
      * retorna una copia de las partidas en el SimCity.
      * Complejidad: O(SUM(i=0, N, copy(SimCity_i))
-     **/ //TODO: CHECK complejidad / cambiar implementacion del iterador
+     **/
     DiccTrie<SimCity> partidas();
 
     /**
      CONGELADAS
      * retorna el conjunto de Nombres de las partidas congeladas.
      * Complejidad: O(N)  donde N es la cantidad de partidas definidas
-     */ //TODO: CHECK complejidad / cambiar implementacion del iterador
+     **/
     std::set<Nombre> congeladas();
 
     /**
      NUEVA PARTIDA
      * crea una nueva partida de SimCity.
-     * Complejidad: O(copy(Mapa))    TODO: CHECK
+     * Complejidad: O(copy(Mapa))
      **/
     void nuevaPartida(const Nombre& n, const Mapa& m);
 
@@ -113,8 +113,8 @@ public:
 private:
 
     struct Partida {
-        explicit Partida(const Mapa& m): sc(SimCity(m)), modificable(false) {};
-        SimCity sc;
+        explicit Partida(const Mapa& m): sc(new SimCity(m)), modificable(false) {};
+        SimCity *sc;
         bool modificable;
     };
 

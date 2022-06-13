@@ -5,11 +5,13 @@
 #include "Mapa.h"
 
 class SimCity {
+
+// FUNCIONALIDAD SIMCITY
 public:
     SimCity(Mapa m);
     ~SimCity();
 
-    operator=(const SimCity& aCopiar);
+    void operator=(const SimCity& aCopiar);
     Mapa mapa() const;
     std::map<Casilla, Nat> casas() const;
     std::map<Casilla, Nat> comercios() const;
@@ -19,12 +21,15 @@ public:
     void avanzarTurno(const std::map<Casilla, Construccion>& cs);
     void unir(const SimCity& otro);
 
+// ESTRUCTURA Y AUX
 private:
+
     struct Hijo {
         Hijo(SimCity* s, Nat t): sc(s), turnoUnido(t) {};
         SimCity* sc;
         Nat turnoUnido;
     };
+
     Nat _antiguedad;
     Nat _turno;
     Nat _popularidad;

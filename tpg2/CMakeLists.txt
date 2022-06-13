@@ -36,12 +36,15 @@ if (WITH_GUI)
 endif (WITH_GUI)
 
 add_executable(correrTests ${SOURCE_FILES} tests/servidor-tests.cpp)
+add_executable(correrTests_Dicc ${SOURCE_FILES} tests/DiccTrie_tests.cpp)
 
 # Necesitamos asociar los archivos del framework de testing
 target_link_libraries(correrTests gtest gtest_main)
+target_link_libraries(correrTests_Dicc gtest gtest_main)
 
 # Test suites a ejecutar
 add_test(correrTests servidor_test)
+add_test(correrTests_Dicc DiccTrie_test)
 
 # Target para correr Valgrind
 add_custom_target(correrValgrind
