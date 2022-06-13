@@ -33,12 +33,12 @@
             ($\forall\ partida$: Nombre)$^{1}$(def?($partida,\ e$) \impluego \\
                 \tab ($\neg$ obtener($partida,\ e$).modificable $\Leftrightarrow$ \\
                 \tab ($\exists\ otra$: Nombre)(def?($otra,\ e$) \yluego \\
-                    \tab\tab ($\exists\ hijo$: Hijo)(está?($hijo$, *(obtener($otra,\ e$).sim).uniones) $\wedge$ \\
+                    \tab\tab ($\exists\ hijo$: Hijo)(está?($hijo$, uniones(*(obtener($otra,\ e$).sim))) $\wedge$ \\
                         \tab\tab\tab $hijo$.sc $\igobs$ obtener($partida,\ e$).sim) \\
                 \tab )) \\
             ) $\wedge$ \\
             ($\forall\ partida$: Nombre)$^{2}$(def?($partida,\ e$) \impluego \\
-                \tab ($\forall\ hijo$: Hijo)(esta?($hijo$, *(obtener($partida,\ e$).sim).uniones) $\Rightarrow$ \\
+                \tab ($\forall\ hijo$: Hijo)(esta?($hijo$, uniones(*(obtener($partida,\ e$).sim))) $\Rightarrow$ \\
                     \tab\tab ($\exists\ otra$: Nombre)(def?($otra,\ e$) \yluego \\ 
                         \tab\tab\tab obtener($otra,\ e$).sim $\igobs$ $hijo$.sc) \\
                 \tab) \\

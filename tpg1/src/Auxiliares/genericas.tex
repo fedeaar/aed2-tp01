@@ -19,3 +19,32 @@
 \par%
 
 \vspace{3mm}
+\begin{tad}{\tadNombre{dicc'($\alpha \times \beta$)} extiende dicc($\alpha \times \beta$)}
+
+    \vspace{2mm}
+    dicc'($\alpha \times \beta$) se define equivalentemente a \tadNombre{dicc($\alpha \times \beta$)}, pero agrega las siguientes operaciones nuevas:
+
+    \vspace{2mm}
+    \tadExporta{$\bullet\ \cup_{dicc'}\ \bullet$}
+
+    \vspace{2mm}
+    \tadOtrasOperaciones
+    \tadOperacion{$\bullet\ \cup_{dicc'}\ \bullet$}{dicc'($\alpha$, $\beta$),dicc'($\alpha$, $\beta$)}{dicc'($\alpha$ $\times$ $\beta$)}{}
+
+    \vspace{2mm}
+    \tadEncabezado{otros ax.}{
+        \paratodo {dicc'($\alpha$ $\times$ $\beta$)}{d,\ d'}
+    }
+
+    \tadAxioma{$d$ $\cup_{dicc'}$ $d'$}{
+        $\LIF$ vacio?(claves($d'$)) $\LTHEN$ \\
+            \tab $d$ \\
+        $\LELSE$ $\LIF$ $\lnot$ def?(proximo, $d$) $\LTHEN$ \\
+            \tab definir(proximo, obtener(proximo, $d'$), $d$) $\cup_{dicc'}$ borrar(proximo, $d'$) \\
+        $\LELSE$ \\
+            \tab $d$ $\cup_{dicc'}$ borrar(proximo, $d'$) \\
+        $\LFI$
+        \\ donde proximo $\equiv$ dameUno(claves($d'$)) 
+    }
+
+\end{tad}

@@ -1,12 +1,13 @@
 \begin{tad}{\tadNombre{SimCity}}
+    
     \vspace{0.5mm}
     \tadGeneros{SimCity}
 
     \vspace{2mm}
-    \tadExporta{SimCity, observadores, generadores, turnos, $\bullet\ \cup_{dicc}\ \bullet$}
+    \tadExporta{SimCity, observadores, generadores, turnos, uniones}
 
     \vspace{2mm}
-    \tadUsa{Mapa, Nat, Pos, Construcción, Nivel, dicc($\alpha\ \times\ \beta$)}
+    \tadUsa{Mapa, Nat, Pos, Construcción, Nivel, dicc'($\alpha\ \times\ \beta$), conj($\alpha$)}
     
     \vspace{2mm}
     \tadIgualdadObservacional{s}{s'}{SimCity}{
@@ -21,16 +22,16 @@
     
     \tadObservadores
     \tadOperacion{mapa}{SimCity}{Mapa}{}
-    \tadOperacion{casas}{SimCity}{dicc(Pos $\times$ Nivel)}{}
-    \tadOperacion{comercios}{SimCity}{dicc(Pos $\times$ Nivel)}{}
+    \tadOperacion{casas}{SimCity}{dicc'(Pos $\times$ Nivel)}{}
+    \tadOperacion{comercios}{SimCity}{dicc'(Pos $\times$ Nivel)}{}
     \tadOperacion{popularidad}{SimCity}{Nat}{}
     
-    \tadAlinearFunciones{avanzarTurno}{SimCity/s,dicc(Pos,Construccion)/cs}
+    \tadAlinearFunciones{avanzarTurno}{SimCity/s,dicc'(Pos,Construccion)/cs}
     
     \vspace{2mm}
     \tadGeneradores
     \tadOperacion{iniciar}{Mapa}{SimCity}{}
-    \tadOperacion{avanzarTurno}{SimCity/s,dicc(Pos,Construccion)/cs}{SimCity}{avanzarValido($s$,\ $cs$)$^{1}$}
+    \tadOperacion{avanzarTurno}{SimCity/s,dicc'(Pos,Construccion)/cs}{SimCity}{avanzarValido($s$,\ $cs$)$^{1}$}
     %posiciones no estan ocupadas y no son ríos
     \tadOperacion{unir}{SimCity/a,SimCity/b}{SimCity}{unirValido($a$,\ $b$)$^{1}$}
     %ríos no elimnan construcciones y no se pisan construcciones de nivel máximo
@@ -38,45 +39,45 @@
 
     \vspace{2mm}
     \tadOtrasOperaciones
-    \tadAlinearFunciones{construcciones}{dicc($\alpha$, $\beta$),dicc($\alpha$, $\beta$)}
+    \tadAlinearFunciones{construcciones}{dicc'($\alpha$, $\beta$),dicc'($\alpha$, $\beta$)}
     \tadOperacion{turnos}{SimCity}{Nat}{}
-    %Junta los diccionarios casas y comercios
-    \tadOperacion{construcciones}{SimCity}{dicc(Pos $\times$ Nivel)}{}
+    \tadOperacion{uniones}{SimCity}{conj(SimCity)}{}
+    %Junta los dicc'ionarios casas y comercios
+    \tadOperacion{construcciones}{SimCity}{dicc'(Pos $\times$ Nivel)}{}
     %Calcula las construcciones de mayor nivel
         %\tadOperacion{masNivel}{SimCity}{conj(Pos)}{}
-        %\tadOperacion{masNivelAux}{dicc(Pos, Nivel),Nat}{conj(Pos)}{}
+        %\tadOperacion{masNivelAux}{dicc'(Pos, Nivel),Nat}{conj(Pos)}{}
     %Calcula el nivel mas alto de entre todas las construcciones
-        %\tadOperacion{nivelMaximo}{dicc(Pos, Nivel)}{Nat}{}
-    %Junta dos diccionarios de casas
-    \tadAlinearFunciones{construcciones}{SimCity,dicc(Pos, Nivel),dicc(Pos $\times$ Construcción)}
+        %\tadOperacion{nivelMaximo}{dicc'(Pos, Nivel)}{Nat}{}
+    %Junta dos dicc'ionarios de casas
+    \tadAlinearFunciones{construcciones}{SimCity,dicc'(Pos, Nivel),dicc'(Pos $\times$ Construcción)}
     
-    \tadOperacion{agCasas}{dicc(Pos, Nivel),dicc(Pos, Construcción)}{dicc(Pos $\times$ Nivel)}{}
-    %Junta dos diccionarios de comercios
-    \tadOperacion{agComercios}{dicc(Pos, Nivel),dicc(Pos, Construcción)}{dicc(Pos $\times$ Nivel)}{}
+    \tadOperacion{agCasas}{dicc'(Pos, Nivel),dicc'(Pos, Construcción)}{dicc'(Pos $\times$ Nivel)}{}
+    %Junta dos dicc'ionarios de comercios
+    \tadOperacion{agComercios}{dicc'(Pos, Nivel),dicc'(Pos, Construcción)}{dicc'(Pos $\times$ Nivel)}{}
     %Calcula el nivel de un comercio al ser agregado al SimCity
-    \tadOperacion{nivelComercio}{Pos,Nat,dicc(Pos, Nivel)}{Nat}{}
+    \tadOperacion{nivelComercio}{Pos,Nat,dicc'(Pos, Nivel)}{Nat}{}
     %Calcula la distancia Manhattan de dos posiciones
     \tadOperacion{distManhattan}{Pos,Pos}{Nat}{}
-    \tadOperacion{$\bullet\ \cup_{dicc}\ \bullet$}{dicc($\alpha$, $\beta$),dicc($\alpha$, $\beta$)}{dicc($\alpha$ $\times$ $\beta$)}{}
-
+    
     %\vspace{2mm}
     
-    %Devuelve el diccionario de conostrucciones a distancia manhattan <= 3 
-    %\tadOperacion{conjManhatt}{Pos,dicc(Pos, Nivel)}{dicc(Pos, Nivel)}{}
-     %Devuelve el segundo diccionario sin las claves que tambien aparecian en el primero
-    \tadAlinearFunciones{avanzarNivel}{dicc(Pos, Construcción),dicc(Pos, Construcción)}
-    \tadOperacion{sacarRepes}{dicc(Pos, Construcción),dicc(Pos, Construcción)}{dicc(Pos $\times$ Construcción)}{}
-    \tadOperacion{avanzarNivel}{dicc(Pos, Nivel)}{dicc(Pos, Nivel)}{}
-    \tadAlinearFunciones{manhatizar}{dicc(Pos, Construccion),dicc(Pos, Nivel),dicc(Pos, Nivel)}
-    \tadOperacion{unirConst}{dicc(Pos, Construccion),dicc(Pos, Nivel),dicc(Pos, Nivel)}{dicc(Pos, Nivel)}{}
-    \tadOperacion{manhatizar}{dicc(Pos, Nivel),dicc(Pos, Nivel)}{dicc(Pos, Nivel)}{}
+    %Devuelve el dicc'ionario de conostrucciones a distancia manhattan <= 3 
+    %\tadOperacion{conjManhatt}{Pos,dicc'(Pos, Nivel)}{dicc'(Pos, Nivel)}{}
+     %Devuelve el segundo dicc'ionario sin las claves que tambien aparecian en el primero
+    \tadAlinearFunciones{avanzarNivel}{dicc'(Pos, Construcción),dicc'(Pos, Construcción)}
+    \tadOperacion{sacarRepes}{dicc'(Pos, Construcción),dicc'(Pos, Construcción)}{dicc'(Pos $\times$ Construcción)}{}
+    \tadOperacion{avanzarNivel}{dicc'(Pos, Nivel)}{dicc'(Pos, Nivel)}{}
+    \tadAlinearFunciones{manhatizar}{dicc'(Pos, Construccion),dicc'(Pos, Nivel),dicc'(Pos, Nivel)}
+    \tadOperacion{unirConst}{dicc'(Pos, Construccion),dicc'(Pos, Nivel),dicc'(Pos, Nivel)}{dicc'(Pos, Nivel)}{}
+    \tadOperacion{manhatizar}{dicc'(Pos, Nivel),dicc'(Pos, Nivel)}{dicc'(Pos, Nivel)}{}
    
     \vspace{2mm}
     %\newpage
     \tadAxiomas[
         \paratodo{simcity}{s,\ s'}, 
         \paratodo{Mapa}{m},
-        \paratodo{dicc(Pos $\times$ Construcción)}{cs}
+        \paratodo{dicc'(Pos $\times$ Construcción)}{cs}
         ]
     \vspace{1mm}
     \tadAlinearAxiomas{mapa(avanzarTurno($s,\ cs$))}
@@ -125,14 +126,19 @@
     }
 
     \vspace{2mm}
-    \tadEncabezado{otros ax.}{\paratodo{simcity}{s}, \paratodo{Pos}{p,\ q}, \paratodo{dicc(Pos $\times$ Construcción)}{cs,\ cs'}, 
-    \paratodo{dicc(Pos $\times$ Nivel)}{cn,\ cn'}, \\
-    \paratodo {dicc($\alpha$ $\times$ $\beta$)}{d,\ d'}
+    \tadAlinearAxiomas{uniones(avanzarTurno($s,\ cs$))}
+    \tadAxioma{uniones(iniciar($m$))}{$\emptyset$}
+    \tadAxioma{uniones(avanzarTurno($s,\ cs$))}{uniones($s$)}
+    \tadAxioma{uniones(unir($s,\ s'$))}{Ag($s'$, uniones($s$))}
+
+    \vspace{2mm}
+    \tadEncabezado{otros ax.}{\paratodo{simcity}{s}, \paratodo{Pos}{p,\ q}, \paratodo{dicc'(Pos $\times$ Construcción)}{cs,\ cs'}, 
+    \paratodo{dicc'(Pos $\times$ Nivel)}{cn,\ cn'}
     }
     \vspace{1mm}
     \tadAlinearAxiomas{agComercios($s,\ cn,\ cs$)}
 
-    \tadAxioma{construcciones($s$)}{casas($s$) $\cup_{dicc}$ comercios($s$)}
+    \tadAxioma{construcciones($s$)}{casas($s$) $\cup_{dicc'}$ comercios($s$)}
     
     \tadAxioma{agCasas($cn,\ cs$)}{
         $\LIF$ vacio?(claves($cs$)) $\LTHEN$ \\ 
@@ -190,16 +196,7 @@
     }
 
     %\vspace{2mm}
-    \tadAxioma{$d$ $\cup_{dicc}$ $d'$}{
-        $\LIF$ vacio?(claves($d'$)) $\LTHEN$ \\
-            \tab $d$ \\
-        $\LELSE$ $\LIF$ $\lnot$ def?(proximo, $d$) $\LTHEN$ \\
-            \tab definir(proximo, obtener(proximo, $d'$), $d$) $\cup_{dicc}$ borrar(proximo, $d'$) \\
-        $\LELSE$ \\
-            \tab $d$ $\cup_{dicc}$ borrar(proximo, $d'$) \\
-        $\LFI$
-        \\ donde proximo $\equiv$ dameUno(claves($d'$)) 
-    }
+    
 
     \tadAxioma{avanzarNivel(cs)}{
         $\LIF$ vacio?(claves($cs$)) $\LTHEN$ \\
@@ -211,7 +208,7 @@
         $\LFI$
     }
 
-    %Quiero eliminar las claves que aparecen en ambos dicc en cs'
+    %Quiero eliminar las claves que aparecen en ambos dicc' en cs'
     %\vspace{2mm}
     %\tadAxioma{sacarRepes($cs,\ cs'$)}{
     %    $\LIF$ vacio?(claves($cs$)) $\LTHEN$ \\
@@ -224,16 +221,6 @@
     %    \\ donde proximo $\equiv$ dameUno(claves($cs$))
     %}
 
-    \pie{
-        \vfill{}
-        \item definido en el apartado Definiciones Auxiliares de SimCity.
-        %\item las funciones $\mathbf{agCasas}$ y $\mathbf{agComercios}$ agregan respectivamente al diccionario de casas/comercios las construcciones 
-        %de entrada sin importar si esas posiciones ya se encontraban ocupadas o no. Esto no genera un problema en avanzar turno, por sus 
-        %restricciones, pero si al unir SimCitys (ya que podrian haber colisiones). Para solucionar esto, sacarRepes quita del diccionario
-        %de entrada las posiciones ocupadas por construcciones ya establecidas. Es decir, como resolución al conflicto de
-        %colisiones, las construcciones que permanecen son las del SimCity original.
-        
-    }
 
     \vspace{1mm}
 
@@ -250,6 +237,17 @@
         \\ donde proximo $\equiv$ dameUno(claves($cn'$)) 
     }\vspace{1mm}
 
+    \pie{
+        \vfill{}
+        \item definido en el apartado Definiciones Auxiliares de SimCity.
+        %\item las funciones $\mathbf{agCasas}$ y $\mathbf{agComercios}$ agregan respectivamente al dicc'ionario de casas/comercios las construcciones 
+        %de entrada sin importar si esas posiciones ya se encontraban ocupadas o no. Esto no genera un problema en avanzar turno, por sus 
+        %restricciones, pero si al unir SimCitys (ya que podrian haber colisiones). Para solucionar esto, sacarRepes quita del dicc'ionario
+        %de entrada las posiciones ocupadas por construcciones ya establecidas. Es decir, como resolución al conflicto de
+        %colisiones, las construcciones que permanecen son las del SimCity original.
+        
+    }
+    
     \tadAxioma{manhatizar($cn$, $cn'$)}{
         $\LIF$ vacio?($cn'$) $\LTHEN$ \\
             \tab vacio \\
@@ -263,13 +261,14 @@
     }
 
     
+    
 \end{tad}  
 
 %\newpage
 \Titulo{Definiciones Auxiliares de SimCity}
 \vspace{3mm}
 
-\tadOperacion{avanzarValido}{SimCity/s,dicc(Pos,Construcción)/cs}{boolean}{}
+\tadOperacion{avanzarValido}{SimCity/s,dicc'(Pos,Construcción)/cs}{boolean}{}
 \tadAxioma{avanzarValido($s,\ cs$)}{
     $\lnot$ vacio?(claves($cs$)) $\wedge$ $\\$ 
     ($\forall$ $p$ : Pos) (def?($p$, $cs$) $\impluego$ $\\$
