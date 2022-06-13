@@ -4,22 +4,22 @@
     \tadGeneros{Server}
     \vspace{2mm}
     
-    \tadExporta{Server, observadores,\ generadores,\ verMapa,\ verCasas,\ verComercios,\ verPopularidad, \\ agregarCasa,\ agregarComercio\ y verTurno}
+    \tadExporta{Server, observadores,\ generadores,\ congeladas,\ verMapa,\ verCasas,\ verComercios,\\ verPopularidad,\ agregarCasa,\ agregarComercio\ y verTurno}
     \vspace{2mm}
     
-    \tadUsa{SimCity,\ Mapa,\ Nombre,\ Pos,\ Construcción,\ Nivel,\ Nat,\ Bool,\ dicc($\alpha$ $\times$ $\beta$),\ conj($\alpha$)}
+    \tadUsa{SimCity,\ Mapa,\ Nombre,\ Pos,\ Construcción,\ Nivel,\ Nat,\ Bool,\ dicc'($\alpha$ $\times$ $\beta$),\ conj($\alpha$)}
     \vspace{2mm}
     
     \tadIgualdadObservacional{s}{s'}{Server}{
-        partidas($s$) $\igobs$ partidas($s'$) \yluego \\
-        congeladas($s$) $\igobs$ congeladas($s'$)
+        partidas($s$) $\igobs$ partidas($s'$) %\yluego \\
+        %congeladas($s$) $\igobs$ congeladas($s'$)
     }
     \vspace{2mm}
 
     \tadObservadores
     \tadAlinearFunciones{pendientes}{Server/s, Nombre/p}
-    \tadOperacion{partidas}{Server}{dicc(Nombre $\times$ SimCity)}{}
-    \tadOperacion{congeladas}{Server}{conj(Nombre)}{}  
+    \tadOperacion{partidas}{Server}{dicc'(Nombre $\times$ SimCity)}{}
+    %\tadOperacion{congeladas}{Server}{conj(Nombre)}{}  
     \vspace{2mm}
 
     \tadGeneradores
@@ -27,15 +27,16 @@
     \tadOperacion{nuevoServer}{}{Server}{}
     \tadOperacion{nuevaPartida}{Server /s, Nombre /p, Mapa}{Server}{$\neg$ def?($p$, partidas($s$))}
     \tadOperacion{unirPartidas}{Server /s, Nombre /p1, Nombre /p2}{Server}{unionValida($s$, $p1$, $p2$)$^{1}$}
-    \tadAlinearFunciones{avanzarTurnoPartida}{Server /s, Nombre /p, dicc(Pos $\times$ Construcción)/ cs}
-    \tadOperacion{avanzarTurnoPartida}{Server /s, Nombre /p, dicc(Pos $\times$ Construcción) /cs}{Server}{avanzarValido($s$, $p$)$^{1}$} 
+    \tadAlinearFunciones{avanzarTurnoPartida}{Server /s, Nombre /p, dicc'(Pos $\times$ Construcción)/ cs}
+    \tadOperacion{avanzarTurnoPartida}{Server /s, Nombre /p, dicc'(Pos $\times$ Construcción) /cs}{Server}{avanzarValido($s$, $p$)$^{1}$} 
     \vspace{2mm}
     
     \tadOtrasOperaciones
     \tadAlinearFunciones{verPopularidad}{Server /s, Nombre /p}
+    \tadOperacion{congeladas}{Server}{conj(Nombre)}{}  
     \tadOperacion{verMapa}{Server /s, Nombre /p}{Mapa}{def?($p$, partidas($s$))}
-    \tadOperacion{verCasas}{Server /s, Nombre /p}{dicc(Pos $\times$ Nivel)}{def?($p$, partidas($s$))}        
-    \tadOperacion{verComercios}{Server /s, Nombre /p}{dicc(Pos $\times$ Nivel)}{def?($p$, partidas($s$))}
+    \tadOperacion{verCasas}{Server /s, Nombre /p}{dicc'(Pos $\times$ Nivel)}{def?($p$, partidas($s$))}        
+    \tadOperacion{verComercios}{Server /s, Nombre /p}{dicc'(Pos $\times$ Nivel)}{def?($p$, partidas($s$))}
     \tadOperacion{verPopularidad}{Server /s, Nombre /p}{Nat}{def?($p$, partidas($s$))}
     \tadOperacion{verTurno}{Server /s, Nombre /p}{Nat}{def?($p$, partidas($s$))}
     \tadAlinearFunciones{agregarComercio}{Server /s, Nombre /p1, Nombre /p2}
@@ -126,7 +127,7 @@
 }
 \vspace{2mm}
 
-\tadOperacion{avanzarValido}{Server /s, Nombre /p, dicc(Pos $\times$ Construcción) /cs}{boolean}{}
+\tadOperacion{avanzarValido}{Server /s, Nombre /p, dicc'(Pos $\times$ Construcción) /cs}{boolean}{}
 \tadAxioma{avanzarValido($s$,\ $p$, $cs$)}{
         def?($p$, partidas($s$))\ $\land$ \\
         $p$\ $\notin$\ congeladas($s$)\ $\land$\ \\

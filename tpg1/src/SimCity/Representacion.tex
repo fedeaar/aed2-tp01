@@ -151,13 +151,13 @@ $}
     \vfill
     %\setcounter{enumi}{8}
     \item Se asume el traspaso de toda estructura de representación a su equivalente abstracto 
-    (se aplica el sombrerito).
+    (se aplica el sombrerito). 
     \item Cada hijo apunta a un Simcity válido.
     \item El turno es mayor o igual al turno de cualquier unión inmediata.
     \item Las uniones están ordenadas de más antiguas a más recientes.
-    \item Las construcciones en éste nivel no se solapan.
+    \item Las construcciones en éste nivel no se solapan. Notar que las definiciones de 'unirCasas', 'unirComercios' y demás resuelven los problemas de colisiones entre Uniones de SimCities con una prioridad izquierdista. En este sentido, basta con chequear solo éste nivel por solapamientos, ya que cualquier otra colisión es válida y será resuelta con el método recién descripto. 
     \item Se agregó al menos un conjunto de construcciones por cada turno interno.
-    \item La estructura no loopea consigo misma.
+    \item La estructura no loopea consigo misma. 
     \item La antiguedad es mayor o igual a la antiguedad de cualquier simCity hijo.
     \item La popularidad es igual a la cantidad de uniones total.
     \item Ninguna casa está sobre un río perteneciente a cualquier mapa en la unión.

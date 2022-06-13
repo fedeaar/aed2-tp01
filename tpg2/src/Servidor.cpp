@@ -5,14 +5,18 @@
 Servidor::Servidor(): _partidas() {}
 
 
-Servidor::~Servidor() {}
+Servidor::~Servidor() {
+    for (auto it = _partidas.begin(); it != _partidas.end(); ++it) {
+        delete it.significado().sc;
+    }
+}
 
 
 // FUNCIONES
 DiccTrie<SimCity> Servidor::partidas() {
     DiccTrie<SimCity> res{};
     for (auto it = _partidas.begin(); it != _partidas.end(); ++it) {
-        res[it.clave()] = SimCity(*it.significado().sc);
+        res[it.clave()] = *(it.significado().sc); //TODO: PENSAR la copia
     }
     return res;
 }
@@ -30,56 +34,56 @@ std::set<Nombre> Servidor::congeladas() {
 
 
 void Servidor::nuevaPartida(const Nombre& n, const Mapa& m) {
-    _partidas[n] = Partida(m);
+    _partidas.at(n) = Partida(m);
 }
 
 
 void Servidor::unirPartidas(const Nombre& n, const Nombre& m) {
-    _partidas[n].sc.unir(_partidas[m].sc);
+    _partidas.at(n).sc->unir(*_partidas[m].sc);
 }
 
 
 void Servidor::avanzarTurnoPartida(const Nombre& n, const std::map<Casilla, Construccion>& cs) {
-    _partidas[n].sc.avanzarTurno(cs);
+    _partidas.at(n).sc->avanzarTurno(cs);
 }
 
 
 void Servidor::agregarCasa(const Nombre& n, const Casilla& p) {
     std::map<Casilla, Construccion> cs {};
     cs.insert(std::make_pair(p, casa));
-    _partidas[n].sc.avanzarTurno(cs);
+    _partidas.at(n).sc->avanzarTurno(cs);
 }
 
 
 void Servidor::agregarComercio(const Nombre& n, const Casilla& p) {
     std::map<Casilla, Construccion> cs {};
     cs.insert(std::make_pair(p, comercio));
-    _partidas[n].sc.avanzarTurno(cs);
+    _partidas.at(n).sc->avanzarTurno(cs);
 }
 
 
 Mapa Servidor::verMapa(const Nombre& n) const {
-    return _partidas[n].sc.mapa();
+    return _partidas.at(n).sc->mapa();
 }
 
 
 std::map<Casilla, Nat> Servidor::verCasas(const Nombre& n) const {
-    return _partidas[n].sc.casas();
+    return _partidas.at(n).sc->casas();
 }
 
 
 std::map<Casilla, Nat> Servidor::verComercios(const Nombre& n) const {
-    return _partidas[n].sc.comercios();
+    return _partidas.at(n).sc->comercios();
 }
 
 
 Nat Servidor::verPopularidad(const Nombre& n) const {
-    return _partidas[n].sc.popularidad();
+    return _partidas.at(n).sc->popularidad();
 }
 
 
 Nat Servidor::verTurnos(const Nombre& n) const {
-    return _partidas[n].sc.turnos();
+    return _partidas.at(n).sc->turnos();
 }
 
 

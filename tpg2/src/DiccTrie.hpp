@@ -3,7 +3,7 @@
 
 // CONSTRUCTOR
 template <class T, std::size_t C>
-DiccTrie<T, C>::DiccTrie(): _raiz(new Nodo()), _size(0) {}
+DiccTrie<T, C>::DiccTrie(): _raiz(new Nodo()), _size(0), _claves() {}
 
 
 template <class T, std::size_t C>
@@ -27,6 +27,7 @@ DiccTrie<T, C>& DiccTrie<T, C>::operator=(const DiccTrie<T, C>& d) {
         }
         _raiz = _copiar(d._raiz);
         _size = d._size;
+        _copiar_claves(d);
     }
     return *this;
 }
@@ -40,7 +41,7 @@ T& DiccTrie<T, C>::operator[](const std::string& clave){
     return at(clave);
 }
 template <class T, std::size_t C>
-const T& DiccTrie<T, C>::operator[](const std::string& clave) const {
+const T& DiccTrie<T, C>::operator[](const std::string& clave) const{
     if (!count(clave)) {
         insert(std::make_pair(clave, T{}));
     }
@@ -60,6 +61,7 @@ void DiccTrie<T, C>::insert(const std::pair<std::string, T>& cs) {
     Nodo* padre = std::get<0>(padre_hijo_i);
     Nodo* hijo = std::get<1>(padre_hijo_i);
     std::size_t i = std::get<2>(padre_hijo_i) - 1;
+    // agregar clave
     // definir
     if (hijo != nullptr) { // i == len(clave), redefinir
         delete hijo->definicion;
@@ -76,6 +78,8 @@ void DiccTrie<T, C>::insert(const std::pair<std::string, T>& cs) {
         }
         delete curr->definicion;
         curr->definicion = new T(significado);
+        auto it = _claves.insert(_claves.end(), {clave, curr}); // crear it
+        curr->_clave = it;
     }
     ++_size;
 }
@@ -117,6 +121,7 @@ void DiccTrie<T, C>::erase(const std::string& clave) {
             delete hijo->definicion;
             hijo->definicion = nullptr;
         }
+        _claves.erase(hijo->_clave); // del it
         --_size;
     }
 }
@@ -150,6 +155,16 @@ typename DiccTrie<T, C>::Nodo* DiccTrie<T, C>::_copiar(Nodo* raiz) {
         copia->definicion = nullptr;
     }
     return copia;
+}
+
+
+template <class T, std::size_t C>
+void DiccTrie<T, C>::_copiar_claves(const DiccTrie<T, C>& otro) {
+    _claves.erase(_claves.begin(), _claves.end());
+    for (auto x : otro._claves) {
+        std::tuple<Nodo*, Nodo*, std::size_t> padre_hijo_i = _alcanzar(std::get<0>(x));
+        _claves.insert(_claves.end(), {std::get<0>(x), std::get<1>(padre_hijo_i)});
+    }
 }
 
 
