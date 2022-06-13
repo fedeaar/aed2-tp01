@@ -79,13 +79,12 @@ Nat aed2_Servidor::nivel(Jugador j, Casilla c) const {
     if (comercios.count(c) == 1) {
         return casas[c];
     }
-
     return 0; // Posición no definida
 }
 
 
 bool aed2_Servidor::huboConstruccion(Jugador j) const {
-    return _s.verTurnos(j) == 1; //????? Si esta vacio el SimCity?
+    return _s.verTurnos(j) != 1; //????? Si esta vacio el SimCity?
 }
 
 

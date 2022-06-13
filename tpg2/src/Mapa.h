@@ -41,7 +41,7 @@ public:
     /**
     SUMA
     * Une dos Mapas.
-    * Complejidad: O(copy(this) + copy(b))
+    * Complejidad: O(copy(this) + copy(b)) / O(#horizontales^2 + #verticales^2) CHEQUEAR
     **/
     Mapa operator+(const Mapa& b);
 
