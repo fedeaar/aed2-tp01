@@ -23,7 +23,8 @@ public:
 
 // ESTRUCTURA Y AUX
 private:
-
+    map<Casilla, Nat> listDeTipo(Construccion tipo) const;
+    
     struct Hijo {
         Hijo(SimCity* s, Nat t): sc(s), turnoUnido(t) {};
         SimCity* sc;
@@ -35,6 +36,7 @@ private:
     Nat _popularidad;
     Mapa _mapa;
     std::list<std::map<Casilla, Construccion>*> _construcciones;
+    //std::list<const std::map<Casilla, Construccion>*> _construcciones;
     std::list<Hijo> _uniones;
 };
 
