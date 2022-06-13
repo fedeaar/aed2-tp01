@@ -1,8 +1,11 @@
+using namespace std;
+
 #ifndef TP_SIMCITY_SIMCITY_H
 #define TP_SIMCITY_SIMCITY_H
 
-#include "Tipos.h"
+#include "TiCasilla.h"
 #include "Mapa.h"
+
 
 class SimCity {
 
@@ -13,18 +16,23 @@ public:
 
     void operator=(const SimCity& aCopiar);
     Mapa mapa() const;
-    std::map<Casilla, Nat> casas() const;
-    std::map<Casilla, Nat> comercios() const;
+    map<Casilla, Nat> casas() const;
+    map<Casilla, Nat> comercios() const;
     Nat popularidad() const;
     Nat turnos() const;
 
-    void avanzarTurno(const std::map<Casilla, Construccion>& cs);
+    void avanzarTurno(const map<Casilla, Construccion>& cs);
     void unir(const SimCity& otro);
-
-// ESTRUCTURA Y AUX
+   // ESTRUCTURA Y AUX
 private:
     map<Casilla, Nat> listDeTipo(Construccion tipo) const;
-    
+
+    map<Casilla, Nat> comerciosAux(const map<Casilla, Nat>& casasTotales) const;
+
+    void manhatizar(map<Casilla, Nat>& comercios, const map<Casilla, Nat>& casasTotales) const;
+
+    Nat nivelCom(Casilla p, const map<Casilla, Nat>& cs) const;
+
     struct Hijo {
         Hijo(SimCity* s, Nat t): sc(s), turnoUnido(t) {};
         SimCity* sc;
@@ -35,9 +43,9 @@ private:
     Nat _turno;
     Nat _popularidad;
     Mapa _mapa;
-    std::list<std::map<Casilla, Construccion>*> _construcciones;
-    //std::list<const std::map<Casilla, Construccion>*> _construcciones;
-    std::list<Hijo> _uniones;
+    list<map<Casilla, Construccion>*> _construcciones;
+    //??list<const map<Casilla, Construccion>*> _construcciones;
+    list<Hijo> _uniones;
 };
 
 #endif //TP_SIMCITY_SIMCITY_H
