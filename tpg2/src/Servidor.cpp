@@ -12,7 +12,7 @@ Servidor::~Servidor() {}
 DiccTrie<SimCity> Servidor::partidas() {
     DiccTrie<SimCity> res{};
     for (auto it = _partidas.begin(); it != _partidas.end(); ++it) {
-        res[it.clave()] = SimCity(*it.significado().sc);
+        res[it.clave()] = it.significado().sc; //TODO: PENSAR
     }
     return res;
 }

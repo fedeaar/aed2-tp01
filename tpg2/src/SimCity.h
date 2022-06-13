@@ -7,9 +7,9 @@
 class SimCity {
 public:
     SimCity(Mapa m);
-    SimCity(const SimCity& aCopiar);
     ~SimCity();
 
+    operator=(const SimCity& aCopiar);
     Mapa mapa() const;
     std::map<Casilla, Nat> casas() const;
     std::map<Casilla, Nat> comercios() const;
