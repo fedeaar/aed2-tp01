@@ -3,7 +3,6 @@ using namespace std;
 #ifndef TP_SIMCITY_SIMCITY_H
 #define TP_SIMCITY_SIMCITY_H
 
-#include "TiCasilla.h"
 #include "Mapa.h"
 
 
@@ -34,8 +33,8 @@ private:
     Nat nivelCom(Casilla p, const map<Casilla, Nat>& cs) const;
 
     struct Hijo {
-        Hijo(SimCity* s, Nat t): sc(s), turnoUnido(t) {};
-        SimCity* sc;
+        Hijo(const SimCity* s, Nat t): sc(s), turnoUnido(t) {};
+        const SimCity* sc;
         Nat turnoUnido;
     };
 
@@ -43,8 +42,7 @@ private:
     Nat _turno;
     Nat _popularidad;
     Mapa _mapa;
-    list<map<Casilla, Construccion>*> _construcciones;
-    //??list<const map<Casilla, Construccion>*> _construcciones;
+    list<const map<Casilla, Construccion>*> _construcciones;
     list<Hijo> _uniones;
 };
 
