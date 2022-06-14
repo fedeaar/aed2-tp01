@@ -84,7 +84,8 @@ Nat aed2_Servidor::nivel(Jugador j, Casilla c) const {
 
 
 bool aed2_Servidor::huboConstruccion(Jugador j) const {
-    return _s.verTurnos(j) != 1; //????? Si esta vacio el SimCity?
+    return !_pendientes.at(j).empty();
+    //return _s.verTurnos(j) != 1; //????? Si esta vacio el SimCity?
 }
 
 

@@ -16,7 +16,7 @@ Servidor::~Servidor() {
 DiccTrie<SimCity> Servidor::partidas() {
     DiccTrie<SimCity> res{};
     for (auto it = _partidas.begin(); it != _partidas.end(); ++it) {
-        res[it.clave()] = *(it.significado().sc); //TODO: PENSAR la copia
+        res.insert(std::make_pair(it.clave(), *(it.significado().sc))); //TODO: PENSAR la copia
     }
     return res;
 }
@@ -34,12 +34,12 @@ std::set<Nombre> Servidor::congeladas() {
 
 
 void Servidor::nuevaPartida(const Nombre& n, const Mapa& m) {
-    _partidas.at(n) = Partida(m);
+    _partidas.insert(std::make_pair(n, Partida(m)));
 }
 
 
 void Servidor::unirPartidas(const Nombre& n, const Nombre& m) {
-    _partidas.at(n).sc->unir(*_partidas[m].sc);
+    _partidas.at(n).sc->unir(*_partidas.at(m).sc);
 }
 
 

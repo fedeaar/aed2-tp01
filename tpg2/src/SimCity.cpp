@@ -1,18 +1,19 @@
 #include "SimCity.h"
 
-SimCity::SimCity(Mapa m) : _mapa(m) {
+SimCity::SimCity(Mapa m): _mapa(m) {
     _turno = 0;
     _antiguedad = 0;
     _popularidad = 0;
 }
 
-SimCity::SimCity(const SimCity& aCopiar) {
+SimCity& SimCity::operator=(const SimCity& aCopiar) {
     _turno = aCopiar._turno;
     _antiguedad = aCopiar._antiguedad;
     _popularidad = aCopiar._popularidad;
-    _construcciones = aCopiar._construcciones;
-    _mapa = aCopiar._mapa;
-    _uniones = aCopiar._uniones;  // los struct tienen funcion de copiado?
+    _construcciones = aCopiar._construcciones;  // indef
+    _mapa = aCopiar._mapa;  // indef
+    _uniones = aCopiar._uniones;  // los struct tienen funcion de copiado? no para los punteros
+    return *this;
 }
 
 SimCity::~SimCity() {}

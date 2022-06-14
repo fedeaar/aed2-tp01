@@ -13,7 +13,7 @@ public:
     SimCity(Mapa m);
     ~SimCity();
 
-    void operator=(const SimCity& aCopiar);
+    SimCity& operator=(const SimCity& aCopiar);
     Mapa mapa() const;
     map<Casilla, Nat> casas() const;
     map<Casilla, Nat> comercios() const;
