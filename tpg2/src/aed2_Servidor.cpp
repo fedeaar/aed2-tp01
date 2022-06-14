@@ -24,6 +24,7 @@ void aed2_Servidor::agregarComercio(Jugador j, Casilla c) {
 
 void aed2_Servidor::avanzarTurno(Jugador j) {
     _s.avanzarTurnoPartida(j, _pendientes.at(j));
+    _pendientes.at(j).clear();
 }
 
 
