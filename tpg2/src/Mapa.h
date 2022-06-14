@@ -36,12 +36,12 @@ public:
     * Verifica si en determinada pos hay un río.
     * Complejidad: O(#horizontales + #verticales)
     **/
-    bool esRio(const Pos& p);
+    bool esRio(const Casilla& c);
 
     /**
     SUMA
     * Une dos Mapas.
-    * Complejidad: O(copy(this) + copy(b)) / O(#horizontales^2 + #verticales^2) CHEQUEAR
+    * Complejidad: O(#horizontales(this) * #horizontales(b) + #verticales(this) * #verticales(b)) CHEQUEAR
     **/
     Mapa operator+(const Mapa& b);
 

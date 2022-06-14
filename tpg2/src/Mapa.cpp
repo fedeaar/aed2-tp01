@@ -18,8 +18,8 @@ const std::set<int>& Mapa::verticales() const{
 }
 
 
-bool Mapa::esRio(const Pos& p) {
-    return _hs.count(p.y) == 1 || _vs.count(p.x) == 1;
+bool Mapa::esRio(const Casilla& c) {
+    return _hs.count(c.second) == 1 || _vs.count(c.first) == 1;
 }
 
 

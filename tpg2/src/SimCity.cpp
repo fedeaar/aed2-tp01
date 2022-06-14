@@ -111,4 +111,4 @@ Nat SimCity::nivelCom(Casilla p, const map<Casilla, Nat>& cs) const {
         }
     }
     return maxLvl;
-};
+}
