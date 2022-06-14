@@ -44,12 +44,21 @@ set<int> aed2_Servidor::riosVerticales(Jugador j) const {
 
 set<Casilla> aed2_Servidor::casas(Jugador j) const {
     std::map<Casilla, Nat> cn = _s.verCasas(j);
+    std::map<Casilla, Construccion> pend = _pendientes.at(j);
     std::set<Casilla> res;
-    auto it = cn.begin();
 
+    auto it = cn.begin();
     while (it != cn.end()) {
         res.insert((*it).first);
         it++;
+    }
+
+    auto itP = pend.begin();
+    while (itP != pend.end()){
+        if ((*itP).second == casa) {
+            res.insert((*itP).first);
+        }
+        itP++;
     }
 
     return res;
@@ -58,6 +67,7 @@ set<Casilla> aed2_Servidor::casas(Jugador j) const {
 
 set<Casilla> aed2_Servidor::comercios(Jugador j) const {
     std::map<Casilla, Nat> cn = _s.verComercios(j);
+    std::map<Casilla, Construccion> pend = _pendientes.at(j);
     std::set<Casilla> res;
     auto it = cn.begin();
 
@@ -65,6 +75,15 @@ set<Casilla> aed2_Servidor::comercios(Jugador j) const {
         res.insert((*it).first);
         it++;
     }
+
+    auto itP = pend.begin();
+    while (itP != pend.end()){
+        if ((*itP).second == comercio) {
+            res.insert((*itP).first);
+        }
+        itP++;
+    }
+
 
     return res;
 }
