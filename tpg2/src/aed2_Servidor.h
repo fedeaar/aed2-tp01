@@ -8,6 +8,8 @@ class aed2_Servidor {
 public:
     aed2_Servidor();
 
+    ~aed2_Servidor();
+
     void nuevaPartida(Jugador j, set<int> horizontales, set<int> verticales);
 
     void agregarCasa(Jugador j, Casilla c);
@@ -37,7 +39,7 @@ public:
 private:
     Servidor _s;
     DiccTrie<std::map<Casilla, Construccion>*> _pendientes;
-    std::list<std::map<Casilla, Construccion>> _construcciones;
+    std::list<std::map<Casilla, Construccion>*> _construcciones;
 };
 
 #endif // AED2_SERVIDOR_H

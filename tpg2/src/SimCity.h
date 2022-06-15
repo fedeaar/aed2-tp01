@@ -5,7 +5,6 @@ using namespace std;
 
 #include "Mapa.h"
 
-
 class SimCity {
 
 // FUNCIONALIDAD SIMCITY
@@ -22,15 +21,18 @@ public:
 
     void avanzarTurno(const map<Casilla, Construccion>& cs);
     void unir(const SimCity& otro);
-   // ESTRUCTURA Y AUX
+
+// ESTRUCTURA Y AUX
 private:
+    friend class aed2_Servidor;
+
     map<Casilla, Nat> listDeTipo(Construccion tipo) const;
 
     map<Casilla, Nat> comerciosAux(const map<Casilla, Nat>& casasTotales) const;
 
     void manhatizar(map<Casilla, Nat>& comercios, const map<Casilla, Nat>& casasTotales) const;
 
-    Nat nivelCom(Casilla p, const map<Casilla, Nat>& cs) const;
+    static Nat nivelCom(Casilla p, const map<Casilla, Nat>& cs);
 
     struct Hijo {
         Hijo(const SimCity* s, Nat t): sc(s), turnoUnido(t) {};

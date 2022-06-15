@@ -4,12 +4,18 @@
 aed2_Servidor::aed2_Servidor() {}
 
 
+aed2_Servidor::~aed2_Servidor() {
+    for (auto it = _construcciones.begin(); it != _construcciones.end(); ++it) {
+        delete *it;
+    }
+}
+
 void aed2_Servidor::nuevaPartida(Jugador j, set<int> horizontales, set<int> verticales) {
     Mapa m(horizontales, verticales);
     _s.nuevaPartida(j, m);
-    map<Casilla, Construccion> cs;
+    map<Casilla, Construccion>* cs = new map<Casilla, Construccion>{};
     _construcciones.emplace_back(cs);
-    _pendientes.insert(std::make_pair(j, &cs));
+    _pendientes.insert(std::make_pair(j, cs));
 }
 
 
@@ -25,14 +31,17 @@ void aed2_Servidor::agregarComercio(Jugador j, Casilla c) {
 
 void aed2_Servidor::avanzarTurno(Jugador j) {
     _s.avanzarTurnoPartida(j, *_pendientes.at(j));
-    map<Casilla, Construccion> cs;
+    map<Casilla, Construccion>* cs = new map<Casilla, Construccion>{};
     _construcciones.emplace_back(cs);
-    _pendientes.insert(std::make_pair(j, &cs));
+    _pendientes.insert(std::make_pair(j, cs));
 }
 
 
 void aed2_Servidor::unir(Jugador j1, Jugador j2) {
     _s.unirPartidas(j1, j2);
+    map<Casilla, Construccion>* cs_j2 = _pendientes.at(j2); // todo check que no haya problemas de complejidad
+    // sino pasar a lista
+    _pendientes.at(j1)->insert(cs_j2->begin(), cs_j2->end());
 }
 
 
@@ -48,17 +57,17 @@ set<int> aed2_Servidor::riosVerticales(Jugador j) const {
 
 set<Casilla> aed2_Servidor::casas(Jugador j) const {
     std::map<Casilla, Nat> cn = _s.verCasas(j);
-    std::map<Casilla, Construccion>* pend = _pendientes.at(j);
+    std::map<Casilla, Construccion> pend = *_pendientes.at(j);
     std::set<Casilla> res;
 
-    /*auto it = cn.begin();
+    auto it = cn.begin();
     while (it != cn.end()) {
         res.insert((*it).first);
         it++;
-    }*/
+    }
 
-    auto itP = (*pend).begin();
-    while (itP != (*pend).end()){
+    auto itP = pend.begin();
+    while (itP != pend.end()){
         if ((*itP).second == casa) {
             res.insert((*itP).first);
         }
@@ -95,12 +104,14 @@ set<Casilla> aed2_Servidor::comercios(Jugador j) const {
 
 Nat aed2_Servidor::nivel(Jugador j, Casilla c) const {
     std::map<Casilla, Nat> casas = _s.verCasas(j);
-    if (casas.count(c) == 1) {
-        return casas[c];
+    if (casas.count(c)) {
+        return casas.at(c);
     }
     std::map<Casilla, Nat> comercios = _s.verComercios(j);
-    if (comercios.count(c) == 1) {
-        return casas[c];
+    if (comercios.count(c)) {
+        return comercios.at(c);
+    } else if (_pendientes.at(j)->count(c) && _pendientes.at(j)->at(c) == comercio) {
+        return SimCity::nivelCom(c, casas);
     }
     return 0; // Posición no definida
 }

@@ -160,6 +160,7 @@ TEST_F(ServidorTest, comercio_con_casa_mejor_cercana) {
     EXPECT_EQ(s.casas(jugador1), posicion1);
     EXPECT_EQ(s.comercios(jugador1), posicion2);
     EXPECT_EQ(s.nivel(jugador1, pos1), 1);
+    //s.avanzarTurno(jugador1);   // todo check
     EXPECT_EQ(s.nivel(jugador1, pos2), 1);
 }
 

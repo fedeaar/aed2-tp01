@@ -1,10 +1,6 @@
 #include "SimCity.h"
 
-SimCity::SimCity(Mapa m): _mapa(m) {
-    _turno = 0;
-    _antiguedad = 0;
-    _popularidad = 0;
-}
+SimCity::SimCity(Mapa m): _mapa(m), _turno(0), _antiguedad(0), _popularidad(0) {}
 
 SimCity& SimCity::operator=(const SimCity& aCopiar) {
     _turno = aCopiar._turno;
@@ -56,7 +52,7 @@ Nat SimCity::popularidad() const {
 }
 
 Nat SimCity::turnos() const {
-    return _turno;
+    return _antiguedad;
 }
 
 void SimCity::avanzarTurno(const map<Casilla, Construccion>& cs) {
@@ -74,7 +70,7 @@ void SimCity::unir(const SimCity& otro) {
 
 map<Casilla, Nat> SimCity::listDeTipo(Construccion tipo) const {
     map<Casilla, Nat> res;
-    int i = 1;  // tiene que empezar en 1
+    int i = 0;  // tiene que empezar en 1
     for (auto it = _construcciones.begin(); it != _construcciones.end(); ++it, ++i)
         for (auto itCs = (*it)->begin(); itCs != (*it)->end(); ++itCs)
             if (itCs->second == tipo) res[itCs->first] = _turno - i;
@@ -100,13 +96,13 @@ void SimCity::manhatizar(map<Casilla, Nat>& comercios, const map<Casilla, Nat>& 
         it->second = max(it->second, nivelCom(it->first, casasTotales));
 }
 
-Nat SimCity::nivelCom(Casilla p, const map<Casilla, Nat>& cs) const {
-    Nat maxLvl = 1;
+Nat SimCity::nivelCom(Casilla p, const map<Casilla, Nat>& cs) {
+    Nat maxLvl = 0;
     for (int i = -3; i <= 3; ++i) {
         for (int j = abs(i) - 3; j <= 3 - abs(i); ++j) {
-            if (p.first + i >= 0 && p.second + j >= 0) {
-                Casilla p2(p.first + i, p.second + j);
-                if (cs.count(p2)) maxLvl = max(maxLvl, cs.find(p2)->second);
+            Casilla p2(p.first + i, p.second + j);
+            if (cs.count(p2)) {
+                maxLvl = max(maxLvl, cs.find(p2)->second);
             }
         }
     }
