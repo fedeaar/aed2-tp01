@@ -6,25 +6,28 @@ aed2_Servidor::aed2_Servidor() {}
 
 void aed2_Servidor::nuevaPartida(Jugador j, set<int> horizontales, set<int> verticales) {
     Mapa m(horizontales, verticales);
-    map<Casilla, Construccion> cs;
     _s.nuevaPartida(j, m);
-    _pendientes.insert(make_pair(j, cs));
+    map<Casilla, Construccion> cs;
+    _construcciones.emplace_back(cs);
+    _pendientes.insert(std::make_pair(j, &cs));
 }
 
 
 void aed2_Servidor::agregarCasa(Jugador j, Casilla c) {
-    _pendientes.at(j).insert(make_pair(c, casa));
+    (*_pendientes.at(j)).insert(make_pair(c, casa));
 }
 
 
 void aed2_Servidor::agregarComercio(Jugador j, Casilla c) {
-    _pendientes.at(j).insert(make_pair(c, comercio));
+    (*_pendientes.at(j)).insert(make_pair(c, comercio));
 }
 
 
 void aed2_Servidor::avanzarTurno(Jugador j) {
-    _s.avanzarTurnoPartida(j, _pendientes.at(j));
-    _pendientes.at(j).clear();
+    _s.avanzarTurnoPartida(j, *_pendientes.at(j));
+    map<Casilla, Construccion> cs;
+    _construcciones.emplace_back(cs);
+    _pendientes.insert(std::make_pair(j, &cs));
 }
 
 
@@ -45,17 +48,17 @@ set<int> aed2_Servidor::riosVerticales(Jugador j) const {
 
 set<Casilla> aed2_Servidor::casas(Jugador j) const {
     std::map<Casilla, Nat> cn = _s.verCasas(j);
-    std::map<Casilla, Construccion> pend = _pendientes.at(j);
+    std::map<Casilla, Construccion>* pend = _pendientes.at(j);
     std::set<Casilla> res;
 
-    auto it = cn.begin();
+    /*auto it = cn.begin();
     while (it != cn.end()) {
         res.insert((*it).first);
         it++;
-    }
+    }*/
 
-    auto itP = pend.begin();
-    while (itP != pend.end()){
+    auto itP = (*pend).begin();
+    while (itP != (*pend).end()){
         if ((*itP).second == casa) {
             res.insert((*itP).first);
         }
@@ -68,7 +71,7 @@ set<Casilla> aed2_Servidor::casas(Jugador j) const {
 
 set<Casilla> aed2_Servidor::comercios(Jugador j) const {
     std::map<Casilla, Nat> cn = _s.verComercios(j);
-    std::map<Casilla, Construccion> pend = _pendientes.at(j);
+    std::map<Casilla, Construccion>* pend = _pendientes.at(j);
     std::set<Casilla> res;
     auto it = cn.begin();
 
@@ -77,8 +80,8 @@ set<Casilla> aed2_Servidor::comercios(Jugador j) const {
         it++;
     }
 
-    auto itP = pend.begin();
-    while (itP != pend.end()){
+    auto itP = (*pend).begin();
+    while (itP != (*pend).end()){
         if ((*itP).second == comercio) {
             res.insert((*itP).first);
         }
@@ -104,7 +107,7 @@ Nat aed2_Servidor::nivel(Jugador j, Casilla c) const {
 
 
 bool aed2_Servidor::huboConstruccion(Jugador j) const {
-    return !_pendientes.at(j).empty();
+    return !(*_pendientes.at(j)).empty();
     //return _s.verTurnos(j) != 1; //????? Si esta vacio el SimCity?
 }
 
