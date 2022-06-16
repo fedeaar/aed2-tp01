@@ -30,29 +30,46 @@ Mapa SimCity::mapa() const {
 }
 
 map<Casilla, Nat> SimCity::casas() const {
-    map<Casilla, Nat> res = listDeTipo(casa);
-    map<Casilla, Nat> comerciosTotales = listDeTipo(comercio);
-    for (auto it = _uniones.begin(); it != _uniones.end(); ++it) {
-        map<Casilla, Nat> casasActuales = it->sc->casas();
-        for (auto itCs = casasActuales.begin(); itCs != casasActuales.end(); ++itCs) {
-            const Casilla p = itCs->first;
-            const Nat n = itCs->second;
-            if ((!res.count(p) /*edit*/|| res.at(p) < n) && (!comerciosTotales.count(p) ||
-                                                            nivelCom(p, res) < n)) {
-                res[p] = _turno - it->turnoUnido + n;
-            }
-        }
-        map<Casilla, Nat> comerciosActuales = it->sc->listDeTipo(comercio);
-        comerciosTotales.insert(comerciosActuales.begin(), comerciosActuales.end());
-    }
-    return res;
+    return maximizar(casa);
 }
 
 map<Casilla, Nat> SimCity::comercios() const {
     map<Casilla, Nat> casasTotales = casas();
-    map<Casilla, Nat> comerciosTotales = comerciosAux(casasTotales);
-    manhatizar(comerciosTotales, casasTotales);
+    map<Casilla, Nat> comerciosTotales = maximizar(comercio);
+    for (auto it = comerciosTotales.begin(); it != comerciosTotales.end(); ++it)
+        it->second = max(it->second, nivelCom(it->first, casasTotales));
     return comerciosTotales;
+}
+
+map<Casilla, Nat> SimCity::maximizar(Construccion tipo) const {
+    vector<pair<Casilla, Nat>> planchadas = plancharConstruccion(tipo);
+    map<Casilla, Nat> res;
+    for(int i = 0; i < res.size(); ++i) {
+        Casilla p = planchadas[i].first;
+        Nat n = planchadas[i].second;
+        if(!res.count(p) || res[p] < n) res[p] = n;
+    }
+}
+
+vector<pair<Casilla, Nat>> SimCity::plancharConstruccion(Construccion tipo) const {
+    vector<pair<Casilla, Nat>> res = listDeTipo(tipo);
+    for (auto it = _uniones.begin(); it != _uniones.end(); ++it) {
+        map<Casilla, Nat> actuales = it->sc->casas();
+        for (auto itCs = actuales.begin(); itCs != actuales.end(); ++itCs) {
+            res.emplace_back(itCs->first, _turno - it->turnoUnido + itCs->second);
+        }
+    }
+    return res;
+}
+
+vector<pair<Casilla, Nat>> SimCity::listDeTipo(Construccion tipo) const {
+    vector<pair<Casilla, Nat>> res;
+    int i = 0;
+    for (auto it = _construcciones.begin(); it != _construcciones.end(); ++it, ++i)
+        for (auto itCs = (*it)->begin(); itCs != (*it)->end(); ++itCs) 
+            if (itCs->second == tipo) res.emplace_back(itCs->first, _turno - i);
+        
+    return res;
 }
 
 Nat SimCity::popularidad() const {
@@ -84,33 +101,6 @@ void SimCity::unir(const SimCity& otro) {
     _uniones.push_back(nuevoHijo);
 }
 
-map<Casilla, Nat> SimCity::listDeTipo(Construccion tipo) const {
-    map<Casilla, Nat> res;
-    int i = 0;  // tiene que empezar en 1
-    for (auto it = _construcciones.begin(); it != _construcciones.end(); ++it, ++i)
-        for (auto itCs = (*it)->begin(); itCs != (*it)->end(); ++itCs)
-            if (itCs->second == tipo) res[itCs->first] = _turno - i;
-    return res;
-}
-
-map<Casilla, Nat> SimCity::comerciosAux(const map<Casilla, Nat>& casasTotales) const{
-    map<Casilla, Nat> res = listDeTipo(comercio);
-    for (auto it = _uniones.begin(); it != _uniones.end(); ++it) {
-        map<Casilla, Nat> comerciosActuales = it->sc->comercios();
-        for (auto itCs = comerciosActuales.begin(); itCs != comerciosActuales.end(); ++itCs) {
-            const Casilla p = itCs->first;
-            const Nat n = itCs->second;
-            if ((!res.count(p) /*edit*/|| res.at(p) < n) && (!casasTotales.count(p) || casasTotales.at(p) < n)) {
-                res[p] = _turno - it->turnoUnido + n;
-            }
-        }
-    }
-    return res;
-}
-void SimCity::manhatizar(map<Casilla, Nat>& comercios, const map<Casilla, Nat>& casasTotales) const {
-    for (auto it = comercios.begin(); it != comercios.end(); ++it)
-        it->second = max(it->second, nivelCom(it->first, casasTotales));
-}
 
 Nat SimCity::nivelCom(Casilla p, const map<Casilla, Nat>& cs) {
     Nat maxLvl = 0;
