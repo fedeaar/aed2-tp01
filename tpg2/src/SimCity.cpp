@@ -37,7 +37,8 @@ map<Casilla, Nat> SimCity::casas() const {
         for (auto itCs = casasActuales.begin(); itCs != casasActuales.end(); ++itCs) {
             const Casilla p = itCs->first;
             const Nat n = itCs->second;
-            if ((!res.count(p) /*edit*/|| res.at(p) < n) && (!comerciosTotales.count(p) || comerciosTotales.at(p) < n)) {
+            if ((!res.count(p) /*edit*/|| res.at(p) < n) && (!comerciosTotales.count(p) ||
+                                                            nivelCom(p, res) < n)) {
                 res[p] = _turno - it->turnoUnido + n;
             }
         }
