@@ -30,11 +30,11 @@ public:
 private:
     //friend class aed2_Servidor;
     //friend class Servidor;
-    vector<pair<Casilla, Nat>> SimCity::listDeTipo(Construccion tipo) const;
+    vector<pair<Casilla, Nat>> listDeTipo(Construccion tipo) const;
 
-    vector<pair<Casilla, Nat>> SimCity::plancharConstruccion(Construccion tipo) const;
+    vector<pair<Casilla, Nat>> plancharConstruccion(Construccion tipo) const;
 
-    map<Casilla, Nat> SimCity::maximizar(Construccion tipo) const;
+    map<Casilla, Nat> maximizar(Construccion tipo) const ;
 
     static Nat nivelCom(Casilla p, const map<Casilla, Nat>& cs);
 

@@ -36,19 +36,26 @@ map<Casilla, Nat> SimCity::casas() const {
 map<Casilla, Nat> SimCity::comercios() const {
     map<Casilla, Nat> casasTotales = casas();
     map<Casilla, Nat> comerciosTotales = maximizar(comercio);
-    for (auto it = comerciosTotales.begin(); it != comerciosTotales.end(); ++it)
-        it->second = max(it->second, nivelCom(it->first, casasTotales));
+    for (auto it = comerciosTotales.begin(); it != comerciosTotales.end();) {
+        if(casasTotales.count(it->first)) {
+            comerciosTotales.erase(it->first);
+        } else {
+            it->second = max(it->second, nivelCom(it->first, casasTotales));
+            ++it;
+        }
+    }
     return comerciosTotales;
 }
 
 map<Casilla, Nat> SimCity::maximizar(Construccion tipo) const {
     vector<pair<Casilla, Nat>> planchadas = plancharConstruccion(tipo);
     map<Casilla, Nat> res;
-    for(int i = 0; i < res.size(); ++i) {
+    for(int i = 0; i < planchadas.size(); ++i) {
         Casilla p = planchadas[i].first;
         Nat n = planchadas[i].second;
         if(!res.count(p) || res[p] < n) res[p] = n;
     }
+    return res;
 }
 
 vector<pair<Casilla, Nat>> SimCity::plancharConstruccion(Construccion tipo) const {
@@ -87,11 +94,11 @@ void SimCity::avanzarTurno() {
 }
 
 void SimCity::agregarCasa(Casilla pos) {
-    _construcciones.back()->insert(std::make_pair(pos, casa));
+    (*_construcciones.back())[pos] = casa;
 }
 
 void SimCity::agregarComercio(Casilla pos) {
-    _construcciones.back()->insert(std::make_pair(pos, comercio));
+    (*_construcciones.back())[pos] = comercio;
 }
 
 void SimCity::unir(const SimCity& otro) {
@@ -116,8 +123,9 @@ Nat SimCity::nivelCom(Casilla p, const map<Casilla, Nat>& cs) {
 }
 
 bool SimCity::huboConstruccion() const {
+
     bool res = !(_construcciones.back()->empty());
-    if (!res) {
+    if (!res && _uniones.size()) {
         SimCity::Hijo ult = _uniones.back();
         res = ult.turnoUnido == _turno && !((ult.sc->_construcciones.back())->empty());
     }
