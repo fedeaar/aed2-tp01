@@ -19,13 +19,17 @@ public:
     Nat popularidad() const;
     Nat turnos() const;
 
-    void avanzarTurno(const map<Casilla, Construccion>& cs);
+    void avanzarTurno();
+    void agregarCasa(Casilla pos);
+    void agregarComercio(Casilla pos);
     void unir(const SimCity& otro);
+
+    bool huboConstruccion() const;
 
 // ESTRUCTURA Y AUX
 private:
-    friend class aed2_Servidor;
-
+    //friend class aed2_Servidor;
+    //friend class Servidor;
     map<Casilla, Nat> listDeTipo(Construccion tipo) const;
 
     map<Casilla, Nat> comerciosAux(const map<Casilla, Nat>& casasTotales) const;
@@ -44,7 +48,7 @@ private:
     Nat _turno;
     Nat _popularidad;
     Mapa _mapa;
-    list<const map<Casilla, Construccion>*> _construcciones;
+    list<map<Casilla, Construccion>*> _construcciones;
     list<Hijo> _uniones;
 };
 

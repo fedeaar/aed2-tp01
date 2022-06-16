@@ -421,16 +421,17 @@ TEST_F(ServidorTest, unir_casas_solapadas_menor_nivel) {
     s.nuevaPartida(jugador2, h2, v2);
     s.agregarCasa(jugador1, pos0);
     s.agregarCasa(jugador1, pos1);
-    s.avanzarTurno(jugador1);
+    s.avanzarTurno(jugador1);       //
     s.agregarCasa(jugador1, pos3);
-    s.avanzarTurno(jugador1);
-    s.agregarCasa(jugador1, pos2);
+    s.avanzarTurno(jugador1);       //
+    s.agregarCasa(jugador1, pos2);  //
     s.agregarCasa(jugador2, pos4);
     s.avanzarTurno(jugador2);
     s.agregarCasa(jugador2, pos2);
     s.avanzarTurno(jugador2);
     s.unir(jugador1, jugador2);
-
+    // j1 = pos3 = 1 pos0 = 2, pos1 = 2, pos2 = 0
+    // j2 = pos0 = 1, pos1 = 1
     EXPECT_EQ(s.riosHorizontales(jugador1), h12);
     EXPECT_EQ(s.riosVerticales(jugador1), v12);
     EXPECT_TRUE(s.huboConstruccion(jugador1));
@@ -557,7 +558,7 @@ TEST_F(ServidorTest, unir_solapamiento_casa_mayor_a_comercio) {
     EXPECT_EQ(s.antiguedad(jugador1), 3);
     EXPECT_EQ(s.popularidad(jugador1), 1);
     EXPECT_EQ(s.casas(jugador1), posiciones234);
-    EXPECT_EQ(s.comercios(jugador1), posicion1);
+    EXPECT_EQ(s.comercios(jugador1), posicion1); // este test esta mal creo
     EXPECT_EQ(s.nivel(jugador1, pos1), 3);
     EXPECT_EQ(s.nivel(jugador1, pos2), 1);
     EXPECT_EQ(s.nivel(jugador1, pos3), 2);

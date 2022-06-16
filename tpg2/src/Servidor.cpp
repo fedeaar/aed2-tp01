@@ -40,25 +40,22 @@ void Servidor::nuevaPartida(const Nombre& n, const Mapa& m) {
 
 void Servidor::unirPartidas(const Nombre& n, const Nombre& m) {
     _partidas.at(n).sc->unir(*_partidas.at(m).sc);
+    _partidas.at(m).modificable = false;
 }
 
 
-void Servidor::avanzarTurnoPartida(const Nombre& n, const std::map<Casilla, Construccion>& cs) {
-    _partidas.at(n).sc->avanzarTurno(cs);
+void Servidor::avanzarTurnoPartida(const Nombre& n) {
+    _partidas.at(n).sc->avanzarTurno();
 }
 
 
 void Servidor::agregarCasa(const Nombre& n, const Casilla& p) {
-    std::map<Casilla, Construccion> cs {};
-    cs.insert(std::make_pair(p, casa));
-    _partidas.at(n).sc->avanzarTurno(cs);
+    _partidas.at(n).sc->agregarCasa(p);
 }
 
 
 void Servidor::agregarComercio(const Nombre& n, const Casilla& p) {
-    std::map<Casilla, Construccion> cs {};
-    cs.insert(std::make_pair(p, comercio));
-    _partidas.at(n).sc->avanzarTurno(cs);
+    _partidas.at(n).sc->agregarComercio(p);
 }
 
 
@@ -84,6 +81,10 @@ Nat Servidor::verPopularidad(const Nombre& n) const {
 
 Nat Servidor::verTurnos(const Nombre& n) const {
     return _partidas.at(n).sc->turnos();
+}
+
+bool Servidor::huboConstruccion(const Nombre &n) const {
+    return _partidas.at(n).sc->huboConstruccion();
 }
 
 
