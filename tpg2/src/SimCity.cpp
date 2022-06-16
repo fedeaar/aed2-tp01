@@ -38,7 +38,7 @@ map<Casilla, Nat> SimCity::comercios() const {
     map<Casilla, Nat> comerciosTotales = maximizar(comercio);
     for (auto it = comerciosTotales.begin(); it != comerciosTotales.end();) {
         if(casasTotales.count(it->first)) {
-            comerciosTotales.erase(it->first);
+            comerciosTotales.erase(it++->first);
         } else {
             it->second = max(it->second, nivelCom(it->first, casasTotales));
             ++it;
@@ -61,7 +61,7 @@ map<Casilla, Nat> SimCity::maximizar(Construccion tipo) const {
 vector<pair<Casilla, Nat>> SimCity::plancharConstruccion(Construccion tipo) const {
     vector<pair<Casilla, Nat>> res = listDeTipo(tipo);
     for (auto it = _uniones.begin(); it != _uniones.end(); ++it) {
-        map<Casilla, Nat> actuales = it->sc->casas();
+        vector<pair<Casilla, Nat>> actuales = it->sc->plancharConstruccion(tipo);
         for (auto itCs = actuales.begin(); itCs != actuales.end(); ++itCs) {
             res.emplace_back(itCs->first, _turno - it->turnoUnido + itCs->second);
         }
