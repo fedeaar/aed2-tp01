@@ -39,8 +39,17 @@ void aed2_Servidor::avanzarTurno(Jugador j) {
 
 void aed2_Servidor::unir(Jugador j1, Jugador j2) {
     _s.unirPartidas(j1, j2);
+
+    //set<Casilla> cas = casas(j1);
+    //set<Casilla> com = comercios(j1);
     map<Casilla, Construccion>* cs_j2 = _pendientes.at(j2); // todo check que no haya problemas de complejidad
     // sino pasar a lista
+    /*
+    for (auto it = (*cs_j2).begin(); it != (*cs_j2).end(); it++) {
+        if (!cas.count((*it).first) && !com.count((*it).first)) {
+            _pendientes.at(j1)->insert(*it);
+        }
+    }*/
     _pendientes.at(j1)->insert(cs_j2->begin(), cs_j2->end());
 }
 
