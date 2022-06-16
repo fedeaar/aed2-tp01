@@ -413,7 +413,7 @@ TEST_F(ServidorTest, unir_casas_solapadas_mayor_nivel) {
     EXPECT_EQ(s.nivel(jugador1, pos2), 1);
     EXPECT_EQ(s.nivel(jugador1, pos3), 2);
     EXPECT_EQ(s.nivel(jugador1, pos4), 1);
-}
+} //Cuando unis con una casa pendiente en el hijo que solapa, huboConstrucciones = true pero gana la casa del papa (por nivel mas alto?)
 
 TEST_F(ServidorTest, unir_casas_solapadas_menor_nivel) {
     aed2_Servidor s;
@@ -444,7 +444,7 @@ TEST_F(ServidorTest, unir_casas_solapadas_menor_nivel) {
     EXPECT_EQ(s.nivel(jugador1, pos2), 1);
     EXPECT_EQ(s.nivel(jugador1, pos3), 1);
     EXPECT_EQ(s.nivel(jugador1, pos4), 2);
-}
+} //Cuando unis con una casa pendiente en el padre que solapa, huboConstrucciones = true pero gana la casa del hijo (por nivel mas alto?)
 
 TEST_F(ServidorTest, unir_comercios_solapados_mismo_nivel) {
     aed2_Servidor s;
@@ -505,7 +505,7 @@ TEST_F(ServidorTest, unir_comercios_solapados_mayor_nivel) {
     EXPECT_EQ(s.nivel(jugador1, pos2), 1);
     EXPECT_EQ(s.nivel(jugador1, pos3), 2);
     EXPECT_EQ(s.nivel(jugador1, pos4), 1);
-}
+} //Igual que test unir_casas_solapadas_mayor_nivel
 
 TEST_F(ServidorTest, unir_comercios_solapados_menor_nivel) {
     aed2_Servidor s;
@@ -535,7 +535,7 @@ TEST_F(ServidorTest, unir_comercios_solapados_menor_nivel) {
     EXPECT_EQ(s.nivel(jugador1, pos2), 1);
     EXPECT_EQ(s.nivel(jugador1, pos3), 1);
     EXPECT_EQ(s.nivel(jugador1, pos4), 2);
-}
+} //Igual que test unir_casas_solapadas_menor_nivel
 
 TEST_F(ServidorTest, unir_solapamiento_casa_mayor_a_comercio) {
     aed2_Servidor s;
@@ -563,7 +563,7 @@ TEST_F(ServidorTest, unir_solapamiento_casa_mayor_a_comercio) {
     EXPECT_EQ(s.nivel(jugador1, pos2), 1);
     EXPECT_EQ(s.nivel(jugador1, pos3), 2);
     EXPECT_EQ(s.nivel(jugador1, pos4), 1);
-}
+}//Cuando unis con un comercio pendiente en el hijo que solapa una casa, huboConstrucciones = true pero gana casa (nivel mas alto o casa tiene prio?).
 
 TEST_F(ServidorTest, unir_solapamiento_casa_menor_a_comercio) {
     aed2_Servidor s;
@@ -591,7 +591,7 @@ TEST_F(ServidorTest, unir_solapamiento_casa_menor_a_comercio) {
     EXPECT_EQ(s.nivel(jugador1, pos2), 0);
     EXPECT_EQ(s.nivel(jugador1, pos3), 1);
     EXPECT_EQ(s.nivel(jugador1, pos4), 2);
-}
+}//Cuando unis con una casa pendiente en el padre que solapa un comercio del hijo, huboConstrucciones = true pero gana casa (casa tiene prio?).
 
 TEST_F(ServidorTest, unir_solapamiento_comercio_mayor_a_casa) {
     aed2_Servidor s;
@@ -619,7 +619,7 @@ TEST_F(ServidorTest, unir_solapamiento_comercio_mayor_a_casa) {
     EXPECT_EQ(s.nivel(jugador1, pos2), 0);
     EXPECT_EQ(s.nivel(jugador1, pos3), 2);
     EXPECT_EQ(s.nivel(jugador1, pos4), 1);
-}
+}//Cuando unis con casa en pendientes (hijo) que solapa con comercio (padre), huboConstruccion = true y gana el pendiente del hijo (casa tiene prio?)
 
 TEST_F(ServidorTest, unir_solapamiento_comercio_menor_a_casa) {
     aed2_Servidor s;
@@ -647,7 +647,7 @@ TEST_F(ServidorTest, unir_solapamiento_comercio_menor_a_casa) {
     EXPECT_EQ(s.nivel(jugador1, pos2), 1);
     EXPECT_EQ(s.nivel(jugador1, pos3), 1);
     EXPECT_EQ(s.nivel(jugador1, pos4), 2);
-}
+} //Cuando unis con un pendiente en el hijo que solapa, huboConstrucciones = true pero la construccion no esta.
 
 TEST_F(ServidorTest, unir_comercio_aumenta_nivel_por_casas_cercanas) {
     aed2_Servidor s;
