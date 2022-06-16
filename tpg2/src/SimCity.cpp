@@ -83,7 +83,7 @@ Nat SimCity::turnos() const {
 void SimCity::avanzarTurno() {
     _turno++;
     _antiguedad++;
-    _construcciones.push_back(new map<Casilla, Construccion>());  // tengo quilombo con el const por aliasing
+    _construcciones.push_back(new map<Casilla, Construccion>());
 }
 
 void SimCity::agregarCasa(Casilla pos) {
@@ -97,7 +97,7 @@ void SimCity::agregarComercio(Casilla pos) {
 void SimCity::unir(const SimCity& otro) {
     _popularidad = _popularidad + otro._popularidad + 1;
     _antiguedad = max(_antiguedad, otro._antiguedad);
-    Hijo nuevoHijo = Hijo(&otro, _turno);  // tengo quilombo con el const por aliasing
+    Hijo nuevoHijo = Hijo(&otro, _turno);
     _uniones.push_back(nuevoHijo);
 }
 
