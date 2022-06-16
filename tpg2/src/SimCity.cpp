@@ -1,6 +1,15 @@
 #include "SimCity.h"
 
-SimCity::SimCity(Mapa m): _mapa(m), _turno(0), _antiguedad(0), _popularidad(0) {}
+SimCity::SimCity(Mapa m): _mapa(m), _turno(0), _antiguedad(0), _popularidad(0), _construcciones() {
+    _construcciones.push_back(new map<Casilla, Construccion>());
+}
+
+SimCity::~SimCity() {
+    // no recursivo, los hijos se tienen que manejar por su cuenta.
+    for (auto it : _construcciones) {
+        delete it;
+    }
+}
 
 SimCity& SimCity::operator=(const SimCity& aCopiar) {
     _turno = aCopiar._turno;
@@ -11,8 +20,6 @@ SimCity& SimCity::operator=(const SimCity& aCopiar) {
     _uniones = aCopiar._uniones;  // los struct tienen funcion de copiado? no para los punteros
     return *this;
 }
-
-SimCity::~SimCity() {}
 
 Mapa SimCity::mapa() const {
     Mapa res = _mapa;
@@ -30,7 +37,8 @@ map<Casilla, Nat> SimCity::casas() const {
         for (auto itCs = casasActuales.begin(); itCs != casasActuales.end(); ++itCs) {
             const Casilla p = itCs->first;
             const Nat n = itCs->second;
-            if (!res.count(p) && !comerciosTotales.count(p)) {
+            if ((!res.count(p) /*edit*/|| res.at(p) < n) && (!comerciosTotales.count(p) ||
+                                                            nivelCom(p, res) < n)) {
                 res[p] = _turno - it->turnoUnido + n;
             }
         }
@@ -55,10 +63,18 @@ Nat SimCity::turnos() const {
     return _antiguedad;
 }
 
-void SimCity::avanzarTurno(const map<Casilla, Construccion>& cs) {
+void SimCity::avanzarTurno() {
     _turno++;
     _antiguedad++;
-    _construcciones.push_back(&cs);  // tengo quilombo con el const por aliasing
+    _construcciones.push_back(new map<Casilla, Construccion>());  // tengo quilombo con el const por aliasing
+}
+
+void SimCity::agregarCasa(Casilla pos) {
+    _construcciones.back()->insert(std::make_pair(pos, casa));
+}
+
+void SimCity::agregarComercio(Casilla pos) {
+    _construcciones.back()->insert(std::make_pair(pos, comercio));
 }
 
 void SimCity::unir(const SimCity& otro) {
@@ -84,7 +100,7 @@ map<Casilla, Nat> SimCity::comerciosAux(const map<Casilla, Nat>& casasTotales) c
         for (auto itCs = comerciosActuales.begin(); itCs != comerciosActuales.end(); ++itCs) {
             const Casilla p = itCs->first;
             const Nat n = itCs->second;
-            if (!res.count(p) && !casasTotales.count(p)) {
+            if ((!res.count(p) /*edit*/|| res.at(p) < n) && (!casasTotales.count(p) || casasTotales.at(p) < n)) {
                 res[p] = _turno - it->turnoUnido + n;
             }
         }
@@ -107,4 +123,13 @@ Nat SimCity::nivelCom(Casilla p, const map<Casilla, Nat>& cs) {
         }
     }
     return maxLvl;
+}
+
+bool SimCity::huboConstruccion() const {
+    bool res = !(_construcciones.back()->empty());
+    if (!res) {
+        SimCity::Hijo ult = _uniones.back();
+        res = ult.turnoUnido == _turno && !((ult.sc->_construcciones.back())->empty());
+    }
+    return res;
 }

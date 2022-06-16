@@ -38,8 +38,10 @@ public:
 
 private:
     Servidor _s;
-    DiccTrie<std::map<Casilla, Construccion>*> _pendientes;
-    std::list<std::map<Casilla, Construccion>*> _construcciones;
+    //DiccTrie<std::map<Casilla, Construccion>*> _pendientes;
+    //std::list<std::map<Casilla, Construccion>*> _construcciones;
+
+    //std::map<Casilla, Construccion> _validarPendientes(Jugador j) const;
 };
 
 #endif // AED2_SERVIDOR_H

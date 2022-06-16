@@ -56,7 +56,7 @@ public:
      * avanza un turno de SimCity.
      * Complejidad: O(claveMasLarga)
      **/
-    void avanzarTurnoPartida(const Nombre& n, const std::map<Casilla, Construccion>& cs);
+    void avanzarTurnoPartida(const Nombre& n);
 
     /**
      AGREGAR CASA
@@ -108,12 +108,19 @@ public:
      **/
     Nat verTurnos(const Nombre& n) const;
 
+    /**
+     HUBO CONSTRUCCION
+     * evalua si hubo una union en este turno para una Partida.
+     * Complejidad: O(claveMasLarga)
+     **/
+    bool huboConstruccion(const Nombre& n) const;
+
 
 // ESTRUCTURA Y AUX
 private:
 
     struct Partida {
-        explicit Partida(const Mapa& m): sc(new SimCity(m)), modificable(false) {};
+        explicit Partida(const Mapa& m): sc(new SimCity(m)), modificable(true) {};
         SimCity *sc;
         bool modificable;
     };
