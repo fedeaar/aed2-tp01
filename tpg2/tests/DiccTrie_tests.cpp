@@ -220,36 +220,13 @@ TEST(DiccTrie_test, erase) {
     EXPECT_FALSE(sin_prefijos.count("adios") == 1);
 }
 
-#ifdef EXT
-
-TEST(DiccTrie_test, operator_corchetes) {
-    DiccTrie<int> sin_prefijos;
-    DiccTrie<int> con_prefijos;
-
-    sin_prefijos["hola"] = 1;
-    sin_prefijos["chau"] = 2;
-    sin_prefijos["adios"] =  3;
-
-    con_prefijos["c"] =  1;
-    con_prefijos["casa"] =  2;
-    con_prefijos["casona"] =  3;
-
-    EXPECT_EQ(sin_prefijos["hola"], 1);
-    EXPECT_EQ(sin_prefijos["chau"], 2);
-    EXPECT_EQ(sin_prefijos["adios"], 3);
-
-    EXPECT_EQ(con_prefijos["c"], 1);
-    EXPECT_EQ(con_prefijos["casa"], 2);
-    EXPECT_EQ(con_prefijos["casona"], 3);
-}
-
 TEST(DiccTrie_test, iterar_ordenado) {
     DiccTrie<int> a;
     std::vector<std::tuple<std::string, int>> test {
         {"hola", 1}, {"que", 2}, {"tal", 3}, {"ahora", 2}, {"esta", 100}, {"ordenado", 9}, {"0si", 0}, {"aero", 400}
     };
     for (auto x : test) {
-        a[std::get<0>(x)] = std::get<1>(x);
+        a.insert(std::make_pair(std::get<0>(x), std::get<1>(x)));
     }
     std::vector<std::tuple<std::string, int>> res{};
     for (DiccTrie<int>::iterator_ordenado it = a.begin_ordenado(); it != a.end_ordenado(); ++it) {
@@ -263,16 +240,17 @@ TEST(DiccTrie_test, iterar_ordenado) {
 
 TEST(DiccTrie_test, modificar_it_ordenado) {
     DiccTrie<int> a;
-    a["hola"] = 1;
-    a["chau"] = 2;
-    a["adios"] =  3;
+    a.insert(std::make_pair("hola", 1));
+    a.insert(std::make_pair("chau", 2));
+    a.insert(std::make_pair("adios", 3));
+
 
     for (auto it = a.begin_ordenado(); it != a.end_ordenado(); ++it) {
         it.significado() = 4;
     }
-    EXPECT_EQ(a["hola"], 4);
-    EXPECT_EQ(a["chau"], 4);
-    EXPECT_EQ(a["adios"], 4);
+    EXPECT_EQ(a.at("hola"), 4);
+    EXPECT_EQ(a.at("chau"), 4);
+    EXPECT_EQ(a.at("adios"), 4);
 }
 
 TEST(DiccTrie_test, iterar) {
@@ -281,7 +259,7 @@ TEST(DiccTrie_test, iterar) {
             {"hola", 1}, {"que", 2}, {"tal", 3}, {"ahora", 2}, {"esta", 100}, {"ordenado", 9}, {"0si", 0}, {"aero", 400}
     };
     for (auto x : test) {
-        a[std::get<0>(x)] = std::get<1>(x);
+        a.insert(std::make_pair(std::get<0>(x), std::get<1>(x)));
     }
     std::vector<std::tuple<std::string, int>> res{};
     for (DiccTrie<int>::iterator it = a.begin(); it != a.end(); ++it) {
@@ -292,16 +270,17 @@ TEST(DiccTrie_test, iterar) {
 
 TEST(DiccTrie_test, modificar_it) {
     DiccTrie<int> a;
-    a["hola"] = 1;
-    a["chau"] = 2;
-    a["adios"] =  3;
+    a.insert(std::make_pair("hola", 1));
+    a.insert(std::make_pair("chau", 2));
+    a.insert(std::make_pair("adios", 3));
+
 
     for (auto it = a.begin(); it != a.end(); ++it) {
         it.significado() = 4;
     }
-    EXPECT_EQ(a["hola"], 4);
-    EXPECT_EQ(a["chau"], 4);
-    EXPECT_EQ(a["adios"], 4);
+    EXPECT_EQ(a.at("hola"), 4);
+    EXPECT_EQ(a.at("chau"), 4);
+    EXPECT_EQ(a.at("adios"), 4);
 }
 
 TEST(DiccTrie_test, borrar_iterado) {
@@ -310,7 +289,7 @@ TEST(DiccTrie_test, borrar_iterado) {
             {"hola", 1}, {"que", 2}, {"tal", 3}, {"ahora", 2}, {"esta", 100}, {"ordenado", 9}, {"0si", 0}, {"aero", 400}
     };
     for (auto x : test) {
-        a[std::get<0>(x)] = std::get<1>(x);
+        a.insert(std::make_pair(std::get<0>(x), std::get<1>(x)));
     }
     a.erase("hola");
     std::vector<std::tuple<std::string, int>> res{};
@@ -320,7 +299,6 @@ TEST(DiccTrie_test, borrar_iterado) {
     test.erase(test.begin());
     EXPECT_EQ(res, test);
 }
-#endif
 
 int main(int argc, char* argv[]) {
 	testing::InitGoogleTest(&argc, argv);

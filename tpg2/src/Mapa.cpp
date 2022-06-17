@@ -1,25 +1,29 @@
 #include "Mapa.h"
-#include "Tipos.h"
 
 
-Mapa::Mapa(std::set<int> hs, std::set<int> vs) : _hs(hs), _vs(vs) {}
+Mapa::Mapa(std::set<int> hs, std::set<int> vs) : _hs(std::move(hs)), _vs(std::move(vs)) {}
 
 
-Mapa::~Mapa() {}
+Mapa::~Mapa() = default;
 
 
-const std::set<int>& Mapa::horizontales() const{
+bool Mapa::operator==(const Mapa &otro) const {
+    return _hs == otro._hs && _vs == otro._vs;
+}
+
+
+const std::set<int>& Mapa::horizontales() const {
     return _hs;
 }
 
 
-const std::set<int>& Mapa::verticales() const{
+const std::set<int>& Mapa::verticales() const {
     return _vs;
 }
 
 
 bool Mapa::esRio(const Casilla& c) {
-    return _hs.count(c.second) == 1 || _vs.count(c.first) == 1;
+    return _hs.count(c.second) || _vs.count(c.first);
 }
 
 
@@ -42,3 +46,4 @@ Mapa Mapa::operator+(const Mapa& b) {
 
     return res;
 }
+

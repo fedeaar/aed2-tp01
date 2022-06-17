@@ -1,7 +1,6 @@
 #include "Servidor.h"
 
 
-// CONSTRUCTOR
 Servidor::Servidor(): _partidas() {}
 
 
@@ -12,11 +11,10 @@ Servidor::~Servidor() {
 }
 
 
-// FUNCIONES
 DiccTrie<SimCity> Servidor::partidas() {
     DiccTrie<SimCity> res{};
     for (auto it = _partidas.begin(); it != _partidas.end(); ++it) {
-        res.insert(std::make_pair(it.clave(), *(it.significado().sc))); //TODO: PENSAR la copia
+        res.insert(std::make_pair(it.clave(), *(it.significado().sc)));
     }
     return res;
 }
@@ -82,6 +80,7 @@ Nat Servidor::verPopularidad(const Nombre& n) const {
 Nat Servidor::verTurnos(const Nombre& n) const {
     return _partidas.at(n).sc->turnos();
 }
+
 
 bool Servidor::huboConstruccion(const Nombre &n) const {
     return _partidas.at(n).sc->huboConstruccion();

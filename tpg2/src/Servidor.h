@@ -6,9 +6,9 @@
 #include "SimCity.h"
 #include "DiccTrie.h"
 
+
 class Servidor {
 
-// FUNCIONALIDAD SERVIDOR
 public:
 
     /**
@@ -26,7 +26,7 @@ public:
     /**
      PARTIDAS
      * retorna una copia de las partidas en el SimCity.
-     * Complejidad: O(SUM(i=0, N, copy(SimCity_i))
+     * Complejidad: O(SUM(i=0; N; copy(SimCity_i))
      **/
     DiccTrie<SimCity> partidas();
 
@@ -40,7 +40,7 @@ public:
     /**
      NUEVA PARTIDA
      * crea una nueva partida de SimCity.
-     * Complejidad: O(copy(Mapa))
+     * Complejidad: O(copy(Mapa) + claveMasLarga)
      **/
     void nuevaPartida(const Nombre& n, const Mapa& m);
 
@@ -116,7 +116,6 @@ public:
     bool huboConstruccion(const Nombre& n) const;
 
 
-// ESTRUCTURA Y AUX
 private:
 
     struct Partida {

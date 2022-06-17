@@ -1,9 +1,65 @@
 #include "DiccTrie.h"
 
 
-// ITERADOR ORDENADO (recorre el arbol)
+/* iterador rapido*/
+template<class T, std::size_t C>
+DiccTrie<T, C>::iterator::iterator(typename std::list<std::tuple<std::string, Nodo*>>::iterator it): _it(it) {}
 
-// CONSTRUCTOR
+
+template <class T, std::size_t C>
+typename DiccTrie<T, C>::iterator DiccTrie<T, C>::begin() {
+    iterator primero {_claves.begin()};
+    return primero;
+}
+
+
+template <class T, std::size_t C>
+typename DiccTrie<T, C>::iterator DiccTrie<T, C>::end() {
+    return iterator {_claves.end()};
+}
+
+
+template <class T, std::size_t C>
+bool DiccTrie<T, C>::iterator::operator==(const iterator& otro) {
+    return _it == otro._it;
+}
+
+
+template <class T, std::size_t C>
+bool DiccTrie<T, C>::iterator::operator!=(const iterator& otro) {
+    return _it != otro._it;
+}
+
+
+template <class T, std::size_t C>
+void DiccTrie<T, C>::iterator::operator++() {
+    _it++;
+}
+
+
+template <class T, std::size_t C>
+void DiccTrie<T, C>::iterator::next() {
+    _it++;
+}
+
+
+template <class T, std::size_t C>
+const std::string& DiccTrie<T, C>::iterator::clave() {
+    return std::get<0>(*_it);
+}
+
+
+template <class T, std::size_t C>
+T& DiccTrie<T, C>::iterator::significado() {
+    return *(std::get<1>(*_it)->definicion);
+}
+template <class T, std::size_t C>
+const T& DiccTrie<T, C>::iterator::significado() const {
+    return *(std::get<1>(*_it)->definicion);
+}
+
+
+/* iterador ordenado */
 template<class T, std::size_t C>
 DiccTrie<T, C>::iterator_ordenado::iterator_ordenado(Nodo* raiz): _actual(raiz), _clave() {}
 
@@ -11,20 +67,20 @@ DiccTrie<T, C>::iterator_ordenado::iterator_ordenado(Nodo* raiz): _actual(raiz),
 template <class T, std::size_t C>
 typename DiccTrie<T, C>::iterator_ordenado DiccTrie<T, C>::begin_ordenado() {
     iterator_ordenado primero {_raiz};
-    primero.next(); // 'primero' no está posicionado sobre una clave aún
+    primero.next();
     return primero;
 }
 
 
 template <class T, std::size_t C>
 typename DiccTrie<T, C>::iterator_ordenado DiccTrie<T, C>::end_ordenado() {
-    return iterator_ordenado(); // null
+    return iterator_ordenado();
 }
 
-// OPERADORES
+
 template <class T, std::size_t C>
 bool DiccTrie<T, C>::iterator_ordenado::operator==(const iterator_ordenado& otro) {
-    return _actual == otro._actual; // igualdad de direcciones, no hace falta chequear claves.
+    return _actual == otro._actual;
 }
 
 
@@ -40,7 +96,6 @@ void DiccTrie<T, C>::iterator_ordenado::operator++() {
 }
 
 
-// FUNCIONES
 template <class T, std::size_t C>
 void DiccTrie<T, C>::iterator_ordenado::next() {
     std::tuple<Nodo*, std::string> siguiente = _avanzar(_actual, _clave);
@@ -64,7 +119,6 @@ const T& DiccTrie<T, C>::iterator_ordenado::significado() const {
 }
 
 
-// AUX
 template <class T, std::size_t C> typename std::tuple<typename DiccTrie<T, C>::Nodo*, std::string>
 DiccTrie<T, C>::iterator_ordenado::_avanzar(Nodo* raiz, std::string& clave, std::size_t correr) {
     if (raiz == nullptr) {
@@ -97,64 +151,3 @@ DiccTrie<T, C>::iterator_ordenado::_proxima(Nodo* raiz, std::string& clave, bool
     }
 }
 
-
-// ITERADOR RAPIDO
-
-// CONSTRUCTOR
-template<class T, std::size_t C>
-DiccTrie<T, C>::iterator::iterator(typename std::list<std::tuple<std::string, Nodo*>>::iterator it): _it(it) {}
-
-
-template <class T, std::size_t C>
-typename DiccTrie<T, C>::iterator DiccTrie<T, C>::begin() {
-    iterator primero {_claves.begin()};
-    return primero;
-}
-
-
-template <class T, std::size_t C>
-typename DiccTrie<T, C>::iterator DiccTrie<T, C>::end() {
-    return iterator {_claves.end()};
-}
-
-
-// OPERADORES
-template <class T, std::size_t C>
-bool DiccTrie<T, C>::iterator::operator==(const iterator& otro) {
-    return _it == otro._it;
-}
-
-
-template <class T, std::size_t C>
-bool DiccTrie<T, C>::iterator::operator!=(const iterator& otro) {
-    return _it != otro._it;
-}
-
-
-template <class T, std::size_t C>
-void DiccTrie<T, C>::iterator::operator++() {
-    _it++;
-}
-
-
-// FUNCIONES
-template <class T, std::size_t C>
-void DiccTrie<T, C>::iterator::next() {
-    _it++;
-}
-
-
-template <class T, std::size_t C>
-const std::string& DiccTrie<T, C>::iterator::clave() {
-    return std::get<0>(*_it);
-}
-
-
-template <class T, std::size_t C>
-T& DiccTrie<T, C>::iterator::significado() {
-    return *(std::get<1>(*_it)->definicion);
-}
-template <class T, std::size_t C>
-const T& DiccTrie<T, C>::iterator::significado() const {
-    return *(std::get<1>(*_it)->definicion);
-}

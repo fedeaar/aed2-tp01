@@ -10,19 +10,21 @@
 #include <map>
 #include <list>
 #include <vector>
+#include <utility>
 
 using namespace std;
 
 using Nat = unsigned int;
 
-using Casilla = pair<int, int>;
+using Casilla = std::pair<int, int>;
 
-using Jugador = string;
+using Jugador = std::string;
 
-using Nombre = string;
+using Nombre = std::string;
 
 enum Direccion {
-    Horizontal, Vertical // y, x
+    Horizontal,
+    Vertical
 };
 
 enum Construccion {
@@ -30,9 +32,5 @@ enum Construccion {
     comercio
 };
 
-struct Pos {
-    Nat x{};
-    Nat y{};
-};
 #endif // TIPOS_H
 
