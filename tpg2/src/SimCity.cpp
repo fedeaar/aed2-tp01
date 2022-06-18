@@ -7,7 +7,7 @@ SimCity::SimCity(Mapa m): _mapa(m), _turno(0), _antiguedad(0), _popularidad(0), 
 
 
 SimCity::SimCity(const SimCity& aCopiar): _turno(aCopiar._turno), _antiguedad(aCopiar._antiguedad),
-_popularidad(aCopiar._antiguedad), _mapa(aCopiar._mapa), _uniones(aCopiar._uniones), _construcciones() {
+_popularidad(aCopiar._popularidad), _mapa(aCopiar._mapa), _uniones(aCopiar._uniones), _construcciones() {
     for (auto it : aCopiar._construcciones) {
         _construcciones.push_back(new std::map<Casilla, Construccion>(*it));
     }
