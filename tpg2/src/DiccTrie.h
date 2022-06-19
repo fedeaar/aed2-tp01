@@ -76,7 +76,7 @@ public:
 
     /**
      EMPTY
-     * devuelve true si no hay ningún elemento en el diccionario
+     * Devuelve true si no hay ningún elemento en el diccionario
      **/
     bool empty() const;
 
@@ -97,27 +97,27 @@ private:
     std::list<std::tuple<std::string, Nodo *>> _claves;
 
     /**
-     * copia recursivamente el árbol C-ario.
+     * Copia recursivamente el árbol C-ario.
      */
     Nodo *_copiar(Nodo *raiz);
 
     /**
-     * copia las claves del árbol C-ario.
+     * Copia las claves del árbol C-ario.
      */
     void _copiar_claves(const DiccTrie<T, C> &otro);
 
     /**
-     * elimina recursivamente el árbol C-ario.
+     * Elimina recursivamente el árbol C-ario.
      **/
     void _eliminar(Nodo *raiz);
 
     /**
-     * retorna el par padre-hijo donde está definida la clave, o el último nodo, de no estarlo.
+     * Retorna el par padre-hijo donde está definida la clave, o el último nodo, de no estarlo.
      **/
     std::tuple<Nodo *, Nodo *, size_t> _alcanzar(const std::string &clave) const;
 
     /**
-     * evalúa si un array tiene punteros válidos.
+     * Evalúa si un array tiene punteros válidos.
      **/
     bool _es_null_array(Nodo *(&a)[C]);
 
@@ -132,43 +132,43 @@ public:
 
         /**
          CONSTRUCTOR
-         * crea un iterador apuntando a la primer clave.
+         * Crea un iterador apuntando a la primer clave.
          **/
         explicit iterator(typename std::list<std::tuple<std::string, Nodo*>>::iterator it);
 
         /**
          OPERADOR ==
-         * evalúa si dos iteradores son iguales.
+         * Evalúa si dos iteradores son iguales.
          **/
         bool operator==(const iterator& otro);
 
         /**
          OPERADOR !=
-         * evalúa si dos iteradores son distintos.
+         * Evalúa si dos iteradores son distintos.
          **/
         bool operator!=(const iterator& otro);
 
         /**
          OPERADOR ++
-         * avanza el iterador a la próxima clave.
+         * Avanza el iterador a la próxima clave.
          **/
         void operator++();
 
         /**
          NEXT
-         * avanza el iterador a la próxima clave.
+         * Avanza el iterador a la próxima clave.
          **/
         void next();
 
         /**
          CLAVE
-         * retorna la clave asociada al iterador.
+         * Retorna la clave asociada al iterador.
          **/
         const std::string& clave();
 
         /**
          SIGNIFICADO
-         * retorna el significado asociado al iterador.
+         * Retorna el significado asociado al iterador.
          -- PRODUCE ALIASING --
          **/
         T& significado();
@@ -186,43 +186,43 @@ public:
 
         /**
          CONSTRUCTOR
-         * crea un iterador apuntando a la primer clave.
+         * Crea un iterador apuntando a la primer clave.
          **/
         explicit iterator_ordenado(Nodo* raiz=nullptr);
 
         /**
          OPERADOR ==
-         * evalúa si dos iteradores son iguales.
+         * Evalúa si dos iteradores son iguales.
          **/
         bool operator==(const iterator_ordenado& otro);
 
         /**
          OPERADOR !=
-         * evalúa si dos iteradores son distintos.
+         * Evalúa si dos iteradores son distintos.
          **/
         bool operator!=(const iterator_ordenado& otro);
 
         /**
          OPERADOR ++
-         * avanza el iterador a la próxima clave.
+         * Avanza el iterador a la próxima clave.
          **/
         void operator++();
 
         /**
          NEXT
-         * avanza el iterador a la próxima clave.
+         * Avanza el iterador a la próxima clave.
          **/
         void next();
 
         /**
          CLAVE
-         * retorna la clave asociada al iterador.
+         * Retorna la clave asociada al iterador.
          **/
         const std::string& clave();
 
         /**
          SIGNIFICADO
-         * retorna el significado asociado al iterador.
+         * Retorna el significado asociado al iterador.
          -- PRODUCE ALIASING --
          **/
         T& significado();
@@ -240,25 +240,25 @@ public:
 
     /**
      BEGIN
-     * crea un nuevo iterador a las claves del diccionario.
+     * Crea un nuevo iterador a las claves del diccionario.
      **/
     iterator begin();
 
     /**
      END
-     * crea un iterador invalido que demarca el final de una iteración.
+     * Crea un iterador invalido que demarca el final de una iteración.
      **/
     iterator end();
 
     /**
      BEGIN ORDENADO
-     * crea un nuevo iterador a las claves del diccionario, ejecuta en orden.
+     * Crea un nuevo iterador a las claves del diccionario, ejecuta en orden.
      **/
     iterator_ordenado begin_ordenado();
 
     /**
      END ORDENADO
-     * crea un iterador ordenado invalido que demarca el final de una iteración.
+     * Crea un iterador ordenado invalido que demarca el final de una iteración.
      **/
     iterator_ordenado end_ordenado();
 };

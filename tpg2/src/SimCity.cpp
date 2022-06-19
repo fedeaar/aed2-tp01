@@ -125,10 +125,8 @@ vector<pair<Casilla, Nat>> SimCity::listDeTipo(Construccion tipo) const {
     vector<pair<Casilla, Nat>> res;
     int i = 0;
     for (auto it = _construcciones.begin(); it != _construcciones.end(); ++it, ++i) {
-        if (*it) {
-            for (auto itCs = (*it)->begin(); itCs != (*it)->end(); ++itCs)
-                if (itCs->second == tipo) res.emplace_back(itCs->first, _turno - i);
-        }
+        for (auto itCs = (*it)->begin(); itCs != (*it)->end(); ++itCs)
+            if (itCs->second == tipo) res.emplace_back(itCs->first, _turno - i);
     }
     return res;
 }

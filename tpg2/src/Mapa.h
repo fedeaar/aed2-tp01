@@ -22,7 +22,7 @@ public:
 
     /**
      OPERATOR ==
-     * evalua igualdad entre mapas.
+     * Evalua igualdad entre mapas.
      * Complejidad: O(#horizontales + #verticales)
      **/
     bool operator==(const Mapa& otro) const;

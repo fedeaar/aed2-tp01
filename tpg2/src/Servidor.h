@@ -13,7 +13,7 @@ public:
 
     /**
      CONSTRUCTOR
-     * crea un nuevo servidor.
+     * Crea un nuevo servidor.
      * Complejidad: O(1)
      **/
     Servidor();
@@ -25,42 +25,43 @@ public:
 
     /**
      PARTIDAS
-     * retorna una copia de las partidas en el SimCity.
+     * Retorna una copia de las partidas en el SimCity.
      * Complejidad: O(SUM(i=0; N; copy(SimCity_i))
+     -- PRODUCE ALIASING con las uniones --
      **/
     DiccTrie<SimCity> partidas();
 
     /**
      CONGELADAS
-     * retorna el conjunto de Nombres de las partidas congeladas.
+     * Retorna el conjunto de Nombres de las partidas congeladas.
      * Complejidad: O(N)  donde N es la cantidad de partidas definidas
      **/
     std::set<Nombre> congeladas();
 
     /**
      NUEVA PARTIDA
-     * crea una nueva partida de SimCity.
+     * Crea una nueva partida de SimCity.
      * Complejidad: O(copy(Mapa) + claveMasLarga)
      **/
     void nuevaPartida(const Nombre& n, const Mapa& m);
 
     /**
      UNIR PARTIDAS
-     * une dos partidas de SimCity.
+     * Une dos partidas de SimCity.
      * Complejidad: O(claveMasLarga)
      */
     void unirPartidas(const Nombre& n, const Nombre& m);
 
     /**
      AVANZAR TURNO
-     * avanza un turno de SimCity.
+     * Avanza un turno de SimCity.
      * Complejidad: O(claveMasLarga)
      **/
     void avanzarTurnoPartida(const Nombre& n);
 
     /**
      AGREGAR CASA
-     * agrega una casa al SimCity y pasa de turno.
+     * Agrega una casa al SimCity y pasa de turno.
      * Complejidad: O(claveMasLarga)
      **/
     void agregarCasa(const Nombre& n, const Casilla& p);
@@ -68,49 +69,49 @@ public:
 
     /**
      AGREGAR COMERCIO
-     * agrega un comercio al SimCity y pasa de turno.
+     * Agrega un comercio al SimCity y pasa de turno.
      * Complejidad: O(claveMasLarga)
      **/
     void agregarComercio(const Nombre& n, const Casilla& p);
 
     /**
      VER MAPA
-     * crea una copia del mapa en el SimCity.
+     * Crea una copia del mapa en el SimCity.
      * Complejidad: O(claveMasLarga + simCity::mapa())
      **/
     Mapa verMapa(const Nombre& n) const;
 
     /**
      VER CASAS
-     * crea una copia de las casas en el SimCity.
+     * Crea una copia de las casas en el SimCity.
      * Complejidad: O(claveMasLarga + simCity::casas())
      **/
     std::map<Casilla, Nat> verCasas(const Nombre& n) const;
 
     /**
      VER COMERCIOS
-     * crea una copia de los comercios en el SimCity.
+     * Crea una copia de los comercios en el SimCity.
      * Complejidad: O(claveMasLarga + simCity::comercios())
      **/
     std::map<Casilla, Nat> verComercios(const Nombre& n) const;
 
     /**
      VER POPULARIDAD
-     * muestra la popularidad de una Partida.
+     * Muestra la popularidad de una Partida.
      * Complejidad: O(claveMasLarga)
      **/
     Nat verPopularidad(const Nombre& n) const;
 
     /**
      VER TURNOS
-     * muestra el turno actual de una Partida.
+     * Muestra el turno actual de una Partida.
      * Complejidad: O(claveMasLarga)
      **/
     Nat verTurnos(const Nombre& n) const;
 
     /**
      HUBO CONSTRUCCION
-     * evalua si hubo una union en este turno para una Partida.
+     * Evalua si hubo una union en este turno para una Partida.
      * Complejidad: O(claveMasLarga)
      **/
     bool huboConstruccion(const Nombre& n) const;
